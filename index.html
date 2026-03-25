@@ -75,7 +75,7 @@ label.hbtn{cursor:pointer}
 .ins-t{flex:1}.ins-t strong{color:var(--teal)}
 .ins-x{position:absolute;top:4px;right:6px;background:none;border:none;color:var(--txm);cursor:pointer;font-size:11px}
 .map-w{position:absolute;inset:0}.map-w>div{width:100%;height:100%}
-.mleg{position:absolute;bottom:6px;right:6px;z-index:999;background:rgba(255,255,255,.96);border:1px solid var(--bdr);border-radius:7px;padding:6px 8px;min-width:120px;max-height:40vh;overflow-y:auto;box-shadow:var(--sh);font-size:8px}
+.mleg{position:absolute;top:6px;right:6px;z-index:999;background:rgba(255,255,255,.96);border:1px solid var(--bdr);border-radius:7px;padding:6px 8px;min-width:120px;max-height:40vh;overflow-y:auto;box-shadow:var(--sh);font-size:8px}
 .mleg h4{font-size:7px;font-weight:700;color:var(--txm);text-transform:uppercase;margin-bottom:2px}
 .li{display:flex;align-items:center;gap:4px;padding:1px 0;font-size:8px;color:var(--txl)}.li .lc{width:10px;height:6px;border-radius:2px;flex-shrink:0}.li .lic{width:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .leaflet-popup-content-wrapper{background:var(--w)!important;color:var(--tx)!important;border:1px solid var(--bdr)!important;border-radius:9px!important;box-shadow:var(--shl)!important}
@@ -118,9 +118,9 @@ input[type="file"]{display:none}
   <div class="hdr">
     <div class="br"><div><div style="font-size:13px;font-weight:800;color:var(--teal);letter-spacing:-.3px">SHADOWFAX</div><div style="font-size:6px;color:var(--tl);font-style:italic;margin-top:-1px;text-align:right">Think ahead!</div></div><div class="pn">LM Planning Dashboard</div></div>
     <div class="tbar">
-      <button class="tbtn active" onclick="swTab('t1',this)">Pan India View</button>
-      <button class="tbtn" onclick="swTab('t2',this)">Expansion Plan</button>
-      <button class="tbtn" onclick="swTab('t3',this)">Hub anomaly</button>
+      <button class="tbtn active" onclick="swTab('t1',this)">📊 Pan India</button>
+      <button class="tbtn" onclick="swTab('t2',this)">🚀 Expansion</button>
+      <button class="tbtn" onclick="swTab('t3',this)">🔲 Hub Merger</button>
     </div>
     <div class="hacts"><button class="hbtn" onclick="refreshAll()">🔄 Refresh <span class="sp" id="rSp"></span></button><label class="hbtn">🗺️ GeoJSON<input type="file" id="gfT" accept=".geojson,.json"></label></div>
   </div>
@@ -128,7 +128,7 @@ input[type="file"]{display:none}
     <!-- TAB 1 -->
     <div class="tab-c active" id="tab-t1">
       <div class="map-w"><div id="map1"></div></div>
-      <div class="kstrip"><div class="kp tot"><div class="kl">Total</div><div class="kv" id="k1t">—</div></div><div class="kp svc"><div class="kl">Serviceable</div><div class="kv" id="k1s">—</div></div><div class="kp nsvc"><div class="kl">Non Svc</div><div class="kv" id="k1n">—</div></div><div class="kp rct"><div class="kl">Reactivation</div><div class="kv" id="k1rc">—</div></div><div class="kp pct"><div class="kl">IPS Meesho%</div><div class="kv" id="k1ips">—</div></div><div class="kp pct"><div class="kl">Overall Meesho%</div><div class="kv" id="k1ovr">—</div></div><div class="kp def"><div class="kl">Defunct NS</div><div class="kv" id="k1d">—</div></div></div>
+      <div class="kstrip"><div class="kp tot"><div class="kl">Total</div><div class="kv" id="k1t">—</div></div><div class="kp svc"><div class="kl">Serviceable</div><div class="kv" id="k1s">—</div></div><div class="kp nsvc"><div class="kl">Non Svc</div><div class="kv" id="k1n">—</div></div><div class="kp rct"><div class="kl">Reactivation</div><div class="kv" id="k1rc">—</div></div><div class="kp svc"><div class="kl">IPS Svc Pins</div><div class="kv" id="k1ipsp">—</div></div><div class="kp nsvc"><div class="kl">IPS Non Svc</div><div class="kv" id="k1ipsn">—</div></div></div>
       <div class="sidebar" id="sb1"><div class="sb-tgl" onclick="tgSB('sb1')">◀</div><div class="sb-hd">🎛️ Pan India</div>
         <div class="sb-bd"><div class="sb-s"><div class="sb-st">Filters</div>
           <div class="sb-f"><label>Pin Type</label><div id="ss_f1pt"></div></div><div class="sb-f"><label>Region</label><div id="ss_f1r"></div></div><div class="sb-f"><label>State</label><div id="ss_f1st"></div></div><div class="sb-f"><label>POD</label><div id="ss_f1p"></div></div><div class="sb-f"><label>City</label><div id="ss_f1c"></div></div><div class="sb-f"><label>Svc Remarks</label><div id="ss_f1sr"></div></div>
@@ -162,14 +162,19 @@ input[type="file"]{display:none}
     <div class="tab-c" id="tab-t3">
       <div class="map-w"><div id="map3"></div></div>
       <div class="kstrip"><div class="kp tot"><div class="kl">Total Hubs</div><div class="kv" id="k3h">—</div></div><div class="kp svc"><div class="kl">Inside Boundary</div><div class="kv" id="k3in">—</div></div><div class="kp nsvc"><div class="kl">Outside</div><div class="kv" id="k3out">—</div></div><div class="kp hub"><div class="kl">Merger Hubs</div><div class="kv" id="k3m">—</div></div><div class="kp pct"><div class="kl">Total Pins</div><div class="kv" id="k3p">—</div></div></div>
-      <div class="sidebar" id="sb3"><div class="sb-tgl" onclick="tgSB('sb3')">◀</div><div class="sb-hd">Hub anomaly</div>
+      <div class="sidebar" id="sb3"><div class="sb-tgl" onclick="tgSB('sb3')">◀</div><div class="sb-hd">🔲 Hub Merger</div>
         <div class="sb-bd"><div class="sb-s"><div class="sb-st">Filters</div>
           <div class="sb-f"><label>Pin Type</label><div id="ss_f3pt"></div></div><div class="sb-f"><label>Region</label><div id="ss_f3r"></div></div><div class="sb-f"><label>State</label><div id="ss_f3st"></div></div><div class="sb-f"><label>POD</label><div id="ss_f3p"></div></div><div class="sb-f"><label>City</label><div id="ss_f3c"></div></div><div class="sb-f"><label>Svc Remarks</label><div id="ss_f3sr"></div></div>
           <div class="sb-rst" onclick="rf3()">↺ Reset All</div></div>
           <div class="sb-s"><div class="sb-st">Search Hub</div><div class="sb-f"><div class="hub-dd-wrap"><input class="hub-dd-input" id="hdi3" placeholder="Type hub..." oninput="hubDD(3)" onfocus="hubDD(3)"><div class="hub-dd-list" id="hdl3"></div></div></div></div>
           <div class="sb-s"><div class="sb-st">⚠️ Hubs Outside Boundary</div><div id="outsideList" style="max-height:200px;overflow-y:auto"></div></div>
         </div></div>
-      <div class="mleg"><h4>Legend</h4><div class="li"><div class="lc" style="background:var(--teal);opacity:.3;border:2px solid var(--teal)"></div>Hub Boundary (Inside)</div><div class="li"><div class="lc" style="background:#e53935;opacity:.3;border:2px dashed #e53935"></div>Hub Boundary (Outside)</div><div class="li"><div class="lic"><svg viewBox="0 0 24 24" width="9" height="9"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="#43a047" stroke="#1b5e20" stroke-width="1.5" stroke-linejoin="round"/></svg></div>Hub ✅</div><div class="li"><div class="lic"><svg viewBox="0 0 24 24" width="9" height="9"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="#e53935" stroke="#b71c1c" stroke-width="1.5" stroke-linejoin="round"/></svg></div>Hub ⚠️</div></div>
+      <div class="mleg"><h4>Legend</h4><div class="li"><div class="lc" style="background:var(--teal);opacity:.3;border:2px solid var(--teal)"></div>Inside ✅</div><div class="li"><div class="lc" style="background:#e53935;opacity:.3;border:2px dashed #e53935"></div>Outside ⚠️</div><div class="li"><div class="lic"><svg viewBox="0 0 24 24" width="9" height="9"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="#43a047" stroke="#1b5e20" stroke-width="1.5" stroke-linejoin="round"/></svg></div>Hub ✅</div><div class="li"><div class="lic"><svg viewBox="0 0 24 24" width="9" height="9"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="#e53935" stroke="#b71c1c" stroke-width="1.5" stroke-linejoin="round"/></svg></div>Hub ⚠️</div></div>
+      <!-- Hub List Table Panel -->
+      <div id="hubTablePanel" style="display:none;position:absolute;bottom:6px;left:50%;transform:translateX(-50%);z-index:999;background:rgba(255,255,255,.98);backdrop-filter:blur(12px);border:1px solid var(--bdr);border-radius:10px;padding:10px;max-width:700px;width:90%;box-shadow:var(--shl);max-height:250px;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h4 style="font-size:11px;font-weight:700;color:var(--teal)">📋 Hub List</h4><button onclick="toggleHubTable()" style="background:none;border:none;color:var(--txm);cursor:pointer;font-size:14px">✕</button></div>
+        <div style="max-height:200px;overflow-y:auto" id="hubTableContent"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -261,19 +266,32 @@ function mkPop(d){const rm=gv(d,'Serviceability Remarks');let bc='nsvc';if(isSvc
 function mkHubPop(nm,items){const s=items.filter(d=>isSvc(d)).length,n=items.filter(d=>isNS(d)).length,adl=items.reduce((a,d)=>a+(parseFloat(gv(d,'Pincode ADL')||gv(d,'Promised ADL'))||0),0),pins=items.slice(0,20).map(d=>gv(d,'Pincode')).filter(Boolean).join(', ');
   return`<div><div class="hp-t">🏠 ${nm}</div><div class="hp-ch"><div class="hp-c">📍${items.length}</div><div class="hp-c">✅${s}</div><div class="hp-c">❌${n}</div><div class="hp-c">ADL:${Math.round(adl)}</div></div><div class="hp-pins"><strong>Pins:</strong> ${pins}${items.length>20?'…':''}</div></div>`}
 
+// Interlinked filter helper — cascade options based on region selection
+function getCascaded(data,regionVal){
+  const st=new Set,p=new Set,c=new Set;
+  data.forEach(d=>{if(regionVal&&gv(d,'Region')!==regionVal)return;st.add(gv(d,'State'));p.add(gv(d,'POD'));c.add(gv(d,'City'))});
+  return{states:[...st].filter(Boolean).sort(),pods:[...p].filter(Boolean).sort(),cities:[...c].filter(Boolean).sort()}}
+
 // TAB 1
 function pf1(){const sets={pt:new Set,r:new Set,st:new Set,p:new Set,c:new Set,sr:new Set};aM.forEach(d=>{sets.pt.add(gv(d,'Pin Type'));sets.r.add(gv(d,'Region'));sets.st.add(gv(d,'State'));sets.p.add(gv(d,'POD'));sets.c.add(gv(d,'City'));sets.sr.add(gv(d,'Serviceability Remarks'))});
-  createSS('ss_f1pt',[...sets.pt],'af1()');createSS('ss_f1r',[...sets.r],'af1()');createSS('ss_f1st',[...sets.st],'af1()');createSS('ss_f1p',[...sets.p],'af1()');createSS('ss_f1c',[...sets.c],'af1()');createSS('ss_f1sr',[...sets.sr],'af1()')}
-function af1(){const f={pt:getSSVal('ss_f1pt'),r:getSSVal('ss_f1r'),st:getSSVal('ss_f1st'),p:getSSVal('ss_f1p'),c:getSSVal('ss_f1c'),sr:getSSVal('ss_f1sr')};
+  createSS('ss_f1pt',[...sets.pt],'af1()');createSS('ss_f1r',[...sets.r],'cascadeF1()');createSS('ss_f1st',[...sets.st],'af1()');createSS('ss_f1p',[...sets.p],'af1()');createSS('ss_f1c',[...sets.c],'af1()');createSS('ss_f1sr',[...sets.sr],'af1()')}
+function cascadeF1(){const reg=getSSVal('ss_f1r');const cas=getCascaded(aM,reg);
+  createSS('ss_f1st',cas.states,'af1()');createSS('ss_f1p',cas.pods,'af1()');createSS('ss_f1c',cas.cities,'af1()');af1()}function af1(){const f={pt:getSSVal('ss_f1pt'),r:getSSVal('ss_f1r'),st:getSSVal('ss_f1st'),p:getSSVal('ss_f1p'),c:getSSVal('ss_f1c'),sr:getSSVal('ss_f1sr')};
   fM=aM.filter(d=>{if(f.pt&&gv(d,'Pin Type')!==f.pt)return 0;if(f.r&&gv(d,'Region')!==f.r)return 0;if(f.st&&gv(d,'State')!==f.st)return 0;if(f.p&&gv(d,'POD')!==f.p)return 0;if(f.c&&gv(d,'City')!==f.c)return 0;if(f.sr&&gv(d,'Serviceability Remarks')!==f.sr)return 0;return 1});
-  let svc=0,nsvc=0,rct=0,dfN=0,sI=0,sO=0;fM.forEach(d=>{if(isSvc(d)){svc++;sI+=parseRaw(gv(d,'IPS Meesho serviceability%'));sO+=parseRaw(gv(d,'Overall Meesho serviceability%'))}else if(isNS(d))nsvc++;else if(isRe(d))rct++;else if(isDfN(d))dfN++});
-  document.getElementById('k1t').textContent=fM.length.toLocaleString();document.getElementById('k1s').textContent=svc.toLocaleString();document.getElementById('k1n').textContent=nsvc.toLocaleString();document.getElementById('k1rc').textContent=rct.toLocaleString();document.getElementById('k1ips').textContent=(sI*100).toFixed(2)+'%';document.getElementById('k1ovr').textContent=(sO*100).toFixed(2)+'%';document.getElementById('k1d').textContent=dfN;
+  let svc=0,nsvc=0,rct=0,dfN=0,ipsSvc=0,ipsNsvc=0;fM.forEach(d=>{
+    const isIPS=gv(d,'Pin Type').toLowerCase().includes('ips');
+    if(isSvc(d)){svc++;if(isIPS)ipsSvc++}
+    else if(isNS(d)){nsvc++;if(isIPS)ipsNsvc++}
+    else if(isRe(d))rct++;else if(isDfN(d))dfN++});
+  document.getElementById('k1t').textContent=fM.length.toLocaleString();document.getElementById('k1s').textContent=svc.toLocaleString();document.getElementById('k1n').textContent=nsvc.toLocaleString();document.getElementById('k1rc').textContent=rct.toLocaleString();document.getElementById('k1ipsp').textContent=ipsSvc.toLocaleString();document.getElementById('k1ipsn').textContent=ipsNsvc.toLocaleString();
   rMap(1,fM,d=>{if(isSvc(d))return SV;if(isRe(d))return RC;if(isNS(d))return NV;return null});buildHL(1,fM)}
 function rf1(){['ss_f1pt','ss_f1r','ss_f1st','ss_f1p','ss_f1c','ss_f1sr'].forEach(clearSS);clrHub(1);af1()}
 
 // TAB 2
 function pf2(){const sets={pt:new Set,r:new Set,st:new Set,p:new Set,c:new Set,s:new Set};aM.forEach(d=>{const es=gv(d,'Expansion Strategy');if(!es)return;sets.pt.add(gv(d,'Pin Type'));sets.r.add(gv(d,'Region'));sets.st.add(gv(d,'State'));sets.p.add(gv(d,'POD'));sets.c.add(gv(d,'City'));sets.s.add(es)});
-  createSS('ss_f2pt',[...sets.pt].filter(Boolean),'af2()');createSS('ss_f2r',[...sets.r].filter(Boolean),'af2()');createSS('ss_f2st',[...sets.st].filter(Boolean),'af2()');createSS('ss_f2p',[...sets.p].filter(Boolean),'af2()');createSS('ss_f2c',[...sets.c].filter(Boolean),'af2()');createMS('ms_f2s',[...sets.s].filter(Boolean))}
+  createSS('ss_f2pt',[...sets.pt].filter(Boolean),'af2()');createSS('ss_f2r',[...sets.r].filter(Boolean),'cascadeF2()');createSS('ss_f2st',[...sets.st].filter(Boolean),'af2()');createSS('ss_f2p',[...sets.p].filter(Boolean),'af2()');createSS('ss_f2c',[...sets.c].filter(Boolean),'af2()');createMS('ms_f2s',[...sets.s].filter(Boolean))}
+function cascadeF2(){const reg=getSSVal('ss_f2r');const expData=aM.filter(d=>gv(d,'Expansion Strategy'));const cas=getCascaded(expData,reg);
+  createSS('ss_f2st',cas.states,'af2()');createSS('ss_f2p',cas.pods,'af2()');createSS('ss_f2c',cas.cities,'af2()');af2()}
 function af2(){const f={pt:getSSVal('ss_f2pt'),r:getSSVal('ss_f2r'),st:getSSVal('ss_f2st'),p:getSSVal('ss_f2p'),c:getSSVal('ss_f2c')},stS=getMSVals('ms_f2s');
   eF=aM.filter(d=>{const es=gv(d,'Expansion Strategy');if(!es)return 0;if(f.pt&&gv(d,'Pin Type')!==f.pt)return 0;if(f.r&&gv(d,'Region')!==f.r)return 0;if(f.st&&gv(d,'State')!==f.st)return 0;if(f.p&&gv(d,'POD')!==f.p)return 0;if(f.c&&gv(d,'City')!==f.c)return 0;if(stS.size&&!stS.has(es))return 0;return 1});
   let sI=0,sO=0;const ph=new Set,ch=new Set;eF.forEach(d=>{if(isSvc(d)){sI+=parseRaw(gv(d,'IPS Meesho serviceability%'));sO+=parseRaw(gv(d,'Overall Meesho serviceability%'))}const p=gv(d,'Proposed Hub Name');if(p&&p!=='-')ph.add(p);const c=gv(d,'Conversion Hub name');if(c&&c!=='-')ch.add(c)});
@@ -289,8 +307,16 @@ function rf2(){['ss_f2pt','ss_f2r','ss_f2st','ss_f2p','ss_f2c'].forEach(clearSS)
 
 // TAB 3: HUB MERGER
 function pf3(){const sets={pt:new Set,r:new Set,st:new Set,p:new Set,c:new Set,sr:new Set};aM.forEach(d=>{if(!gv(d,'Current Serviceable Hub'))return;sets.pt.add(gv(d,'Pin Type'));sets.r.add(gv(d,'Region'));sets.st.add(gv(d,'State'));sets.p.add(gv(d,'POD'));sets.c.add(gv(d,'City'));sets.sr.add(gv(d,'Serviceability Remarks'))});
-  createSS('ss_f3pt',[...sets.pt],'af3()');createSS('ss_f3r',[...sets.r],'af3()');createSS('ss_f3st',[...sets.st],'af3()');createSS('ss_f3p',[...sets.p],'af3()');createSS('ss_f3c',[...sets.c],'af3()');createSS('ss_f3sr',[...sets.sr],'af3()')}
-function af3(){const f={pt:getSSVal('ss_f3pt'),r:getSSVal('ss_f3r'),st:getSSVal('ss_f3st'),p:getSSVal('ss_f3p'),c:getSSVal('ss_f3c'),sr:getSSVal('ss_f3sr')};
+  // Anomaly filter
+  createSS('ss_f3anom',['Outside Boundary','Inside Boundary'],'af3()');
+  // Merger check — get unique remarks from hub merger sheet
+  const remarks=new Set;hmD.forEach(h=>{const r=gv(h,'Remarks');if(r)remarks.add(r)});
+  createSS('ss_f3merger',[...remarks].filter(Boolean),'af3()');
+  createSS('ss_f3pt',[...sets.pt],'af3()');createSS('ss_f3r',[...sets.r],'cascadeF3()');createSS('ss_f3st',[...sets.st],'af3()');createSS('ss_f3p',[...sets.p],'af3()');createSS('ss_f3c',[...sets.c],'af3()');createSS('ss_f3sr',[...sets.sr],'af3()');
+  // Default to Outside Boundary
+  const anomSel=document.getElementById('ss_f3anom_sel');if(anomSel)anomSel.value='Outside Boundary'}
+function cascadeF3(){const reg=getSSVal('ss_f3r');const hubData=aM.filter(d=>gv(d,'Current Serviceable Hub'));const cas=getCascaded(hubData,reg);
+  createSS('ss_f3st',cas.states,'af3()');createSS('ss_f3p',cas.pods,'af3()');createSS('ss_f3c',cas.cities,'af3()');af3()}function af3(){const f={pt:getSSVal('ss_f3pt'),r:getSSVal('ss_f3r'),st:getSSVal('ss_f3st'),p:getSSVal('ss_f3p'),c:getSSVal('ss_f3c'),sr:getSSVal('ss_f3sr')};
   fM3=aM.filter(d=>{if(!gv(d,'Current Serviceable Hub'))return 0;if(f.pt&&gv(d,'Pin Type')!==f.pt)return 0;if(f.r&&gv(d,'Region')!==f.r)return 0;if(f.st&&gv(d,'State')!==f.st)return 0;if(f.p&&gv(d,'POD')!==f.p)return 0;if(f.c&&gv(d,'City')!==f.c)return 0;if(f.sr&&gv(d,'Serviceability Remarks')!==f.sr)return 0;return 1});
   buildHubMerger()}
 function rf3(){['ss_f3pt','ss_f3r','ss_f3st','ss_f3p','ss_f3c','ss_f3sr'].forEach(clearSS);af3()}
@@ -298,38 +324,60 @@ function rf3(){['ss_f3pt','ss_f3r','ss_f3st','ss_f3p','ss_f3c','ss_f3sr'].forEac
 // Hub merger lookup
 function getHMData(hubName){return hmD.find(h=>gv(h,'Hub name')===hubName)||null}
 
+let hubBdData=[];// store for table
 function buildHubMerger(){
-  hbL3.clearLayers();hmL3.clearLayers();
+  hbL3.clearLayers();hmL3.clearLayers();hubBdData=[];
+  const anomFilter=getSSVal('ss_f3anom');
+  const mergerFilter=getSSVal('ss_f3merger');
   const groups={};fM3.forEach(d=>{const h=gv(d,'Current Serviceable Hub');if(!h||h==='-')return;if(!groups[h])groups[h]={pins:[],lat:null,lng:null,cat:''};groups[h].pins.push(d);
     if(!groups[h].lat){const la=parseFloat(gv(d,'Hub Lat')),lo=parseFloat(gv(d,'Hub Long'));if(!isNaN(la)&&!isNaN(lo)){groups[h].lat=la;groups[h].lng=lo;groups[h].cat=gv(d,'hub_category')}}});
   let totalH=0,insideC=0,outsideC=0,mergerC=0,totalP=fM3.length;
-  const outsideHubs=[];
   Object.entries(groups).forEach(([name,data])=>{
-    const geo=data.pins.filter(d=>d._g&&d._geo);if(!geo.length)return;totalH++;
+    const geo=data.pins.filter(d=>d._g&&d._geo);if(!geo.length)return;
     let merged=null;geo.forEach(d=>{try{const p=turf.feature(d._geo);if(!merged)merged=p;else merged=turf.union(merged,p)}catch(e){}});if(!merged)return;
-    // Check inside
     let isIn=false;if(data.lat&&data.lng){try{isIn=turf.booleanPointInPolygon(turf.point([data.lng,data.lat]),merged)}catch(e){}}
     if(isIn)insideC++;else if(data.lat)outsideC++;
-    // Hub merger sheet data
+    totalH++;
     const hm=getHMData(name);if(hm&&gv(hm,'Merger Type'))mergerC++;
     const nearHub=hm?gv(hm,'Nearest hub'):'';const hvDist=hm?gv(hm,'Havsersine distance'):'';const osmDist=hm?gv(hm,'Osrm Distance'):'';const mType=hm?gv(hm,'Merger Type'):'';const remarks=hm?gv(hm,'Remarks'):'';const cityType=hm?gv(hm,'City Type'):'';
     const svcC=data.pins.filter(d=>isSvc(d)).length,nsC=data.pins.filter(d=>isNS(d)).length;
     const adl=data.pins.reduce((a,d)=>a+(parseFloat(gv(d,'Pincode ADL')||gv(d,'Promised ADL'))||0),0);
-    // Boundary
+    const status=isIn?'Inside':'Outside';
+    hubBdData.push({name,pinCount:data.pins.length,svcC,nsC,adl,isIn,nearHub,hvDist,osmDist,mType,remarks,cityType,cat:data.cat,lat:data.lat,lng:data.lng,status});
+    // Apply anomaly filter
+    if(anomFilter==='Outside Boundary'&&isIn)return;
+    if(anomFilter==='Inside Boundary'&&!isIn)return;
+    // Apply merger filter
+    if(mergerFilter&&remarks!==mergerFilter)return;
+    // Draw boundary
     const col=isIn?'#0B9B8A':'#e53935';
     const bLyr=L.geoJSON(merged,{style:{fillColor:col,fillOpacity:.1,weight:3,color:col,opacity:.7,dashArray:isIn?'':'6,4'}});
     bLyr.on('click',()=>bLyr.bindPopup(mkHubMergerPop(name,data.pins.length,svcC,nsC,adl,isIn,nearHub,hvDist,osmDist,mType,remarks,cityType,data.cat),{maxWidth:400}).openPopup());
     hbL3.addLayer(bLyr);
-    // Hub marker
     if(data.lat&&data.lng){const ic=isIn?'#43a047':'#e53935',st=isIn?'#1b5e20':'#b71c1c';
       const icon=L.divIcon({className:'hub-home-icon',html:`<svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="${ic}" stroke="${st}" stroke-width="1.5" stroke-linejoin="round"/></svg>${isIn?'':'<div style="position:absolute;top:-4px;right:-6px;background:#e53935;color:white;border-radius:50%;width:12px;height:12px;font-size:7px;display:flex;align-items:center;justify-content:center;font-weight:700">!</div>'}`,iconSize:[18,18],iconAnchor:[9,18],popupAnchor:[0,-18]});
       hmL3.addLayer(L.marker([data.lat,data.lng],{icon}).bindPopup(mkHubMergerPop(name,data.pins.length,svcC,nsC,adl,isIn,nearHub,hvDist,osmDist,mType,remarks,cityType,data.cat),{maxWidth:400}))}
-    if(!isIn&&data.lat)outsideHubs.push({name,pinCount:data.pins.length,nearHub,hvDist,mType,remarks})});
-  document.getElementById('k3h').textContent=totalH;document.getElementById('k3in').textContent=insideC;document.getElementById('k3out').textContent=outsideC;document.getElementById('k3m').textContent=mergerC;document.getElementById('k3p').textContent=totalP.toLocaleString();
-  // Outside list
-  const el=document.getElementById('outsideList');
-  if(!outsideHubs.length){el.innerHTML='<div style="color:var(--teal);padding:8px;font-size:11px">✅ All hubs inside boundary!</div>';return}
-  el.innerHTML=outsideHubs.sort((a,b)=>a.name.localeCompare(b.name)).map(h=>`<div class="hub-card" onclick="zoomHub3('${h.name.replace(/'/g,"\\'")}')"><div class="hc-name">🏠 ${h.name}</div><div class="hc-warn">⚠️ Outside boundary</div><div class="hc-info">📍 ${h.pinCount} pins${h.nearHub?' | Nearest: '+h.nearHub:''}${h.hvDist?' ('+h.hvDist+'km)':''}</div>${h.mType?'<div><span class="hc-badge hc-merger">'+h.mType+'</span></div>':''}${h.remarks?'<div class="hc-info">💬 '+h.remarks+'</div>':''}</div>`).join('')}
+  });
+  document.getElementById('k3h').textContent=totalH;document.getElementById('k3in').textContent=insideC;document.getElementById('k3out').textContent=outsideC;document.getElementById('k3m').textContent=mergerC;document.getElementById('k3p').textContent=totalP.toLocaleString()}
+
+// Hub Table
+let hubTableVisible=false;
+function toggleHubTable(){
+  const panel=document.getElementById('hubTablePanel');
+  hubTableVisible=!hubTableVisible;
+  if(hubTableVisible){
+    const anomF=getSSVal('ss_f3anom'),mergerF=getSSVal('ss_f3merger');
+    let filtered=hubBdData;
+    if(anomF==='Outside Boundary')filtered=filtered.filter(h=>!h.isIn);
+    if(anomF==='Inside Boundary')filtered=filtered.filter(h=>h.isIn);
+    if(mergerF)filtered=filtered.filter(h=>h.remarks===mergerF);
+    let html=`<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:var(--teal);color:white;position:sticky;top:0"><th style="padding:4px 6px;text-align:left">Hub</th><th style="padding:4px 6px">Pins</th><th style="padding:4px 6px">Status</th><th style="padding:4px 6px">Nearest</th><th style="padding:4px 6px">Dist</th><th style="padding:4px 6px">Merger</th><th style="padding:4px 6px">Remarks</th></tr></thead><tbody>`;
+    filtered.sort((a,b)=>a.name.localeCompare(b.name)).forEach(h=>{
+      html+=`<tr style="cursor:pointer;border-bottom:1px solid #f0f2f4" onclick="zoomHub3('${h.name.replace(/'/g,"\\'")}')"><td style="padding:4px 6px;font-weight:600">${h.name}</td><td style="padding:4px 6px;text-align:center">${h.pinCount}</td><td style="padding:4px 6px;text-align:center;color:${h.isIn?'#2e7d32':'#c62828'}">${h.isIn?'✅':'⚠️'}</td><td style="padding:4px 6px">${h.nearHub||'-'}</td><td style="padding:4px 6px">${h.hvDist||'-'}</td><td style="padding:4px 6px">${h.mType||'-'}</td><td style="padding:4px 6px;color:var(--txl)">${h.remarks||'-'}</td></tr>`});
+    html+='</tbody></table>';
+    document.getElementById('hubTableContent').innerHTML=html;
+    panel.style.display='block';document.getElementById('hubTableBtn').textContent='📋 Hide Hub List'}
+  else{panel.style.display='none';document.getElementById('hubTableBtn').textContent='📋 Show Hub List'}}
 
 function mkHubMergerPop(nm,pins,svc,ns,adl,isIn,near,hvD,osmD,mType,remarks,cityType,cat){
   const status=isIn?'<span style="background:rgba(67,160,71,.1);color:#2e7d32;padding:2px 8px;border-radius:5px;font-size:9px;font-weight:700">✅ Inside</span>':'<span style="background:rgba(229,57,53,.1);color:#c62828;padding:2px 8px;border-radius:5px;font-size:9px;font-weight:700">⚠️ Outside</span>';
