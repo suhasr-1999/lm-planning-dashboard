@@ -243,7 +243,7 @@ function autoLoad(){const st=document.getElementById('gsSt');setProg(5,'Loading.
     st.textContent='⚠️ GeoJSON not found — upload manually';st.className='gs err';document.getElementById('startBtn').classList.add('show');gDone=1;check()});
   setTimeout(()=>{if(!gDone){st.textContent='⚠️ Large file loading... please wait';setProg(35,'Still loading...')}},8000);
   setTimeout(()=>{if(sDone<need||!gDone){st.textContent='⚠️ Slow — upload manually';st.className='gs err';document.getElementById('startBtn').classList.add('show')}},30000)}
-function finishLoad(){if(gjD&&gsD.length){setProg(60,'Merging...');setTimeout(()=>{mergeAll();buildHubList();setProg(80,'Rendering...');setTimeout(()=>{renderAll();setProg(100,'Done!');document.getElementById('gsSt').textContent='✅ All loaded';document.getElementById('gsSt').className='gs ok';document.getElementById('app').style.display='flex';setTimeout(()=>{document.getElementById('lo').classList.add('hide');[1,2,3].forEach(n=>maps[n].invalidateSize())},200)},150)},100)}
+function finishLoad(){if(gjD&&gsD.length){setProg(60,'Merging...');setTimeout(()=>{mergeAll();buildHubList();setProg(75,'Rendering Tab 1...');setTimeout(()=>{pf1();pf2();pf3();af1();setProg(90,'Rendering Tab 2...');setTimeout(()=>{af2();setProg(100,'Done!');document.getElementById('gsSt').textContent='✅ All loaded';document.getElementById('gsSt').className='gs ok';document.getElementById('app').style.display='flex';setTimeout(()=>{document.getElementById('lo').classList.add('hide');[1,2,3].forEach(n=>maps[n].invalidateSize())},200)},100)},100)},100)}
   else{document.getElementById('startBtn').classList.add('show');setProg(100,'Upload manually')}}
 function startPortal(){document.getElementById('startBtn').style.display='none';finishLoad()}
 window.addEventListener('DOMContentLoaded',()=>setTimeout(autoLoad,300));
@@ -390,7 +390,7 @@ function zoomHub3(nm){const entries=[...hbL3.getLayers()];hmL3.eachLayer(l=>{if(
 function rMap(n,data,colorFn){if(gL[n])maps[n].removeLayer(gL[n]);const ft=[];
   data.forEach(d=>{if(!d._g||!d._geo)return;const c=colorFn(d);if(!c)return;ft.push({type:'Feature',geometry:d._geo,properties:d})});
   gL[n]=L.geoJSON(null,{style:f=>{const c=colorFn(f.properties);return{fillColor:c.f,weight:.5,opacity:1,color:c.b,fillOpacity:.45,renderer:cvs[n]}},onEachFeature:(f,l)=>{l.on({mouseover:e=>e.target.setStyle({weight:2,fillOpacity:.8}),mouseout:e=>{if(gL[n])gL[n].resetStyle(e.target)},click:()=>l.bindPopup(mkPop(f.properties),{maxWidth:300}).openPopup()})},renderer:cvs[n]}).addTo(maps[n]);
-  let i=0;const ch=1500;(function go(){const end=Math.min(i+ch,ft.length);for(;i<end;i++)gL[n].addData(ft[i]);if(i<ft.length)setTimeout(go,0);else if(ft.length>0&&ft.length<5000)try{maps[n].fitBounds(gL[n].getBounds(),{padding:[20,20],maxZoom:11})}catch(e){}})()}
+  let i=0;const ch=800;(function go(){const end=Math.min(i+ch,ft.length);for(;i<end;i++)gL[n].addData(ft[i]);if(i<ft.length)setTimeout(go,10);else if(ft.length>0&&ft.length<5000)try{maps[n].fitBounds(gL[n].getBounds(),{padding:[20,20],maxZoom:11})}catch(e){}})()}
 
 // Hub layers from base data
 function buildHL(n,data){hL[n].clearLayers();const seen=new Set;data.forEach(d=>{const la=parseFloat(gv(d,'Hub Lat')),lo=parseFloat(gv(d,'Hub Long'));if(isNaN(la)||isNaN(lo))return;const nm=gv(d,'Current Serviceable Hub')||gv(d,'Final Hub')||'';if(!nm||seen.has(nm))return;seen.add(nm);const sf=(gv(d,'hub_category')||'').toUpperCase().includes('SELF');const hp=aM.filter(dd=>gv(dd,'Current Serviceable Hub')===nm||gv(dd,'Final Hub')===nm);
@@ -439,9 +439,12 @@ function genIns(){const box=document.getElementById('insC'),panel=document.getEl
   if(hcv)ins.push(`<strong>${hcv}</strong> via <strong>hub conversion</strong>.`);
   box.innerHTML=ins.slice(0,5).map((t,i)=>`<div class="ins-i"><div class="ins-n">${i+1}</div><div class="ins-t">${t}</div></div>`).join('');panel.classList.add('show')}
 
+let t3Rendered=false;
 function swTab(id,btn){document.querySelectorAll('.tab-c').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');
-  const n=id==='t1'?1:id==='t2'?2:3;setTimeout(()=>maps[n].invalidateSize(),100)}
-function renderAll(){pf1();pf2();pf3();af1();af2();af3()}
+  const n=id==='t1'?1:id==='t2'?2:3;setTimeout(()=>maps[n].invalidateSize(),100);
+  // Lazy render Hub Merger
+  if(id==='t3'&&!t3Rendered&&aM.length){t3Rendered=true;setTimeout(()=>af3(),200)}}
+function renderAll(){pf1();pf2();pf3();af1();af2();t3Rendered=false}
 
 // File handlers
 document.getElementById('geoF').addEventListener('change',function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{gjD=JSON.parse(ev.target.result);if(gsD.length)finishLoad()}catch(err){alert(err.message)}};r.readAsText(f)});
