@@ -240,8 +240,16 @@ function autoLoad(){const st=document.getElementById('gsSt');setProg(5,'Loading.
   Papa.parse(GURL(GID_BASE),{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>{if(r.data?.length){gsD=r.data;gsD.forEach(row=>{if(row.Pincode)row.Pincode=String(row.Pincode).trim().split('.')[0]})}sDone++;st.textContent='Base: '+gsD.length+' rows...';setProg(20,'Base loaded...');check()},error:()=>{sDone++;check()}});
   // Hub merger sheet
   Papa.parse(GURL(GID_HUB),{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>{if(r.data?.length)hmD=r.data;sDone++;st.textContent+=' | Hubs: '+hmD.length;setProg(30,'Hub data loaded...');check()},error:()=>{sDone++;check()}});
-  // GeoJSON
-  fetch(GEO_URL).then(r=>{if(!r.ok)throw new Error('');return r.json()}).then(d=>{gjD=d;setProg(40,'Boundaries: '+(gjD.features||[]).length);gDone=1;check()}).catch(()=>{gDone=1;check()});
+  // GeoJSON — with timeout and progress
+  setProg(10,'Loading boundaries (large file, please wait)...');
+  const geoTimeout=setTimeout(()=>{if(!gDone){setProg(30,'Still loading boundaries...');document.getElementById('gsSt').textContent+=' | GeoJSON loading...'}},5000);
+  const geoTimeout2=setTimeout(()=>{if(!gDone){setProg(35,'⚠️ Large file — upload manually if stuck');document.getElementById('startBtn').classList.add('show')}},20000);
+  fetch(GEO_URL).then(r=>{if(!r.ok)throw new Error('Not found');return r.text()}).then(text=>{
+    clearTimeout(geoTimeout);clearTimeout(geoTimeout2);
+    setProg(40,'Parsing boundaries...');
+    setTimeout(()=>{gjD=JSON.parse(text);setProg(45,'Boundaries: '+(gjD.features||[]).length);gDone=1;check()},50)
+  }).catch(e=>{clearTimeout(geoTimeout);clearTimeout(geoTimeout2);
+    setProg(20,'⚠️ GeoJSON not found — upload manually');gDone=1;check()});
   setTimeout(()=>{if(sDone<need||!gDone){st.textContent='⚠️ Slow — upload manually';st.className='gs err'}},15000)}
 function finishLoad(){if(gjD&&gsD.length){setProg(60,'Merging...');setTimeout(()=>{mergeAll();buildHubList();setProg(80,'Rendering...');setTimeout(()=>{renderAll();setProg(100,'Done!');document.getElementById('gsSt').textContent='✅ All loaded';document.getElementById('gsSt').className='gs ok';document.getElementById('app').style.display='flex';setTimeout(()=>{document.getElementById('lo').classList.add('hide');[1,2,3].forEach(n=>maps[n].invalidateSize())},200)},150)},100)}
   else{document.getElementById('startBtn').classList.add('show');setProg(100,'Upload manually')}}
