@@ -91,8 +91,6 @@ label.hbtn{cursor:pointer}
 .hp-pins{font-size:8px;color:var(--txl);line-height:1.4;max-height:80px;overflow-y:auto}
 .hub-card{padding:7px 9px;border:1px solid var(--bdr);border-radius:6px;margin-bottom:4px;cursor:pointer;transition:all .15s;background:var(--w)}.hub-card:hover{border-color:var(--teal);background:var(--tbg)}
 .hub-card .hc-name{font-size:11px;font-weight:600;color:var(--tx)}.hub-card .hc-warn{font-size:9px;color:#e53935;font-weight:600;margin-top:2px}.hub-card .hc-info{font-size:9px;color:var(--txl);margin-top:1px}
-.hub-card .hc-badge{display:inline-block;padding:1px 5px;border-radius:3px;font-size:8px;font-weight:600;margin-right:3px}
-.hc-merger{background:rgba(156,39,176,.08);color:#7b1fa2}.hc-inside{background:rgba(67,160,71,.08);color:#2e7d32}.hc-outside{background:rgba(229,57,53,.08);color:#c62828}
 input[type="file"]{display:none}
 .hub-home-icon{display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
 ::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:#f0f2f4}::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
@@ -101,14 +99,14 @@ input[type="file"]{display:none}
 <body>
 <div class="lo" id="lo">
   <div class="lo-brand"><div><div style="font-size:32px;font-weight:800;color:var(--teal);letter-spacing:-1px">SHADOWFAX</div><div style="font-size:13px;color:var(--tl);font-style:italic;margin-top:-4px;text-align:right">Think ahead!</div></div></div>
-  <p class="lo-sub">LM Planning Dashboard</p>  <p class="lo-sub2">Loading data automatically... (GeoJSON ~25MB, may take 30-60 sec)</p>
+  <p class="lo-sub">LM Planning Dashboard</p><p class="lo-sub2">Loading data automatically... (GeoJSON ~25MB, may take 30-60 sec)</p>
   <div class="ua">
     <div class="pw show" id="pw"><div class="pl" id="pl">Initializing...</div><div class="pbw"><div class="pfl" id="pf"></div></div></div>
     <div class="gs" id="gsSt" style="text-align:center;margin-top:8px"></div>
     <div style="margin-top:12px;text-align:center"><div class="od">—— or load manually ——</div>
       <div style="display:flex;gap:6px;justify-content:center;margin-top:6px">
-        <label class="hbtn" style="font-size:10px;padding:6px 12px">🗺️ Upload GeoJSON<input type="file" id="geoF" accept=".geojson,.json"></label>
-        <label class="hbtn" style="font-size:10px;padding:6px 12px">📄 Upload CSV<input type="file" id="csvF" accept=".csv"></label>
+        <label class="hbtn" style="font-size:10px;padding:6px 12px">Upload GeoJSON<input type="file" id="geoF" accept=".geojson,.json"></label>
+        <label class="hbtn" style="font-size:10px;padding:6px 12px">Upload CSV<input type="file" id="csvF" accept=".csv"></label>
       </div>
       <button class="startb" id="startBtn" onclick="startPortal()">Launch Dashboard →</button>
     </div>
@@ -118,68 +116,65 @@ input[type="file"]{display:none}
   <div class="hdr">
     <div class="br"><div><div style="font-size:13px;font-weight:800;color:var(--teal);letter-spacing:-.3px">SHADOWFAX</div><div style="font-size:6px;color:var(--tl);font-style:italic;margin-top:-1px;text-align:right">Think ahead!</div></div><div class="pn">LM Planning Dashboard</div></div>
     <div class="tbar">
-      <button class="tbtn active" onclick="swTab('t1',this)">📊 Pan India</button>
-      <button class="tbtn" onclick="swTab('t2',this)">🚀 Expansion</button>
-      <button class="tbtn" onclick="swTab('t3',this)">🔲 Hub Merger</button>
+      <button class="tbtn active" onclick="swTab('t1',this)">Pan India</button>
+      <button class="tbtn" onclick="swTab('t2',this)">Expansion</button>
+      <button class="tbtn" onclick="swTab('t3',this)">Hub Anomaly</button>
     </div>
-    <div class="hacts"><button class="hbtn" onclick="refreshAll()">🔄 Refresh <span class="sp" id="rSp"></span></button><label class="hbtn">🗺️ GeoJSON<input type="file" id="gfT" accept=".geojson,.json"></label></div>
+    <div class="hacts"><button class="hbtn" onclick="refreshAll()">Refresh <span class="sp" id="rSp"></span></button><label class="hbtn">GeoJSON<input type="file" id="gfT" accept=".geojson,.json"></label></div>
   </div>
   <div class="main">
-    <!-- TAB 1 -->
+    <!-- TAB 1: PAN INDIA -->
     <div class="tab-c active" id="tab-t1">
       <div class="map-w"><div id="map1"></div></div>
       <div class="kstrip"><div class="kp tot"><div class="kl">Total</div><div class="kv" id="k1t">—</div></div><div class="kp svc"><div class="kl">Serviceable</div><div class="kv" id="k1s">—</div></div><div class="kp nsvc"><div class="kl">Non Svc</div><div class="kv" id="k1n">—</div></div><div class="kp rct"><div class="kl">Reactivation</div><div class="kv" id="k1rc">—</div></div><div class="kp svc"><div class="kl">IPS Svc Pins</div><div class="kv" id="k1ipsp">—</div></div><div class="kp nsvc"><div class="kl">IPS Non Svc</div><div class="kv" id="k1ipsn">—</div></div></div>
-      <div class="sidebar" id="sb1"><div class="sb-tgl" onclick="tgSB('sb1')">◀</div><div class="sb-hd">🎛️ Pan India</div>
+      <div class="sidebar" id="sb1"><div class="sb-tgl" onclick="tgSB('sb1')">◀</div><div class="sb-hd">Pan India</div>
         <div class="sb-bd"><div class="sb-s"><div class="sb-st">Filters</div>
           <div class="sb-f"><label>Pin Type</label><div id="ss_f1pt"></div></div><div class="sb-f"><label>Region</label><div id="ss_f1r"></div></div><div class="sb-f"><label>State</label><div id="ss_f1st"></div></div><div class="sb-f"><label>POD</label><div id="ss_f1p"></div></div><div class="sb-f"><label>City</label><div id="ss_f1c"></div></div><div class="sb-f"><label>Svc Remarks</label><div id="ss_f1sr"></div></div>
-          <div class="sb-rst" onclick="rf1()">↺ Reset All</div></div>
-          <div class="sb-s"><div class="sb-st">Search</div><div class="sb-f"><label>Pincode</label><div style="display:flex;gap:3px"><input type="text" id="ps1" style="flex:1;padding:6px 8px;border:1px solid var(--bdr);border-radius:5px;font-size:12px;font-family:'Inter',sans-serif;color:var(--txl)" placeholder="Pincode..." onkeydown="if(event.key==='Enter')sPin(1)"><button onclick="sPin(1)" style="padding:6px 8px;background:var(--teal);color:var(--w);border:none;border-radius:5px;cursor:pointer;font-size:12px">🔍</button></div></div>
+          <div class="sb-rst" onclick="rf1()">Reset All</div></div>
+          <div class="sb-s"><div class="sb-st">Search</div><div class="sb-f"><label>Pincode</label><div style="display:flex;gap:3px"><input type="text" id="ps1" style="flex:1;padding:6px 8px;border:1px solid var(--bdr);border-radius:5px;font-size:12px;font-family:'Inter',sans-serif;color:var(--txl)" placeholder="Pincode..." onkeydown="if(event.key==='Enter')sPin(1)"><button onclick="sPin(1)" style="padding:6px 8px;background:var(--teal);color:var(--w);border:none;border-radius:5px;cursor:pointer;font-size:12px">Search</button></div></div>
           <div class="sb-f"><label>Hub</label><div class="hub-dd-wrap"><input class="hub-dd-input" id="hdi1" placeholder="Type hub..." oninput="hubDD(1)" onfocus="hubDD(1)"><div class="hub-dd-list" id="hdl1"></div></div></div>
-          <div class="sb-rst hs-clear" id="hsc1" onclick="clrHub(1)">✕ Clear Hub</div></div>
-          <div class="sb-s"><div class="sb-st">Layers</div><button class="sb-btn" id="ht1" onclick="tH(1)">🏠 Show Hubs</button><button class="sb-btn" id="cd1" onclick="tCent(1)">📍 Defunct Centroids</button></div>
+          <div class="sb-rst hs-clear" id="hsc1" onclick="clrHub(1)">Clear Hub</div></div>
+          <div class="sb-s"><div class="sb-st">Layers</div><button class="sb-btn" id="ht1" onclick="tH(1)">Show Hubs</button><button class="sb-btn" id="cd1" onclick="tCent(1)">Defunct Centroids</button></div>
         </div></div>
       <div class="mleg"><h4>Legend</h4><div class="li"><div class="lc" style="background:#43a047"></div>Serviceable</div><div class="li"><div class="lc" style="background:#e53935"></div>Non Serviceable</div><div class="li"><div class="lc" style="background:#FF6D00"></div>Need Reactivation</div><div style="border-top:1px solid var(--bdr);margin:2px 0;padding-top:2px"><div class="li"><div class="lic"><svg viewBox="0 0 24 24" width="9" height="9"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="#43a047" stroke="#1b5e20" stroke-width="1.5" stroke-linejoin="round"/></svg></div>Hub</div><div class="li"><div class="lc" style="background:transparent;border:2px solid #0B6B5A;height:4px"></div>Hub Boundary</div><div class="li"><div style="width:8px;height:9px"><svg width="8" height="9" viewBox="0 0 14 18"><path d="M7 0C3.1 0 0 3.1 0 7c0 5.2 7 11 7 11s7-5.8 7-11C14 3.1 10.9 0 7 0z" fill="#e53935"/></svg></div>Defunct</div></div></div>
     </div>
-    <!-- TAB 2 -->
+    <!-- TAB 2: EXPANSION (no IPS Meesho% / Overall Meesho% KPIs) -->
     <div class="tab-c" id="tab-t2">
       <div class="map-w"><div id="map2"></div></div>
-      <div class="kstrip"><div class="kp tot"><div class="kl">Expansion</div><div class="kv" id="k2t">—</div></div><div class="kp pct"><div class="kl">IPS Meesho%</div><div class="kv" id="k2ips">—</div></div><div class="kp pct"><div class="kl">Overall Meesho%</div><div class="kv" id="k2ovr">—</div></div><div class="kp hub"><div class="kl">Proposed</div><div class="kv" id="k2ph">—</div></div><div class="kp hub"><div class="kl">Conv Hubs</div><div class="kv" id="k2ch">—</div></div></div>
-      <div class="sidebar" id="sb2"><div class="sb-tgl" onclick="tgSB('sb2')">◀</div><div class="sb-hd">🚀 Expansion</div>
+      <div class="kstrip"><div class="kp tot"><div class="kl">Expansion</div><div class="kv" id="k2t">—</div></div><div class="kp hub"><div class="kl">Proposed</div><div class="kv" id="k2ph">—</div></div><div class="kp hub"><div class="kl">Conv Hubs</div><div class="kv" id="k2ch">—</div></div></div>
+      <div class="sidebar" id="sb2"><div class="sb-tgl" onclick="tgSB('sb2')">◀</div><div class="sb-hd">Expansion</div>
         <div class="sb-bd"><div class="sb-s"><div class="sb-st">Filters</div>
           <div class="sb-f"><label>Pin Type</label><div id="ss_f2pt"></div></div><div class="sb-f"><label>Region</label><div id="ss_f2r"></div></div><div class="sb-f"><label>State</label><div id="ss_f2st"></div></div><div class="sb-f"><label>POD</label><div id="ss_f2p"></div></div><div class="sb-f"><label>City</label><div id="ss_f2c"></div></div>
           <div class="sb-f"><label>Strategy (Multi)</label><div id="ms_f2s"></div></div>
-          <div class="sb-rst" onclick="rf2()">↺ Reset All</div></div>
-          <div class="sb-s"><div class="sb-st">Search</div><div class="sb-f"><label>Pincode</label><div style="display:flex;gap:3px"><input type="text" id="ps2" style="flex:1;padding:6px 8px;border:1px solid var(--bdr);border-radius:5px;font-size:12px;font-family:'Inter',sans-serif;color:var(--txl)" placeholder="Pincode..." onkeydown="if(event.key==='Enter')sPin(2)"><button onclick="sPin(2)" style="padding:6px 8px;background:var(--teal);color:var(--w);border:none;border-radius:5px;cursor:pointer;font-size:12px">🔍</button></div></div>
+          <div class="sb-rst" onclick="rf2()">Reset All</div></div>
+          <div class="sb-s"><div class="sb-st">Search</div><div class="sb-f"><label>Pincode</label><div style="display:flex;gap:3px"><input type="text" id="ps2" style="flex:1;padding:6px 8px;border:1px solid var(--bdr);border-radius:5px;font-size:12px;font-family:'Inter',sans-serif;color:var(--txl)" placeholder="Pincode..." onkeydown="if(event.key==='Enter')sPin(2)"><button onclick="sPin(2)" style="padding:6px 8px;background:var(--teal);color:var(--w);border:none;border-radius:5px;cursor:pointer;font-size:12px">Search</button></div></div>
           <div class="sb-f"><label>Hub</label><div class="hub-dd-wrap"><input class="hub-dd-input" id="hdi2" placeholder="Type hub..." oninput="hubDD(2)" onfocus="hubDD(2)"><div class="hub-dd-list" id="hdl2"></div></div></div>
-          <div class="sb-rst hs-clear" id="hsc2" onclick="clrHub(2)">✕ Clear Hub</div></div>
-          <div class="sb-s"><div class="sb-st">Layers</div><button class="sb-btn" id="ht2" onclick="tH(2)">🏠 Show Hubs</button><button class="sb-btn" id="cd2" onclick="tCent(2)">📍 Defunct Centroids</button></div>
-          <div class="sb-s"><div class="sb-st">Insights</div><button class="sb-btn" onclick="genIns()" style="background:linear-gradient(135deg,#fff8e1,#fff3e0);color:#e65100;border-color:#ffe0b2;font-weight:600">✨ Generate Insights</button></div>
+          <div class="sb-rst hs-clear" id="hsc2" onclick="clrHub(2)">Clear Hub</div></div>
+          <div class="sb-s"><div class="sb-st">Layers</div><button class="sb-btn" id="ht2" onclick="tH(2)">Show Hubs</button><button class="sb-btn" id="cd2" onclick="tCent(2)">Defunct Centroids</button></div>
+          <div class="sb-s"><div class="sb-st">Insights</div><button class="sb-btn" onclick="genIns()" style="background:linear-gradient(135deg,#fff8e1,#fff3e0);color:#e65100;border-color:#ffe0b2;font-weight:600">Generate Insights</button></div>
         </div></div>
       <div class="mleg" id="leg2"></div>
-      <div class="ins-p" id="insP"><button class="ins-x" onclick="document.getElementById('insP').classList.remove('show')">✕</button><h4>💡 Insights</h4><div id="insC"></div></div>
+      <div class="ins-p" id="insP"><button class="ins-x" onclick="document.getElementById('insP').classList.remove('show')">✕</button><h4>Insights</h4><div id="insC"></div></div>
     </div>
-    <!-- TAB 3: HUB MERGER -->
+    <!-- TAB 3: HUB ANOMALY -->
     <div class="tab-c" id="tab-t3">
       <div class="map-w"><div id="map3"></div></div>
       <div class="kstrip"><div class="kp tot"><div class="kl">Total Hubs</div><div class="kv" id="k3h">—</div></div><div class="kp svc"><div class="kl">Inside Boundary</div><div class="kv" id="k3in">—</div></div><div class="kp nsvc"><div class="kl">Outside</div><div class="kv" id="k3out">—</div></div><div class="kp hub"><div class="kl">Merger Hubs</div><div class="kv" id="k3m">—</div></div><div class="kp pct"><div class="kl">Total Pins</div><div class="kv" id="k3p">—</div></div></div>
-      <div class="sidebar" id="sb3"><div class="sb-tgl" onclick="tgSB('sb3')">◀</div><div class="sb-hd">🔲 Hub Merger</div>
+      <div class="sidebar" id="sb3"><div class="sb-tgl" onclick="tgSB('sb3')">◀</div><div class="sb-hd">Hub Anomaly</div>
         <div class="sb-bd"><div class="sb-s"><div class="sb-st">Filters</div>
-          <!-- FIX: Added missing Anomaly and Merger filter containers -->
           <div class="sb-f"><label>Anomaly Filter</label><div id="ss_f3anom"></div></div>
           <div class="sb-f"><label>Merger Remarks</label><div id="ss_f3merger"></div></div>
           <div class="sb-f"><label>Pin Type</label><div id="ss_f3pt"></div></div><div class="sb-f"><label>Region</label><div id="ss_f3r"></div></div><div class="sb-f"><label>State</label><div id="ss_f3st"></div></div><div class="sb-f"><label>POD</label><div id="ss_f3p"></div></div><div class="sb-f"><label>City</label><div id="ss_f3c"></div></div><div class="sb-f"><label>Svc Remarks</label><div id="ss_f3sr"></div></div>
-          <div class="sb-rst" onclick="rf3()">↺ Reset All</div></div>
+          <div class="sb-rst" onclick="rf3()">Reset All</div></div>
           <div class="sb-s"><div class="sb-st">Search Hub</div><div class="sb-f"><div class="hub-dd-wrap"><input class="hub-dd-input" id="hdi3" placeholder="Type hub..." oninput="hubDD(3)" onfocus="hubDD(3)"><div class="hub-dd-list" id="hdl3"></div></div></div></div>
-          <!-- FIX: Added Hub List button -->
           <div class="sb-s"><div class="sb-st">Actions</div>
-            <button class="sb-btn" id="hubTableBtn" onclick="toggleHubTable()">📋 Show Hub List</button>
+            <button class="sb-btn" id="hubTableBtn" onclick="toggleHubTable()">Show Hub List</button>
           </div>
-          <div class="sb-s"><div class="sb-st">⚠️ Hubs Outside Boundary</div><div id="outsideList" style="max-height:200px;overflow-y:auto"></div></div>
+          <div class="sb-s"><div class="sb-st">Hubs Outside Boundary</div><div id="outsideList" style="max-height:200px;overflow-y:auto"></div></div>
         </div></div>
-      <div class="mleg"><h4>Legend</h4><div class="li"><div class="lc" style="background:var(--teal);opacity:.3;border:2px solid var(--teal)"></div>Inside ✅</div><div class="li"><div class="lc" style="background:#e53935;opacity:.3;border:2px dashed #e53935"></div>Outside ⚠️</div><div class="li"><div class="lic"><svg viewBox="0 0 24 24" width="9" height="9"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="#43a047" stroke="#1b5e20" stroke-width="1.5" stroke-linejoin="round"/></svg></div>Hub ✅</div><div class="li"><div class="lic"><svg viewBox="0 0 24 24" width="9" height="9"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="#e53935" stroke="#b71c1c" stroke-width="1.5" stroke-linejoin="round"/></svg></div>Hub ⚠️</div></div>
-      <!-- Hub List Table Panel -->
+      <div class="mleg"><h4>Legend</h4><div class="li"><div class="lc" style="background:var(--teal);opacity:.3;border:2px solid var(--teal)"></div>Inside</div><div class="li"><div class="lc" style="background:#e53935;opacity:.3;border:2px dashed #e53935"></div>Outside</div><div class="li"><div class="lic"><svg viewBox="0 0 24 24" width="9" height="9"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="#43a047" stroke="#1b5e20" stroke-width="1.5" stroke-linejoin="round"/></svg></div>Self Hub</div><div class="li"><div class="lic"><svg viewBox="0 0 24 24" width="9" height="9"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="#ff9800" stroke="#e65100" stroke-width="1.5" stroke-linejoin="round"/></svg></div>Non-Self Hub</div></div>
       <div id="hubTablePanel" style="display:none;position:absolute;bottom:6px;left:50%;transform:translateX(-50%);z-index:999;background:rgba(255,255,255,.98);backdrop-filter:blur(12px);border:1px solid var(--bdr);border-radius:10px;padding:10px;max-width:700px;width:90%;box-shadow:var(--shl);max-height:250px;overflow:hidden">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h4 style="font-size:11px;font-weight:700;color:var(--teal)">📋 Hub List</h4><button onclick="toggleHubTable()" style="background:none;border:none;color:var(--txm);cursor:pointer;font-size:14px">✕</button></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h4 style="font-size:11px;font-weight:700;color:var(--teal)">Hub List</h4><button onclick="toggleHubTable()" style="background:none;border:none;color:var(--txm);cursor:pointer;font-size:14px">✕</button></div>
         <div style="max-height:200px;overflow-y:auto" id="hubTableContent"></div>
       </div>
     </div>
@@ -192,7 +187,8 @@ const SV={f:'#43a047',b:'#2e7d32'},NV={f:'#e53935',b:'#b71c1c'},RC={f:'#FF6D00',
 const SID='1-d3YUOaNlMpjZ6rYgGgmX3n0rlpt8mF0_5gVcdampvI',GID_BASE='0',GID_HUB='1073579012';
 const GURL=id=>'https://docs.google.com/spreadsheets/d/'+SID+'/gviz/tq?tqx=out:csv&gid='+id;
 const GEO_URL='data/boundaries.geojson';
-const IB=[[6,67],[38,98]];
+// CHANGE 2: Wider bounds — covers Gujarat (west ~66E) and Arunachal (east ~98E) properly
+const IB=[[4,63],[40,100]];
 let gjD=null,gsD=[],hmD=[],aM=[],fM=[],eF=[],fM3=[];
 let allHubNames=[];
 const cvs=[null,L.canvas({padding:.5,tolerance:5}),L.canvas({padding:.5,tolerance:5}),L.canvas({padding:.5,tolerance:5})];
@@ -201,19 +197,10 @@ let hL=[null,L.layerGroup(),L.layerGroup()],centL=[null,L.layerGroup(),L.layerGr
 let hsL=[null,null,null,null];
 let hOn=[0,0,0],centOn=[0,0,0];
 let hbL3=null,hmL3=null;
-
-// FIX: Only init maps 1 and 2 at startup; lazy-init map 3
+// Lazy-init map 3
 [1,2].forEach(n=>{maps[n]=L.map('map'+n,{zoomControl:true,preferCanvas:true,renderer:cvs[n],maxBounds:IB,maxBoundsViscosity:1,minZoom:4}).setView([22.5,82],5);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(maps[n])});
-
 let map3Inited=false;
-function initMap3(){
-  if(map3Inited)return;
-  maps[3]=L.map('map3',{zoomControl:true,preferCanvas:true,renderer:cvs[3],maxBounds:IB,maxBoundsViscosity:1,minZoom:4}).setView([22.5,82],5);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(maps[3]);
-  hbL3=L.layerGroup().addTo(maps[3]);hmL3=L.layerGroup().addTo(maps[3]);
-  map3Inited=true;
-}
-
+function initMap3(){if(map3Inited)return;maps[3]=L.map('map3',{zoomControl:true,preferCanvas:true,renderer:cvs[3],maxBounds:IB,maxBoundsViscosity:1,minZoom:4}).setView([22.5,82],5);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(maps[3]);hbL3=L.layerGroup().addTo(maps[3]);hmL3=L.layerGroup().addTo(maps[3]);map3Inited=true}
 function gv(o,k){return(o[k]||'').toString().trim()}
 function parseRaw(v){if(!v)return 0;const s=String(v).trim().replace('%','');const n=parseFloat(s);return isNaN(n)?0:n}
 function sr(d){return gv(d,'Serviceability Remarks').toLowerCase()}
@@ -225,14 +212,12 @@ function isDf(d){return sr(d).includes('defunct')}
 function setProg(p,l){document.getElementById('pf').style.width=p+'%';if(l)document.getElementById('pl').textContent=l}
 function tgSB(id){const sb=document.getElementById(id);sb.classList.toggle('collapsed');sb.querySelector('.sb-tgl').textContent=sb.classList.contains('collapsed')?'▶':'◀'}
 function haversine(a,b,c,d){const R=6371,dL=(c-a)*Math.PI/180,dN=(d-b)*Math.PI/180,x=Math.sin(dL/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dN/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
-// Single-select
 function createSS(id,items,onChange){const el=document.getElementById(id);if(!el)return;let h=`<select class="sb-sel" id="${id}_sel" onchange="${onChange}"><option value="">All</option>`;[...items].sort().forEach(i=>{if(i)h+=`<option value="${i}">${i}</option>`});el.innerHTML=h+'</select>'}
 function getSSVal(id){const s=document.getElementById(id+'_sel');return s?s.value:''}
 function clearSS(id){const s=document.getElementById(id+'_sel');if(s)s.value=''}
-// Multi-select
 const msState={};
 function createMS(id,items){const el=document.getElementById(id);if(!el)return;msState[id]={selected:new Set,items:[...items].sort()};
-  el.innerHTML=`<div class="ms-wrap"><button class="ms-btn" onclick="toggleMSDD('${id}')">All Strategies</button><div class="ms-dd" id="${id}_dd"><input class="ms-search" placeholder="Search..." oninput="filterMS('${id}',this.value)"><div class="ms-opts" id="${id}_opts"></div><div class="ms-actions"><button class="ms-ok" onclick="applyMS('${id}')">✓ OK</button><button class="ms-clr" onclick="clearMSApply('${id}')">✕ Clear</button></div></div><div class="ms-tags" id="${id}_tags"></div></div>`;
+  el.innerHTML=`<div class="ms-wrap"><button class="ms-btn" onclick="toggleMSDD('${id}')">All Strategies</button><div class="ms-dd" id="${id}_dd"><input class="ms-search" placeholder="Search..." oninput="filterMS('${id}',this.value)"><div class="ms-opts" id="${id}_opts"></div><div class="ms-actions"><button class="ms-ok" onclick="applyMS('${id}')">OK</button><button class="ms-clr" onclick="clearMSApply('${id}')">Clear</button></div></div><div class="ms-tags" id="${id}_tags"></div></div>`;
   renderMSOpts(id);document.addEventListener('click',e=>{const dd=document.getElementById(id+'_dd');if(dd&&dd.classList.contains('open')&&!el.contains(e.target))dd.classList.remove('open')})}
 function toggleMSDD(id){document.getElementById(id+'_dd').classList.toggle('open')}
 function filterMS(id,q){const ql=q.toLowerCase(),st=msState[id],el=document.getElementById(id+'_opts');if(!el||!st)return;el.innerHTML=st.items.filter(i=>i.toLowerCase().includes(ql)).map(i=>`<label class="ms-opt"><input type="checkbox" ${st.selected.has(i)?'checked':''} onchange="toggleMSItem('${id}',\`${i.replace(/`/g,'')}\`,this.checked)"><span>${i}</span></label>`).join('')}
@@ -245,45 +230,44 @@ function getMSVals(id){return msState[id]?msState[id].selected:new Set}
 function clearMS(id){if(msState[id]){msState[id].selected.clear();updateMSDisp(id);renderMSOpts(id)}}
 function applyMS(id){document.getElementById(id+'_dd').classList.remove('open');af2()}
 function clearMSApply(id){clearMS(id);document.getElementById(id+'_dd').classList.remove('open');af2()}
-// LOADING
 function autoLoad(){const st=document.getElementById('gsSt');setProg(5,'Loading...');st.textContent='Loading...';st.className='gs';
   let sDone=0,gDone=0;const need=2;
   function check(){if(sDone>=need&&gDone)finishLoad()}
   Papa.parse(GURL(GID_BASE),{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>{if(r.data?.length){gsD=r.data;gsD.forEach(row=>{if(row.Pincode)row.Pincode=String(row.Pincode).trim().split('.')[0]})}sDone++;st.textContent='Base: '+gsD.length+'...';setProg(20,'Base loaded...');check()},error:()=>{sDone++;check()}});
   Papa.parse(GURL(GID_HUB),{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>{if(r.data?.length)hmD=r.data;sDone++;setProg(30,'Hub data...');check()},error:()=>{sDone++;check()}});
   setProg(10,'Loading boundaries...');
-  fetch(GEO_URL).then(r=>{if(!r.ok)throw new Error('');return r.json()}).then(d=>{gjD=d;setProg(45,'Boundaries: '+(gjD.features||[]).length);gDone=1;check()}).catch(()=>{
-    st.textContent='⚠️ GeoJSON not found — upload manually';st.className='gs err';document.getElementById('startBtn').classList.add('show');gDone=1;check()});
-  setTimeout(()=>{if(!gDone){st.textContent='⚠️ Large file loading... please wait';setProg(35,'Still loading...')}},8000);
-  setTimeout(()=>{if(sDone<need||!gDone){st.textContent='⚠️ Slow — upload manually';st.className='gs err';document.getElementById('startBtn').classList.add('show')}},30000)}
+  fetch(GEO_URL).then(r=>{if(!r.ok)throw new Error('');return r.json()}).then(d=>{gjD=d;setProg(45,'Boundaries: '+(gjD.features||[]).length);gDone=1;check()}).catch(()=>{st.textContent='GeoJSON not found — upload manually';st.className='gs err';document.getElementById('startBtn').classList.add('show');gDone=1;check()});
+  setTimeout(()=>{if(!gDone){st.textContent='Large file loading... please wait';setProg(35,'Still loading...')}},8000);
+  setTimeout(()=>{if(sDone<need||!gDone){st.textContent='Slow — upload manually';st.className='gs err';document.getElementById('startBtn').classList.add('show')}},30000)}
 function finishLoad(){if(gjD&&gsD.length){setProg(60,'Merging...');setTimeout(()=>{
-    try{
-      mergeAll();buildHubList();setProg(80,'Setting up filters...');
-      setTimeout(()=>{
-        try{
-          pf1();pf2();
-          // FIX: pf3 wrapped in try-catch so it doesn't block load
-          try{pf3()}catch(e){console.warn('pf3 init deferred:',e)}
-          fM=aM;eF=aM.filter(d=>gv(d,'Expansion Strategy'));
-          // KPIs only — no map render on load
-          let svc=0,nsvc=0,rct=0,dfN=0,ipsSvc=0,ipsNsvc=0;fM.forEach(d=>{const isIPS=gv(d,'Pin Type').toLowerCase().includes('ips');if(isSvc(d)){svc++;if(isIPS)ipsSvc++}else if(isNS(d)){nsvc++;if(isIPS)ipsNsvc++}else if(isRe(d))rct++;else if(isDfN(d))dfN++});
-          document.getElementById('k1t').textContent=fM.length.toLocaleString();document.getElementById('k1s').textContent=svc.toLocaleString();document.getElementById('k1n').textContent=nsvc.toLocaleString();document.getElementById('k1rc').textContent=rct.toLocaleString();document.getElementById('k1ipsp').textContent=ipsSvc.toLocaleString();document.getElementById('k1ipsn').textContent=ipsNsvc.toLocaleString();
-          // Tab 2 KPIs
-          let sI=0,sO=0;const ph=new Set,ch=new Set;eF.forEach(d=>{if(isSvc(d)){sI+=parseRaw(gv(d,'IPS Meesho serviceability%'));sO+=parseRaw(gv(d,'Overall Meesho serviceability%'))}const p=gv(d,'Proposed Hub Name');if(p&&p!=='-')ph.add(p);const c=gv(d,'Conversion Hub name');if(c&&c!=='-')ch.add(c)});
-          document.getElementById('k2t').textContent=eF.length.toLocaleString();document.getElementById('k2ips').textContent=(sI*100).toFixed(2)+'%';document.getElementById('k2ovr').textContent=(sO*100).toFixed(2)+'%';document.getElementById('k2ph').textContent=ph.size;document.getElementById('k2ch').textContent=ch.size;
-          setProg(100,'Done! Select a filter to view map.');
-          document.getElementById('gsSt').textContent='✅ Loaded — select Region/State/POD to render map';document.getElementById('gsSt').className='gs ok';
-          document.getElementById('app').style.display='flex';
-          setTimeout(()=>{document.getElementById('lo').classList.add('hide');[1,2].forEach(n=>maps[n].invalidateSize())},200);
-        }catch(err){console.error('Filter setup error:',err);document.getElementById('gsSt').textContent='⚠️ Error in setup: '+err.message;document.getElementById('gsSt').className='gs err';document.getElementById('startBtn').classList.add('show')}
-      },100);
-    }catch(err){console.error('Merge error:',err);document.getElementById('gsSt').textContent='⚠️ Merge error: '+err.message;document.getElementById('gsSt').className='gs err';document.getElementById('startBtn').classList.add('show')}
+  try{
+    mergeAll();buildHubList();setProg(80,'Setting up filters...');
+    setTimeout(()=>{
+      try{
+        pf1();pf2();try{pf3()}catch(e){console.warn('pf3 deferred:',e)}
+        fM=aM;eF=aM.filter(d=>gv(d,'Expansion Strategy'));
+        // CHANGE 1: Compute KPIs AND render all pincodes on Pan India immediately
+        let svc=0,nsvc=0,rct=0,dfN=0,ipsSvc=0,ipsNsvc=0;fM.forEach(d=>{const isIPS=gv(d,'Pin Type').toLowerCase().includes('ips');if(isSvc(d)){svc++;if(isIPS)ipsSvc++}else if(isNS(d)){nsvc++;if(isIPS)ipsNsvc++}else if(isRe(d))rct++;else if(isDfN(d))dfN++});
+        document.getElementById('k1t').textContent=fM.length.toLocaleString();document.getElementById('k1s').textContent=svc.toLocaleString();document.getElementById('k1n').textContent=nsvc.toLocaleString();document.getElementById('k1rc').textContent=rct.toLocaleString();document.getElementById('k1ipsp').textContent=ipsSvc.toLocaleString();document.getElementById('k1ipsn').textContent=ipsNsvc.toLocaleString();
+        // Render ALL pincodes on map1 on load
+        rMap(1,fM,d=>{if(isSvc(d))return SV;if(isRe(d))return RC;if(isNS(d))return NV;return null});
+        buildHL(1,fM);
+        // Tab 2 KPIs (no Meesho% needed)
+        const ph=new Set,ch=new Set;eF.forEach(d=>{const p=gv(d,'Proposed Hub Name');if(p&&p!=='-')ph.add(p);const c=gv(d,'Conversion Hub name');if(c&&c!=='-')ch.add(c)});
+        document.getElementById('k2t').textContent=eF.length.toLocaleString();document.getElementById('k2ph').textContent=ph.size;document.getElementById('k2ch').textContent=ch.size;
+        setProg(100,'Done!');
+        document.getElementById('gsSt').textContent='Loaded successfully';document.getElementById('gsSt').className='gs ok';
+        document.getElementById('app').style.display='flex';
+        setTimeout(()=>{document.getElementById('lo').classList.add('hide');[1,2].forEach(n=>maps[n].invalidateSize())},200);
+      }catch(err){console.error('Setup error:',err);document.getElementById('gsSt').textContent='Error: '+err.message;document.getElementById('gsSt').className='gs err';document.getElementById('startBtn').classList.add('show')}
+    },100);
+  }catch(err){console.error('Merge error:',err);document.getElementById('gsSt').textContent='Merge error: '+err.message;document.getElementById('gsSt').className='gs err';document.getElementById('startBtn').classList.add('show')}
   },100)}
   else{document.getElementById('startBtn').classList.add('show');setProg(100,'Upload manually')}}
 function startPortal(){document.getElementById('startBtn').style.display='none';finishLoad()}
 window.addEventListener('DOMContentLoaded',()=>setTimeout(autoLoad,300));
 function refreshAll(){const sp=document.getElementById('rSp');sp.style.display='inline-block';let d=0;
-  const f=()=>{d++;if(d>=2){sp.style.display='none';mergeAll();buildHubList();hubMergerCache={};renderAll();alert('✅ Refreshed!')}};
+  const f=()=>{d++;if(d>=2){sp.style.display='none';mergeAll();buildHubList();hubMergerCache={};renderAll();alert('Refreshed!')}};
   Papa.parse(GURL(GID_BASE),{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>{if(r.data?.length){gsD=r.data;gsD.forEach(row=>{if(row.Pincode)row.Pincode=String(row.Pincode).trim().split('.')[0]})}f()},error:f});
   Papa.parse(GURL(GID_HUB),{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>{if(r.data?.length)hmD=r.data;f()},error:f})}
 function mergeAll(){const gM={};(gjD.features||[]).forEach(f=>{const p=String(f.properties.Pincode||'').trim().split('.')[0];if(p)gM[p]=f});
@@ -294,41 +278,30 @@ function mkPop(d){const rm=gv(d,'Serviceability Remarks');let bc='nsvc';if(isSvc
   const badge=rm?`<span class="popb ${bc}">${rm}</span>`:'';const st=gv(d,'Expansion Strategy'),sc=st?gSC(st):null;
   let sb='';if(sc&&st)sb=`<div style="text-align:center"><span class="spbdg" style="background:${sc.f};color:${sc.b};border:2px solid ${sc.b}">${st}</span></div>`;
   let rows='';['POD','City','State','Region','Pin Type','Expansion Strategy','Current Serviceable Hub','hub_category','S1 Mapping Hub','Final Hub','Proposed Hub Name','Conversion Hub name','Hub Type','Pincode ADL','Hub ADL','Distance','Promised ADL','Status Planning','Platfrom','SFX Share New - 15%','IPS Meesho serviceability%','Overall Meesho serviceability%','Required Help','Previous Hub','Deactivated date','Final Expansion Plan/Suggestion'].forEach(k=>{const v=gv(d,k);if(v&&v!=='-'&&v!=='0'&&v.toLowerCase()!=='na'&&v!=='0.00%')rows+=`<tr><td>${k}</td><td>${v}</td></tr>`});
-  return`<div style="text-align:center"><div class="popt">📍 ${gv(d,'Pincode')}</div>${badge}</div>${sb}<table class="poptbl">${rows||'<tr><td colspan="2" style="text-align:center;color:#aaa;padding:5px">No data</td></tr>'}</table>`}
+  return`<div style="text-align:center"><div class="popt">${gv(d,'Pincode')}</div>${badge}</div>${sb}<table class="poptbl">${rows||'<tr><td colspan="2" style="text-align:center;color:#aaa;padding:5px">No data</td></tr>'}</table>`}
 function mkHubPop(nm,items){const s=items.filter(d=>isSvc(d)).length,n=items.filter(d=>isNS(d)).length,adl=items.reduce((a,d)=>a+(parseFloat(gv(d,'Pincode ADL')||gv(d,'Promised ADL'))||0),0),pins=items.slice(0,20).map(d=>gv(d,'Pincode')).filter(Boolean).join(', ');
-  return`<div><div class="hp-t">🏠 ${nm}</div><div class="hp-ch"><div class="hp-c">📍${items.length}</div><div class="hp-c">✅${s}</div><div class="hp-c">❌${n}</div><div class="hp-c">ADL:${Math.round(adl)}</div></div><div class="hp-pins"><strong>Pins:</strong> ${pins}${items.length>20?'…':''}</div></div>`}
-// Interlinked filter helper — cascade options based on region selection
-function getCascaded(data,regionVal){
-  const st=new Set,p=new Set,c=new Set;
-  data.forEach(d=>{if(regionVal&&gv(d,'Region')!==regionVal)return;st.add(gv(d,'State'));p.add(gv(d,'POD'));c.add(gv(d,'City'))});
-  return{states:[...st].filter(Boolean).sort(),pods:[...p].filter(Boolean).sort(),cities:[...c].filter(Boolean).sort()}}
-// TAB 1
+  return`<div><div class="hp-t">${nm}</div><div class="hp-ch"><div class="hp-c">${items.length} pins</div><div class="hp-c">${s} Svc</div><div class="hp-c">${n} Non</div><div class="hp-c">ADL:${Math.round(adl)}</div></div><div class="hp-pins"><strong>Pins:</strong> ${pins}${items.length>20?'…':''}</div></div>`}
+function getCascaded(data,regionVal){const st=new Set,p=new Set,c=new Set;data.forEach(d=>{if(regionVal&&gv(d,'Region')!==regionVal)return;st.add(gv(d,'State'));p.add(gv(d,'POD'));c.add(gv(d,'City'))});return{states:[...st].filter(Boolean).sort(),pods:[...p].filter(Boolean).sort(),cities:[...c].filter(Boolean).sort()}}
+// TAB 1 — CHANGE 1: Always render map (no hasFilter guard)
 function pf1(){const sets={pt:new Set,r:new Set,st:new Set,p:new Set,c:new Set,sr:new Set};aM.forEach(d=>{sets.pt.add(gv(d,'Pin Type'));sets.r.add(gv(d,'Region'));sets.st.add(gv(d,'State'));sets.p.add(gv(d,'POD'));sets.c.add(gv(d,'City'));sets.sr.add(gv(d,'Serviceability Remarks'))});
   createSS('ss_f1pt',[...sets.pt],'af1()');createSS('ss_f1r',[...sets.r],'cascadeF1()');createSS('ss_f1st',[...sets.st],'af1()');createSS('ss_f1p',[...sets.p],'af1()');createSS('ss_f1c',[...sets.c],'af1()');createSS('ss_f1sr',[...sets.sr],'af1()')}
-function cascadeF1(){const reg=getSSVal('ss_f1r');const cas=getCascaded(aM,reg);
-  createSS('ss_f1st',cas.states,'af1()');createSS('ss_f1p',cas.pods,'af1()');createSS('ss_f1c',cas.cities,'af1()');af1()}
+function cascadeF1(){const reg=getSSVal('ss_f1r');const cas=getCascaded(aM,reg);createSS('ss_f1st',cas.states,'af1()');createSS('ss_f1p',cas.pods,'af1()');createSS('ss_f1c',cas.cities,'af1()');af1()}
 function af1(){const f={pt:getSSVal('ss_f1pt'),r:getSSVal('ss_f1r'),st:getSSVal('ss_f1st'),p:getSSVal('ss_f1p'),c:getSSVal('ss_f1c'),sr:getSSVal('ss_f1sr')};
-  const hasFilter=f.pt||f.r||f.st||f.p||f.c||f.sr;
   fM=aM.filter(d=>{if(f.pt&&gv(d,'Pin Type')!==f.pt)return 0;if(f.r&&gv(d,'Region')!==f.r)return 0;if(f.st&&gv(d,'State')!==f.st)return 0;if(f.p&&gv(d,'POD')!==f.p)return 0;if(f.c&&gv(d,'City')!==f.c)return 0;if(f.sr&&gv(d,'Serviceability Remarks')!==f.sr)return 0;return 1});
-  let svc=0,nsvc=0,rct=0,dfN=0,ipsSvc=0,ipsNsvc=0;fM.forEach(d=>{
-    const isIPS=gv(d,'Pin Type').toLowerCase().includes('ips');
-    if(isSvc(d)){svc++;if(isIPS)ipsSvc++}
-    else if(isNS(d)){nsvc++;if(isIPS)ipsNsvc++}
-    else if(isRe(d))rct++;else if(isDfN(d))dfN++});
+  let svc=0,nsvc=0,rct=0,dfN=0,ipsSvc=0,ipsNsvc=0;fM.forEach(d=>{const isIPS=gv(d,'Pin Type').toLowerCase().includes('ips');if(isSvc(d)){svc++;if(isIPS)ipsSvc++}else if(isNS(d)){nsvc++;if(isIPS)ipsNsvc++}else if(isRe(d))rct++;else if(isDfN(d))dfN++});
   document.getElementById('k1t').textContent=fM.length.toLocaleString();document.getElementById('k1s').textContent=svc.toLocaleString();document.getElementById('k1n').textContent=nsvc.toLocaleString();document.getElementById('k1rc').textContent=rct.toLocaleString();document.getElementById('k1ipsp').textContent=ipsSvc.toLocaleString();document.getElementById('k1ipsn').textContent=ipsNsvc.toLocaleString();
-  if(hasFilter){rMap(1,fM,d=>{if(isSvc(d))return SV;if(isRe(d))return RC;if(isNS(d))return NV;return null});buildHL(1,fM)}
-  else{if(gL[1])maps[1].removeLayer(gL[1]);gL[1]=null}}
+  // Always render — no filter guard
+  rMap(1,fM,d=>{if(isSvc(d))return SV;if(isRe(d))return RC;if(isNS(d))return NV;return null});buildHL(1,fM)}
 function rf1(){['ss_f1pt','ss_f1r','ss_f1st','ss_f1p','ss_f1c','ss_f1sr'].forEach(clearSS);clrHub(1);af1()}
-// TAB 2
+// TAB 2 — CHANGE 3: No Meesho% KPIs
 function pf2(){const sets={pt:new Set,r:new Set,st:new Set,p:new Set,c:new Set,s:new Set};aM.forEach(d=>{const es=gv(d,'Expansion Strategy');if(!es)return;sets.pt.add(gv(d,'Pin Type'));sets.r.add(gv(d,'Region'));sets.st.add(gv(d,'State'));sets.p.add(gv(d,'POD'));sets.c.add(gv(d,'City'));sets.s.add(es)});
   createSS('ss_f2pt',[...sets.pt].filter(Boolean),'af2()');createSS('ss_f2r',[...sets.r].filter(Boolean),'cascadeF2()');createSS('ss_f2st',[...sets.st].filter(Boolean),'af2()');createSS('ss_f2p',[...sets.p].filter(Boolean),'af2()');createSS('ss_f2c',[...sets.c].filter(Boolean),'af2()');createMS('ms_f2s',[...sets.s].filter(Boolean))}
-function cascadeF2(){const reg=getSSVal('ss_f2r');const expData=aM.filter(d=>gv(d,'Expansion Strategy'));const cas=getCascaded(expData,reg);
-  createSS('ss_f2st',cas.states,'af2()');createSS('ss_f2p',cas.pods,'af2()');createSS('ss_f2c',cas.cities,'af2()');af2()}
+function cascadeF2(){const reg=getSSVal('ss_f2r');const expData=aM.filter(d=>gv(d,'Expansion Strategy'));const cas=getCascaded(expData,reg);createSS('ss_f2st',cas.states,'af2()');createSS('ss_f2p',cas.pods,'af2()');createSS('ss_f2c',cas.cities,'af2()');af2()}
 function af2(){const f={pt:getSSVal('ss_f2pt'),r:getSSVal('ss_f2r'),st:getSSVal('ss_f2st'),p:getSSVal('ss_f2p'),c:getSSVal('ss_f2c')},stS=getMSVals('ms_f2s');
   const hasFilter=f.pt||f.r||f.st||f.p||f.c||stS.size;
   eF=aM.filter(d=>{const es=gv(d,'Expansion Strategy');if(!es)return 0;if(f.pt&&gv(d,'Pin Type')!==f.pt)return 0;if(f.r&&gv(d,'Region')!==f.r)return 0;if(f.st&&gv(d,'State')!==f.st)return 0;if(f.p&&gv(d,'POD')!==f.p)return 0;if(f.c&&gv(d,'City')!==f.c)return 0;if(stS.size&&!stS.has(es))return 0;return 1});
-  let sI=0,sO=0;const ph=new Set,ch=new Set;eF.forEach(d=>{if(isSvc(d)){sI+=parseRaw(gv(d,'IPS Meesho serviceability%'));sO+=parseRaw(gv(d,'Overall Meesho serviceability%'))}const p=gv(d,'Proposed Hub Name');if(p&&p!=='-')ph.add(p);const c=gv(d,'Conversion Hub name');if(c&&c!=='-')ch.add(c)});
-  document.getElementById('k2t').textContent=eF.length.toLocaleString();document.getElementById('k2ips').textContent=(sI*100).toFixed(2)+'%';document.getElementById('k2ovr').textContent=(sO*100).toFixed(2)+'%';document.getElementById('k2ph').textContent=ph.size;document.getElementById('k2ch').textContent=ch.size;
+  const ph=new Set,ch=new Set;eF.forEach(d=>{const p=gv(d,'Proposed Hub Name');if(p&&p!=='-')ph.add(p);const c=gv(d,'Conversion Hub name');if(c&&c!=='-')ch.add(c)});
+  document.getElementById('k2t').textContent=eF.length.toLocaleString();document.getElementById('k2ph').textContent=ph.size;document.getElementById('k2ch').textContent=ch.size;
   if(hasFilter){rMap(2,eF,d=>gSC(gv(d,'Expansion Strategy')));buildHL(2,eF);
     if(maps[2]._dA)maps[2].removeLayer(maps[2]._dA);const dA=L.layerGroup();eF.filter(d=>isDf(d)).forEach(d=>{const la=parseFloat(gv(d,'Centroid Lat')),lo=parseFloat(gv(d,'Centroid Long'));if(isNaN(la)||isNaN(lo))return;dA.addLayer(L.marker([la,lo],{icon:L.divIcon({className:'',html:`<svg width="12" height="15" viewBox="0 0 14 18"><path d="M7 0C3.1 0 0 3.1 0 7c0 5.2 7 11 7 11s7-5.8 7-11C14 3.1 10.9 0 7 0z" fill="#e53935" stroke="#b71c1c" stroke-width="1"/><circle cx="7" cy="7" r="2.5" fill="white"/></svg>`,iconSize:[12,15],iconAnchor:[6,15],popupAnchor:[0,-15]})}).bindPopup(mkPop(d),{maxWidth:300}))});dA.addTo(maps[2]);maps[2]._dA=dA;
     const strats=new Set;eF.forEach(d=>{const s=gv(d,'Expansion Strategy');if(s)strats.add(s)});let leg='<h4>Strategy</h4>';[...strats].sort().forEach(s=>{const sc=gSC(s);leg+=`<div class="li"><div class="lc" style="background:${sc.f};border:1px solid ${sc.b}"></div>${s}</div>`});
@@ -336,35 +309,25 @@ function af2(){const f={pt:getSSVal('ss_f2pt'),r:getSSVal('ss_f2r'),st:getSSVal(
     document.getElementById('leg2').innerHTML=leg}
   else{if(gL[2])maps[2].removeLayer(gL[2]);gL[2]=null}}
 function rf2(){['ss_f2pt','ss_f2r','ss_f2st','ss_f2p','ss_f2c'].forEach(clearSS);clearMS('ms_f2s');clrHub(2);document.getElementById('insP').classList.remove('show');af2()}
-// TAB 3: HUB MERGER
+// TAB 3: HUB ANOMALY
 function pf3(){const sets={pt:new Set,r:new Set,st:new Set,p:new Set,c:new Set,sr:new Set};aM.forEach(d=>{if(!gv(d,'Current Serviceable Hub'))return;sets.pt.add(gv(d,'Pin Type'));sets.r.add(gv(d,'Region'));sets.st.add(gv(d,'State'));sets.p.add(gv(d,'POD'));sets.c.add(gv(d,'City'));sets.sr.add(gv(d,'Serviceability Remarks'))});
-  // FIX: These now have matching HTML elements
   createSS('ss_f3anom',['Outside Boundary','Inside Boundary'],'af3()');
   const remarks=new Set;hmD.forEach(h=>{const r=gv(h,'Remarks');if(r)remarks.add(r)});
   createSS('ss_f3merger',[...remarks].filter(Boolean),'af3()');
   createSS('ss_f3pt',[...sets.pt],'af3()');createSS('ss_f3r',[...sets.r],'cascadeF3()');createSS('ss_f3st',[...sets.st],'af3()');createSS('ss_f3p',[...sets.p],'af3()');createSS('ss_f3c',[...sets.c],'af3()');createSS('ss_f3sr',[...sets.sr],'af3()');
   const anomSel=document.getElementById('ss_f3anom_sel');if(anomSel)anomSel.value='Outside Boundary'}
-function cascadeF3(){const reg=getSSVal('ss_f3r');const hubData=aM.filter(d=>gv(d,'Current Serviceable Hub'));const cas=getCascaded(hubData,reg);
-  createSS('ss_f3st',cas.states,'af3()');createSS('ss_f3p',cas.pods,'af3()');createSS('ss_f3c',cas.cities,'af3()');af3()}
+function cascadeF3(){const reg=getSSVal('ss_f3r');const hubData=aM.filter(d=>gv(d,'Current Serviceable Hub'));const cas=getCascaded(hubData,reg);createSS('ss_f3st',cas.states,'af3()');createSS('ss_f3p',cas.pods,'af3()');createSS('ss_f3c',cas.cities,'af3()');af3()}
 function af3(){const f={pt:getSSVal('ss_f3pt'),r:getSSVal('ss_f3r'),st:getSSVal('ss_f3st'),p:getSSVal('ss_f3p'),c:getSSVal('ss_f3c'),sr:getSSVal('ss_f3sr')};
   fM3=aM.filter(d=>{if(!gv(d,'Current Serviceable Hub'))return 0;if(f.pt&&gv(d,'Pin Type')!==f.pt)return 0;if(f.r&&gv(d,'Region')!==f.r)return 0;if(f.st&&gv(d,'State')!==f.st)return 0;if(f.p&&gv(d,'POD')!==f.p)return 0;if(f.c&&gv(d,'City')!==f.c)return 0;if(f.sr&&gv(d,'Serviceability Remarks')!==f.sr)return 0;return 1});
-  buildHubMerger()}
-function rf3(){['ss_f3anom','ss_f3merger','ss_f3pt','ss_f3r','ss_f3st','ss_f3p','ss_f3c','ss_f3sr'].forEach(clearSS);af3()}
-// Hub merger lookup
+  buildHubAnomaly()}
+function rf3(){['ss_f3anom','ss_f3merger','ss_f3pt','ss_f3r','ss_f3st','ss_f3p','ss_f3c','ss_f3sr'].forEach(clearSS);
+  const anomSel=document.getElementById('ss_f3anom_sel');if(anomSel)anomSel.value='Outside Boundary';af3()}
 function getHMData(hubName){return hmD.find(h=>gv(h,'Hub name')===hubName)||null}
-
-// FIX: Cache turf.union results per hub so they're not recomputed on every filter change
 let hubMergerCache={};
-function getHubMergedBoundary(hubName,geoItems){
-  if(hubMergerCache[hubName])return hubMergerCache[hubName];
-  let merged=null;
-  geoItems.forEach(d=>{try{const p=turf.feature(d._geo);if(!merged)merged=p;else merged=turf.union(merged,p)}catch(e){}});
-  hubMergerCache[hubName]=merged;
-  return merged;
-}
-
+function getHubMergedBoundary(hubName,geoItems){if(hubMergerCache[hubName])return hubMergerCache[hubName];let merged=null;geoItems.forEach(d=>{try{const p=turf.feature(d._geo);if(!merged)merged=p;else merged=turf.union(merged,p)}catch(e){}});hubMergerCache[hubName]=merged;return merged}
 let hubBdData=[];
-function buildHubMerger(){
+// CHANGE 4: Hub Anomaly — hub colors based on hub_category (green/orange), skip boundary if no lat/long in Outside filter
+function buildHubAnomaly(){
   if(!map3Inited)return;
   hbL3.clearLayers();hmL3.clearLayers();hubBdData=[];
   const anomFilter=getSSVal('ss_f3anom');
@@ -374,64 +337,68 @@ function buildHubMerger(){
   let totalH=0,insideC=0,outsideC=0,mergerC=0,totalP=fM3.length;
   Object.entries(groups).forEach(([name,data])=>{
     const geo=data.pins.filter(d=>d._g&&d._geo);if(!geo.length)return;
-    // FIX: Use cached merged boundary
-    let merged=getHubMergedBoundary(name,geo);
-    if(!merged)return;
-    let isIn=false;if(data.lat&&data.lng){try{isIn=turf.booleanPointInPolygon(turf.point([data.lng,data.lat]),merged)}catch(e){}}
-    if(isIn)insideC++;else if(data.lat)outsideC++;
+    let merged=getHubMergedBoundary(name,geo);if(!merged)return;
+    let isIn=false;
+    const hasLatLng=data.lat&&data.lng;
+    if(hasLatLng){try{isIn=turf.booleanPointInPolygon(turf.point([data.lng,data.lat]),merged)}catch(e){}}
+    if(isIn)insideC++;else if(hasLatLng)outsideC++;
+    // If no lat/lng, count as outside (unknown location)
+    if(!hasLatLng)outsideC++;
     totalH++;
     const hm=getHMData(name);if(hm&&gv(hm,'Merger Type'))mergerC++;
     const nearHub=hm?gv(hm,'Nearest hub'):'';const hvDist=hm?gv(hm,'Havsersine distance'):'';const osmDist=hm?gv(hm,'Osrm Distance'):'';const mType=hm?gv(hm,'Merger Type'):'';const remarks=hm?gv(hm,'Remarks'):'';const cityType=hm?gv(hm,'City Type'):'';
     const svcC=data.pins.filter(d=>isSvc(d)).length,nsC=data.pins.filter(d=>isNS(d)).length;
     const adl=data.pins.reduce((a,d)=>a+(parseFloat(gv(d,'Pincode ADL')||gv(d,'Promised ADL'))||0),0);
-    const status=isIn?'Inside':'Outside';
-    hubBdData.push({name,pinCount:data.pins.length,svcC,nsC,adl,isIn,nearHub,hvDist,osmDist,mType,remarks,cityType,cat:data.cat,lat:data.lat,lng:data.lng,status});
+    const isSelf=(data.cat||'').toUpperCase().includes('SELF');
+    hubBdData.push({name,pinCount:data.pins.length,svcC,nsC,adl,isIn,nearHub,hvDist,osmDist,mType,remarks,cityType,cat:data.cat,lat:data.lat,lng:data.lng,isSelf,hasLatLng});
+    // Apply anomaly filter
     if(anomFilter==='Outside Boundary'&&isIn)return;
     if(anomFilter==='Inside Boundary'&&!isIn)return;
     if(mergerFilter&&remarks!==mergerFilter)return;
+    // CHANGE 4: If "Outside Boundary" filter and hub has no lat/long → skip boundary entirely (show empty)
+    if(anomFilter==='Outside Boundary'&&!hasLatLng)return;
+    // Draw boundary
     const col=isIn?'#0B9B8A':'#e53935';
     const bLyr=L.geoJSON(merged,{style:{fillColor:col,fillOpacity:.1,weight:3,color:col,opacity:.7,dashArray:isIn?'':'6,4'}});
-    bLyr.on('click',()=>bLyr.bindPopup(mkHubMergerPop(name,data.pins.length,svcC,nsC,adl,isIn,nearHub,hvDist,osmDist,mType,remarks,cityType,data.cat),{maxWidth:400}).openPopup());
+    bLyr.on('click',()=>bLyr.bindPopup(mkHubAnomalyPop(name,data.pins.length,svcC,nsC,adl,isIn,nearHub,hvDist,osmDist,mType,remarks,cityType,data.cat),{maxWidth:400}).openPopup());
     hbL3.addLayer(bLyr);
-    if(data.lat&&data.lng){const ic=isIn?'#43a047':'#e53935',st=isIn?'#1b5e20':'#b71c1c';
-      const icon=L.divIcon({className:'hub-home-icon',html:`<svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="${ic}" stroke="${st}" stroke-width="1.5" stroke-linejoin="round"/></svg>${isIn?'':'<div style="position:absolute;top:-4px;right:-6px;background:#e53935;color:white;border-radius:50%;width:12px;height:12px;font-size:7px;display:flex;align-items:center;justify-content:center;font-weight:700">!</div>'}`,iconSize:[18,18],iconAnchor:[9,18],popupAnchor:[0,-18]});
-      hmL3.addLayer(L.marker([data.lat,data.lng],{icon}).bindPopup(mkHubMergerPop(name,data.pins.length,svcC,nsC,adl,isIn,nearHub,hvDist,osmDist,mType,remarks,cityType,data.cat),{maxWidth:400}))}
+    // CHANGE 4: Hub marker uses same color as other tabs (green=SELF, orange=non-SELF), no red ! badge
+    if(hasLatLng){
+      const ic=isSelf?'#43a047':'#ff9800';
+      const st=isSelf?'#1b5e20':'#e65100';
+      const icon=L.divIcon({className:'hub-home-icon',html:`<svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="${ic}" stroke="${st}" stroke-width="1.5" stroke-linejoin="round"/></svg>`,iconSize:[18,18],iconAnchor:[9,18],popupAnchor:[0,-18]});
+      hmL3.addLayer(L.marker([data.lat,data.lng],{icon}).bindPopup(mkHubAnomalyPop(name,data.pins.length,svcC,nsC,adl,isIn,nearHub,hvDist,osmDist,mType,remarks,cityType,data.cat),{maxWidth:400}))}
   });
   document.getElementById('k3h').textContent=totalH;document.getElementById('k3in').textContent=insideC;document.getElementById('k3out').textContent=outsideC;document.getElementById('k3m').textContent=mergerC;document.getElementById('k3p').textContent=totalP.toLocaleString()}
-// Hub Table
 let hubTableVisible=false;
 function toggleHubTable(){
-  const panel=document.getElementById('hubTablePanel');
-  hubTableVisible=!hubTableVisible;
+  const panel=document.getElementById('hubTablePanel');hubTableVisible=!hubTableVisible;
   if(hubTableVisible){
     const anomF=getSSVal('ss_f3anom'),mergerF=getSSVal('ss_f3merger');
     let filtered=hubBdData;
     if(anomF==='Outside Boundary')filtered=filtered.filter(h=>!h.isIn);
     if(anomF==='Inside Boundary')filtered=filtered.filter(h=>h.isIn);
     if(mergerF)filtered=filtered.filter(h=>h.remarks===mergerF);
-    let html=`<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:var(--teal);color:white;position:sticky;top:0"><th style="padding:4px 6px;text-align:left">Hub</th><th style="padding:4px 6px">Pins</th><th style="padding:4px 6px">Status</th><th style="padding:4px 6px">Nearest</th><th style="padding:4px 6px">Dist</th><th style="padding:4px 6px">Merger</th><th style="padding:4px 6px">Remarks</th></tr></thead><tbody>`;
+    let html=`<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:var(--teal);color:white;position:sticky;top:0"><th style="padding:4px 6px;text-align:left">Hub</th><th style="padding:4px 6px">Type</th><th style="padding:4px 6px">Pins</th><th style="padding:4px 6px">Status</th><th style="padding:4px 6px">Nearest</th><th style="padding:4px 6px">Dist</th><th style="padding:4px 6px">Merger</th><th style="padding:4px 6px">Remarks</th></tr></thead><tbody>`;
     filtered.sort((a,b)=>a.name.localeCompare(b.name)).forEach(h=>{
-      html+=`<tr style="cursor:pointer;border-bottom:1px solid #f0f2f4" onclick="zoomHub3('${h.name.replace(/'/g,"\\'")}')"><td style="padding:4px 6px;font-weight:600">${h.name}</td><td style="padding:4px 6px;text-align:center">${h.pinCount}</td><td style="padding:4px 6px;text-align:center;color:${h.isIn?'#2e7d32':'#c62828'}">${h.isIn?'✅':'⚠️'}</td><td style="padding:4px 6px">${h.nearHub||'-'}</td><td style="padding:4px 6px">${h.hvDist||'-'}</td><td style="padding:4px 6px">${h.mType||'-'}</td><td style="padding:4px 6px;color:var(--txl)">${h.remarks||'-'}</td></tr>`});
+      html+=`<tr style="cursor:pointer;border-bottom:1px solid #f0f2f4" onclick="zoomHub3('${h.name.replace(/'/g,"\\'")}')"><td style="padding:4px 6px;font-weight:600">${h.name}</td><td style="padding:4px 6px;color:${h.isSelf?'#2e7d32':'#e65100'}">${h.cat||'-'}</td><td style="padding:4px 6px;text-align:center">${h.pinCount}</td><td style="padding:4px 6px;text-align:center;color:${h.isIn?'#2e7d32':'#c62828'}">${h.isIn?'Inside':'Outside'}</td><td style="padding:4px 6px">${h.nearHub||'-'}</td><td style="padding:4px 6px">${h.hvDist||'-'}</td><td style="padding:4px 6px">${h.mType||'-'}</td><td style="padding:4px 6px;color:var(--txl)">${h.remarks||'-'}</td></tr>`});
     html+='</tbody></table>';
     document.getElementById('hubTableContent').innerHTML=html;
-    panel.style.display='block';document.getElementById('hubTableBtn').textContent='📋 Hide Hub List'}
-  else{panel.style.display='none';document.getElementById('hubTableBtn').textContent='📋 Show Hub List'}}
-function mkHubMergerPop(nm,pins,svc,ns,adl,isIn,near,hvD,osmD,mType,remarks,cityType,cat){
-  const status=isIn?'<span style="background:rgba(67,160,71,.1);color:#2e7d32;padding:2px 8px;border-radius:5px;font-size:9px;font-weight:700">✅ Inside</span>':'<span style="background:rgba(229,57,53,.1);color:#c62828;padding:2px 8px;border-radius:5px;font-size:9px;font-weight:700">⚠️ Outside</span>';
-  let extra='';if(near)extra+=`<tr><td>Nearest Hub</td><td>${near}</td></tr>`;if(hvD)extra+=`<tr><td>Haversine Dist</td><td>${hvD} km</td></tr>`;if(osmD)extra+=`<tr><td>OSRM Dist</td><td>${osmD} km</td></tr>`;if(mType)extra+=`<tr><td>Merger Type</td><td>${mType}</td></tr>`;if(remarks)extra+=`<tr><td>Remarks</td><td>${remarks}</td></tr>`;if(cityType)extra+=`<tr><td>City Type</td><td>${cityType}</td></tr>`;if(cat)extra+=`<tr><td>Hub Category</td><td>${cat}</td></tr>`;
-  return`<div><div class="hp-t">🏠 ${nm}</div><div style="text-align:center;margin-bottom:6px">${status}</div><div class="hp-ch"><div class="hp-c">📍${pins}</div><div class="hp-c">✅${svc}</div><div class="hp-c">❌${ns}</div><div class="hp-c">ADL:${Math.round(adl)}</div></div>${extra?'<table class="poptbl">'+extra+'</table>':''}</div>`}
+    panel.style.display='block';document.getElementById('hubTableBtn').textContent='Hide Hub List'}
+  else{panel.style.display='none';document.getElementById('hubTableBtn').textContent='Show Hub List'}}
+function mkHubAnomalyPop(nm,pins,svc,ns,adl,isIn,near,hvD,osmD,mType,remarks,cityType,cat){
+  const status=isIn?'<span style="background:rgba(67,160,71,.1);color:#2e7d32;padding:2px 8px;border-radius:5px;font-size:9px;font-weight:700">Inside</span>':'<span style="background:rgba(229,57,53,.1);color:#c62828;padding:2px 8px;border-radius:5px;font-size:9px;font-weight:700">Outside</span>';
+  let extra='';if(cat)extra+=`<tr><td>Hub Category</td><td>${cat}</td></tr>`;if(near)extra+=`<tr><td>Nearest Hub</td><td>${near}</td></tr>`;if(hvD)extra+=`<tr><td>Haversine Dist</td><td>${hvD} km</td></tr>`;if(osmD)extra+=`<tr><td>OSRM Dist</td><td>${osmD} km</td></tr>`;if(mType)extra+=`<tr><td>Merger Type</td><td>${mType}</td></tr>`;if(remarks)extra+=`<tr><td>Remarks</td><td>${remarks}</td></tr>`;if(cityType)extra+=`<tr><td>City Type</td><td>${cityType}</td></tr>`;
+  return`<div><div class="hp-t">${nm}</div><div style="text-align:center;margin-bottom:6px">${status}</div><div class="hp-ch"><div class="hp-c">${pins} pins</div><div class="hp-c">${svc} Svc</div><div class="hp-c">${ns} Non</div><div class="hp-c">ADL:${Math.round(adl)}</div></div>${extra?'<table class="poptbl">'+extra+'</table>':''}</div>`}
 function zoomHub3(nm){if(!map3Inited)return;hmL3.eachLayer(l=>{if(l.getPopup){const c=l.getPopup()?.getContent()||'';if(c.includes(nm)){maps[3].setView(l.getLatLng(),11);setTimeout(()=>l.openPopup(),200)}}})}
-// SHARED: Render map — FIX: chunk size back to 1500 for performance
 function rMap(n,data,colorFn){if(gL[n])maps[n].removeLayer(gL[n]);const ft=[];
   data.forEach(d=>{if(!d._g||!d._geo)return;const c=colorFn(d);if(!c)return;ft.push({type:'Feature',geometry:d._geo,properties:d})});
   gL[n]=L.geoJSON(null,{style:f=>{const c=colorFn(f.properties);return{fillColor:c.f,weight:.5,opacity:1,color:c.b,fillOpacity:.45,renderer:cvs[n]}},onEachFeature:(f,l)=>{l.on({mouseover:e=>e.target.setStyle({weight:2,fillOpacity:.8}),mouseout:e=>{if(gL[n])gL[n].resetStyle(e.target)},click:()=>l.bindPopup(mkPop(f.properties),{maxWidth:300}).openPopup()})},renderer:cvs[n]}).addTo(maps[n]);
   let i=0;const ch=1500;(function go(){const end=Math.min(i+ch,ft.length);for(;i<end;i++)gL[n].addData(ft[i]);if(i<ft.length)setTimeout(go,0);else if(ft.length>0&&ft.length<5000)try{maps[n].fitBounds(gL[n].getBounds(),{padding:[20,20],maxZoom:11})}catch(e){}})()}
-// Hub layers from base data
 function buildHL(n,data){hL[n].clearLayers();const seen=new Set;data.forEach(d=>{const la=parseFloat(gv(d,'Hub Lat')),lo=parseFloat(gv(d,'Hub Long'));if(isNaN(la)||isNaN(lo))return;const nm=gv(d,'Current Serviceable Hub')||gv(d,'Final Hub')||'';if(!nm||seen.has(nm))return;seen.add(nm);const sf=(gv(d,'hub_category')||'').toUpperCase().includes('SELF');const hp=aM.filter(dd=>gv(dd,'Current Serviceable Hub')===nm||gv(dd,'Final Hub')===nm);
     hL[n].addLayer(L.marker([la,lo],{icon:L.divIcon({className:'hub-home-icon',html:`<svg viewBox="0 0 24 24" width="16" height="16"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="${sf?'#43a047':'#ff9800'}" stroke="${sf?'#1b5e20':'#e65100'}" stroke-width="1.5" stroke-linejoin="round"/></svg>`,iconSize:[16,16],iconAnchor:[8,16],popupAnchor:[0,-16]})}).bindPopup(mkHubPop(nm,hp),{maxWidth:350}))});if(hOn[n])maps[n].removeLayer(hL[n]),hL[n].addTo(maps[n])}
-function tH(n){const b=document.getElementById('ht'+n);if(hOn[n]){maps[n].removeLayer(hL[n]);hOn[n]=0;b.classList.remove('on');b.textContent='🏠 Show Hubs'}else{hL[n].addTo(maps[n]);hOn[n]=1;b.classList.add('on');b.textContent='🏠 Hide Hubs'}}
-function tCent(n){const b=document.getElementById('cd'+n);if(centOn[n]){maps[n].removeLayer(centL[n]);centOn[n]=0;b.classList.remove('on');b.textContent='📍 Defunct Centroids'}else{centL[n].clearLayers();(n===1?fM:eF).forEach(d=>{const la=parseFloat(gv(d,'Centroid Lat')),lo=parseFloat(gv(d,'Centroid Long'));if(isNaN(la)||isNaN(lo))return;centL[n].addLayer(L.marker([la,lo],{icon:L.divIcon({className:'',html:`<svg width="12" height="15" viewBox="0 0 14 18"><path d="M7 0C3.1 0 0 3.1 0 7c0 5.2 7 11 7 11s7-5.8 7-11C14 3.1 10.9 0 7 0z" fill="#e53935" stroke="#b71c1c" stroke-width="1"/><circle cx="7" cy="7" r="2.5" fill="white"/></svg>`,iconSize:[12,15],iconAnchor:[6,15],popupAnchor:[0,-15]})}).bindPopup(mkPop(d),{maxWidth:300}))});centL[n].addTo(maps[n]);centOn[n]=1;b.classList.add('on');b.textContent='📍 Hide Centroids'}}
-// Hub search dropdown
+function tH(n){const b=document.getElementById('ht'+n);if(hOn[n]){maps[n].removeLayer(hL[n]);hOn[n]=0;b.classList.remove('on');b.textContent='Show Hubs'}else{hL[n].addTo(maps[n]);hOn[n]=1;b.classList.add('on');b.textContent='Hide Hubs'}}
+function tCent(n){const b=document.getElementById('cd'+n);if(centOn[n]){maps[n].removeLayer(centL[n]);centOn[n]=0;b.classList.remove('on');b.textContent='Defunct Centroids'}else{centL[n].clearLayers();(n===1?fM:eF).forEach(d=>{const la=parseFloat(gv(d,'Centroid Lat')),lo=parseFloat(gv(d,'Centroid Long'));if(isNaN(la)||isNaN(lo))return;centL[n].addLayer(L.marker([la,lo],{icon:L.divIcon({className:'',html:`<svg width="12" height="15" viewBox="0 0 14 18"><path d="M7 0C3.1 0 0 3.1 0 7c0 5.2 7 11 7 11s7-5.8 7-11C14 3.1 10.9 0 7 0z" fill="#e53935" stroke="#b71c1c" stroke-width="1"/><circle cx="7" cy="7" r="2.5" fill="white"/></svg>`,iconSize:[12,15],iconAnchor:[6,15],popupAnchor:[0,-15]})}).bindPopup(mkPop(d),{maxWidth:300}))});centL[n].addTo(maps[n]);centOn[n]=1;b.classList.add('on');b.textContent='Hide Centroids'}}
 function hubDD(n){const inp=document.getElementById('hdi'+n),list=document.getElementById('hdl'+n),q=inp.value.toLowerCase();
   let hl=allHubNames;if(n===2){const ss=getMSVals('ms_f2s');if(ss.size){const sh=new Set;aM.forEach(d=>{if(!ss.has(gv(d,'Expansion Strategy')))return;['Current Serviceable Hub','Final Hub','S1 Mapping Hub','Proposed Hub Name','Conversion Hub name'].forEach(k=>{const v=gv(d,k);if(v&&v!=='-')sh.add(v)})});hl=[...sh].sort()}}
   const m=hl.filter(h=>h.toLowerCase().includes(q)).slice(0,25);if(!m.length||!q){list.classList.remove('open');return}
@@ -451,7 +418,6 @@ function doHubSrch(n,nm){const vl=nm.toLowerCase(),ds=aM;
   try{maps[n].fitBounds(L.geoJSON({type:'FeatureCollection',features:hp.map(d=>({type:'Feature',geometry:d._geo}))}).getBounds(),{padding:[30,30]})}catch(e){if(hLat)maps[n].setView([hLat,hLng],12)}}
 function clrHub(n){if(hsL[n]){maps[n].removeLayer(hsL[n]);hsL[n]=null}document.getElementById('hdi'+n).value='';if(n<=2)document.getElementById('hsc'+n).style.display='none'}
 function sPin(n){const v=document.getElementById('ps'+n).value.trim();if(!v||!gL[n])return;let found=0;gL[n].eachLayer(l=>{if(found)return;if(String(l.feature?.properties?.Pincode)===v){found=1;maps[n].fitBounds(l.getBounds(),{maxZoom:13});l.setStyle({weight:3,color:'#D4CF1F',fillOpacity:.9});setTimeout(()=>l.fire('click'),300);setTimeout(()=>gL[n].resetStyle(l),5000)}});if(!found)alert('Pincode not found')}
-// Insights
 function genIns(){const box=document.getElementById('insC'),panel=document.getElementById('insP');if(!eF.length){panel.classList.remove('show');return}
   const t=eF.length,stCnt={};eF.forEach(d=>{const s=gv(d,'Expansion Strategy');stCnt[s]=(stCnt[s]||0)+1});const sorted=Object.entries(stCnt).sort((a,b)=>b[1]-a[1]),top=sorted[0];
   const adl=eF.reduce((s,d)=>s+(parseFloat(gv(d,'Pincode ADL')||gv(d,'Promised ADL'))||0),0);
@@ -470,13 +436,9 @@ function genIns(){const box=document.getElementById('insC'),panel=document.getEl
 let t3Rendered=false;
 function swTab(id,btn){document.querySelectorAll('.tab-c').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');
   const n=id==='t1'?1:id==='t2'?2:3;
-  // FIX: Lazy-init map 3 only when tab is first opened
-  if(id==='t3'){
-    initMap3();
-    setTimeout(()=>{maps[3].invalidateSize();if(!t3Rendered&&aM.length){t3Rendered=true;setTimeout(()=>{try{pf3();af3()}catch(e){console.warn('Tab3 error:',e)}},200)}},100);
-  }else{setTimeout(()=>maps[n].invalidateSize(),100)}}
+  if(id==='t3'){initMap3();setTimeout(()=>{maps[3].invalidateSize();if(!t3Rendered&&aM.length){t3Rendered=true;setTimeout(()=>{try{pf3();af3()}catch(e){console.warn('Tab3 error:',e)}},200)}},100)}
+  else{setTimeout(()=>maps[n].invalidateSize(),100)}}
 function renderAll(){pf1();pf2();af1();af2();if(t3Rendered){hubMergerCache={};try{pf3();af3()}catch(e){}}else{t3Rendered=false}}
-// File handlers
 document.getElementById('geoF').addEventListener('change',function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{gjD=JSON.parse(ev.target.result);if(gsD.length)finishLoad()}catch(err){alert(err.message)}};r.readAsText(f)});
 document.getElementById('csvF').addEventListener('change',function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const p=Papa.parse(ev.target.result,{header:true,skipEmptyLines:true,dynamicTyping:false});if(p.data?.length){gsD=p.data;gsD.forEach(row=>{if(row.Pincode)row.Pincode=String(row.Pincode).trim().split('.')[0]});if(gjD)finishLoad()}};r.readAsText(f)});
 document.getElementById('gfT').addEventListener('change',function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{gjD=JSON.parse(ev.target.result);hubMergerCache={};mergeAll();buildHubList();renderAll()}catch(err){alert(err.message)}};r.readAsText(f)});
