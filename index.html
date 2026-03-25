@@ -164,9 +164,16 @@ input[type="file"]{display:none}
       <div class="kstrip"><div class="kp tot"><div class="kl">Total Hubs</div><div class="kv" id="k3h">—</div></div><div class="kp svc"><div class="kl">Inside Boundary</div><div class="kv" id="k3in">—</div></div><div class="kp nsvc"><div class="kl">Outside</div><div class="kv" id="k3out">—</div></div><div class="kp hub"><div class="kl">Merger Hubs</div><div class="kv" id="k3m">—</div></div><div class="kp pct"><div class="kl">Total Pins</div><div class="kv" id="k3p">—</div></div></div>
       <div class="sidebar" id="sb3"><div class="sb-tgl" onclick="tgSB('sb3')">◀</div><div class="sb-hd">🔲 Hub Merger</div>
         <div class="sb-bd"><div class="sb-s"><div class="sb-st">Filters</div>
+          <!-- FIX: Added missing Anomaly and Merger filter containers -->
+          <div class="sb-f"><label>Anomaly Filter</label><div id="ss_f3anom"></div></div>
+          <div class="sb-f"><label>Merger Remarks</label><div id="ss_f3merger"></div></div>
           <div class="sb-f"><label>Pin Type</label><div id="ss_f3pt"></div></div><div class="sb-f"><label>Region</label><div id="ss_f3r"></div></div><div class="sb-f"><label>State</label><div id="ss_f3st"></div></div><div class="sb-f"><label>POD</label><div id="ss_f3p"></div></div><div class="sb-f"><label>City</label><div id="ss_f3c"></div></div><div class="sb-f"><label>Svc Remarks</label><div id="ss_f3sr"></div></div>
           <div class="sb-rst" onclick="rf3()">↺ Reset All</div></div>
           <div class="sb-s"><div class="sb-st">Search Hub</div><div class="sb-f"><div class="hub-dd-wrap"><input class="hub-dd-input" id="hdi3" placeholder="Type hub..." oninput="hubDD(3)" onfocus="hubDD(3)"><div class="hub-dd-list" id="hdl3"></div></div></div></div>
+          <!-- FIX: Added Hub List button -->
+          <div class="sb-s"><div class="sb-st">Actions</div>
+            <button class="sb-btn" id="hubTableBtn" onclick="toggleHubTable()">📋 Show Hub List</button>
+          </div>
           <div class="sb-s"><div class="sb-st">⚠️ Hubs Outside Boundary</div><div id="outsideList" style="max-height:200px;overflow-y:auto"></div></div>
         </div></div>
       <div class="mleg"><h4>Legend</h4><div class="li"><div class="lc" style="background:var(--teal);opacity:.3;border:2px solid var(--teal)"></div>Inside ✅</div><div class="li"><div class="lc" style="background:#e53935;opacity:.3;border:2px dashed #e53935"></div>Outside ⚠️</div><div class="li"><div class="lic"><svg viewBox="0 0 24 24" width="9" height="9"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="#43a047" stroke="#1b5e20" stroke-width="1.5" stroke-linejoin="round"/></svg></div>Hub ✅</div><div class="li"><div class="lic"><svg viewBox="0 0 24 24" width="9" height="9"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="#e53935" stroke="#b71c1c" stroke-width="1.5" stroke-linejoin="round"/></svg></div>Hub ⚠️</div></div>
@@ -194,9 +201,18 @@ let hL=[null,L.layerGroup(),L.layerGroup()],centL=[null,L.layerGroup(),L.layerGr
 let hsL=[null,null,null,null];
 let hOn=[0,0,0],centOn=[0,0,0];
 let hbL3=null,hmL3=null;
-// Init maps
-[1,2,3].forEach(n=>{maps[n]=L.map('map'+n,{zoomControl:true,preferCanvas:true,renderer:cvs[n],maxBounds:IB,maxBoundsViscosity:1,minZoom:4}).setView([22.5,82],5);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(maps[n])});
-hbL3=L.layerGroup().addTo(maps[3]);hmL3=L.layerGroup().addTo(maps[3]);
+
+// FIX: Only init maps 1 and 2 at startup; lazy-init map 3
+[1,2].forEach(n=>{maps[n]=L.map('map'+n,{zoomControl:true,preferCanvas:true,renderer:cvs[n],maxBounds:IB,maxBoundsViscosity:1,minZoom:4}).setView([22.5,82],5);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(maps[n])});
+
+let map3Inited=false;
+function initMap3(){
+  if(map3Inited)return;
+  maps[3]=L.map('map3',{zoomControl:true,preferCanvas:true,renderer:cvs[3],maxBounds:IB,maxBoundsViscosity:1,minZoom:4}).setView([22.5,82],5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(maps[3]);
+  hbL3=L.layerGroup().addTo(maps[3]);hmL3=L.layerGroup().addTo(maps[3]);
+  map3Inited=true;
+}
 
 function gv(o,k){return(o[k]||'').toString().trim()}
 function parseRaw(v){if(!v)return 0;const s=String(v).trim().replace('%','');const n=parseFloat(s);return isNaN(n)?0:n}
@@ -209,29 +225,26 @@ function isDf(d){return sr(d).includes('defunct')}
 function setProg(p,l){document.getElementById('pf').style.width=p+'%';if(l)document.getElementById('pl').textContent=l}
 function tgSB(id){const sb=document.getElementById(id);sb.classList.toggle('collapsed');sb.querySelector('.sb-tgl').textContent=sb.classList.contains('collapsed')?'▶':'◀'}
 function haversine(a,b,c,d){const R=6371,dL=(c-a)*Math.PI/180,dN=(d-b)*Math.PI/180,x=Math.sin(dL/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dN/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
-
 // Single-select
-function createSS(id,items,onChange){const el=document.getElementById(id);let h=`<select class="sb-sel" id="${id}_sel" onchange="${onChange}"><option value="">All</option>`;[...items].sort().forEach(i=>{if(i)h+=`<option value="${i}">${i}</option>`});el.innerHTML=h+'</select>'}
+function createSS(id,items,onChange){const el=document.getElementById(id);if(!el)return;let h=`<select class="sb-sel" id="${id}_sel" onchange="${onChange}"><option value="">All</option>`;[...items].sort().forEach(i=>{if(i)h+=`<option value="${i}">${i}</option>`});el.innerHTML=h+'</select>'}
 function getSSVal(id){const s=document.getElementById(id+'_sel');return s?s.value:''}
 function clearSS(id){const s=document.getElementById(id+'_sel');if(s)s.value=''}
-
 // Multi-select
 const msState={};
-function createMS(id,items){const el=document.getElementById(id);msState[id]={selected:new Set,items:[...items].sort()};
+function createMS(id,items){const el=document.getElementById(id);if(!el)return;msState[id]={selected:new Set,items:[...items].sort()};
   el.innerHTML=`<div class="ms-wrap"><button class="ms-btn" onclick="toggleMSDD('${id}')">All Strategies</button><div class="ms-dd" id="${id}_dd"><input class="ms-search" placeholder="Search..." oninput="filterMS('${id}',this.value)"><div class="ms-opts" id="${id}_opts"></div><div class="ms-actions"><button class="ms-ok" onclick="applyMS('${id}')">✓ OK</button><button class="ms-clr" onclick="clearMSApply('${id}')">✕ Clear</button></div></div><div class="ms-tags" id="${id}_tags"></div></div>`;
   renderMSOpts(id);document.addEventListener('click',e=>{const dd=document.getElementById(id+'_dd');if(dd&&dd.classList.contains('open')&&!el.contains(e.target))dd.classList.remove('open')})}
 function toggleMSDD(id){document.getElementById(id+'_dd').classList.toggle('open')}
-function filterMS(id,q){const ql=q.toLowerCase(),st=msState[id],el=document.getElementById(id+'_opts');el.innerHTML=st.items.filter(i=>i.toLowerCase().includes(ql)).map(i=>`<label class="ms-opt"><input type="checkbox" ${st.selected.has(i)?'checked':''} onchange="toggleMSItem('${id}',\`${i.replace(/`/g,'')}\`,this.checked)"><span>${i}</span></label>`).join('')}
+function filterMS(id,q){const ql=q.toLowerCase(),st=msState[id],el=document.getElementById(id+'_opts');if(!el||!st)return;el.innerHTML=st.items.filter(i=>i.toLowerCase().includes(ql)).map(i=>`<label class="ms-opt"><input type="checkbox" ${st.selected.has(i)?'checked':''} onchange="toggleMSItem('${id}',\`${i.replace(/`/g,'')}\`,this.checked)"><span>${i}</span></label>`).join('')}
 function renderMSOpts(id){filterMS(id,'')}
 function toggleMSItem(id,item,checked){if(checked)msState[id].selected.add(item);else msState[id].selected.delete(item);updateMSDisp(id)}
-function updateMSDisp(id){const st=msState[id],btn=document.querySelector(`#${id} .ms-btn`),tags=document.getElementById(id+'_tags');
-  if(!st.selected.size){btn.textContent='All Strategies';tags.innerHTML=''}
-  else{btn.textContent=st.selected.size+' selected';tags.innerHTML=[...st.selected].slice(0,4).map(t=>`<span class="ms-tag">${t.length>18?t.slice(0,18)+'…':t}<span class="ms-tag-x" onclick="event.stopPropagation();toggleMSItem('${id}','${t.replace(/'/g,"\\'")}',false);renderMSOpts('${id}')">✕</span></span>`).join('')+(st.selected.size>4?`<span class="ms-tag">+${st.selected.size-4}</span>`:'')}}
+function updateMSDisp(id){const st=msState[id],btn=document.querySelector(`#${id} .ms-btn`),tags=document.getElementById(id+'_tags');if(!st||!btn)return;
+  if(!st.selected.size){btn.textContent='All Strategies';if(tags)tags.innerHTML=''}
+  else{btn.textContent=st.selected.size+' selected';if(tags)tags.innerHTML=[...st.selected].slice(0,4).map(t=>`<span class="ms-tag">${t.length>18?t.slice(0,18)+'…':t}<span class="ms-tag-x" onclick="event.stopPropagation();toggleMSItem('${id}','${t.replace(/'/g,"\\'")}',false);renderMSOpts('${id}')">✕</span></span>`).join('')+(st.selected.size>4?`<span class="ms-tag">+${st.selected.size-4}</span>`:'')}}
 function getMSVals(id){return msState[id]?msState[id].selected:new Set}
 function clearMS(id){if(msState[id]){msState[id].selected.clear();updateMSDisp(id);renderMSOpts(id)}}
 function applyMS(id){document.getElementById(id+'_dd').classList.remove('open');af2()}
 function clearMSApply(id){clearMS(id);document.getElementById(id+'_dd').classList.remove('open');af2()}
-
 // LOADING
 function autoLoad(){const st=document.getElementById('gsSt');setProg(5,'Loading...');st.textContent='Loading...';st.className='gs';
   let sDone=0,gDone=0;const need=2;
@@ -243,33 +256,40 @@ function autoLoad(){const st=document.getElementById('gsSt');setProg(5,'Loading.
     st.textContent='⚠️ GeoJSON not found — upload manually';st.className='gs err';document.getElementById('startBtn').classList.add('show');gDone=1;check()});
   setTimeout(()=>{if(!gDone){st.textContent='⚠️ Large file loading... please wait';setProg(35,'Still loading...')}},8000);
   setTimeout(()=>{if(sDone<need||!gDone){st.textContent='⚠️ Slow — upload manually';st.className='gs err';document.getElementById('startBtn').classList.add('show')}},30000)}
-function finishLoad(){if(gjD&&gsD.length){setProg(60,'Merging...');setTimeout(()=>{mergeAll();buildHubList();setProg(80,'Setting up filters...');setTimeout(()=>{pf1();pf2();pf3();
-        // Don't render all 25K polygons on load — just show KPIs
-        fM=aM;eF=aM.filter(d=>gv(d,'Expansion Strategy'));
-        // KPIs only — no map render
-        let svc=0,nsvc=0,rct=0,dfN=0,ipsSvc=0,ipsNsvc=0;fM.forEach(d=>{const isIPS=gv(d,'Pin Type').toLowerCase().includes('ips');if(isSvc(d)){svc++;if(isIPS)ipsSvc++}else if(isNS(d)){nsvc++;if(isIPS)ipsNsvc++}else if(isRe(d))rct++;else if(isDfN(d))dfN++});
-        document.getElementById('k1t').textContent=fM.length.toLocaleString();document.getElementById('k1s').textContent=svc.toLocaleString();document.getElementById('k1n').textContent=nsvc.toLocaleString();document.getElementById('k1rc').textContent=rct.toLocaleString();document.getElementById('k1ipsp').textContent=ipsSvc.toLocaleString();document.getElementById('k1ipsn').textContent=ipsNsvc.toLocaleString();
-        // Tab 2 KPIs
-        let sI=0,sO=0;const ph=new Set,ch=new Set;eF.forEach(d=>{if(isSvc(d)){sI+=parseRaw(gv(d,'IPS Meesho serviceability%'));sO+=parseRaw(gv(d,'Overall Meesho serviceability%'))}const p=gv(d,'Proposed Hub Name');if(p&&p!=='-')ph.add(p);const c=gv(d,'Conversion Hub name');if(c&&c!=='-')ch.add(c)});
-        document.getElementById('k2t').textContent=eF.length.toLocaleString();document.getElementById('k2ips').textContent=(sI*100).toFixed(2)+'%';document.getElementById('k2ovr').textContent=(sO*100).toFixed(2)+'%';document.getElementById('k2ph').textContent=ph.size;document.getElementById('k2ch').textContent=ch.size;
-        setProg(100,'Done! Select a filter to view map.');
-        document.getElementById('gsSt').textContent='✅ Loaded — select Region/State/POD to render map';document.getElementById('gsSt').className='gs ok';
-        document.getElementById('app').style.display='flex';
-        setTimeout(()=>{document.getElementById('lo').classList.add('hide');[1,2,3].forEach(n=>maps[n].invalidateSize())},200)},100)},100)}
+function finishLoad(){if(gjD&&gsD.length){setProg(60,'Merging...');setTimeout(()=>{
+    try{
+      mergeAll();buildHubList();setProg(80,'Setting up filters...');
+      setTimeout(()=>{
+        try{
+          pf1();pf2();
+          // FIX: pf3 wrapped in try-catch so it doesn't block load
+          try{pf3()}catch(e){console.warn('pf3 init deferred:',e)}
+          fM=aM;eF=aM.filter(d=>gv(d,'Expansion Strategy'));
+          // KPIs only — no map render on load
+          let svc=0,nsvc=0,rct=0,dfN=0,ipsSvc=0,ipsNsvc=0;fM.forEach(d=>{const isIPS=gv(d,'Pin Type').toLowerCase().includes('ips');if(isSvc(d)){svc++;if(isIPS)ipsSvc++}else if(isNS(d)){nsvc++;if(isIPS)ipsNsvc++}else if(isRe(d))rct++;else if(isDfN(d))dfN++});
+          document.getElementById('k1t').textContent=fM.length.toLocaleString();document.getElementById('k1s').textContent=svc.toLocaleString();document.getElementById('k1n').textContent=nsvc.toLocaleString();document.getElementById('k1rc').textContent=rct.toLocaleString();document.getElementById('k1ipsp').textContent=ipsSvc.toLocaleString();document.getElementById('k1ipsn').textContent=ipsNsvc.toLocaleString();
+          // Tab 2 KPIs
+          let sI=0,sO=0;const ph=new Set,ch=new Set;eF.forEach(d=>{if(isSvc(d)){sI+=parseRaw(gv(d,'IPS Meesho serviceability%'));sO+=parseRaw(gv(d,'Overall Meesho serviceability%'))}const p=gv(d,'Proposed Hub Name');if(p&&p!=='-')ph.add(p);const c=gv(d,'Conversion Hub name');if(c&&c!=='-')ch.add(c)});
+          document.getElementById('k2t').textContent=eF.length.toLocaleString();document.getElementById('k2ips').textContent=(sI*100).toFixed(2)+'%';document.getElementById('k2ovr').textContent=(sO*100).toFixed(2)+'%';document.getElementById('k2ph').textContent=ph.size;document.getElementById('k2ch').textContent=ch.size;
+          setProg(100,'Done! Select a filter to view map.');
+          document.getElementById('gsSt').textContent='✅ Loaded — select Region/State/POD to render map';document.getElementById('gsSt').className='gs ok';
+          document.getElementById('app').style.display='flex';
+          setTimeout(()=>{document.getElementById('lo').classList.add('hide');[1,2].forEach(n=>maps[n].invalidateSize())},200);
+        }catch(err){console.error('Filter setup error:',err);document.getElementById('gsSt').textContent='⚠️ Error in setup: '+err.message;document.getElementById('gsSt').className='gs err';document.getElementById('startBtn').classList.add('show')}
+      },100);
+    }catch(err){console.error('Merge error:',err);document.getElementById('gsSt').textContent='⚠️ Merge error: '+err.message;document.getElementById('gsSt').className='gs err';document.getElementById('startBtn').classList.add('show')}
+  },100)}
   else{document.getElementById('startBtn').classList.add('show');setProg(100,'Upload manually')}}
 function startPortal(){document.getElementById('startBtn').style.display='none';finishLoad()}
 window.addEventListener('DOMContentLoaded',()=>setTimeout(autoLoad,300));
-
 function refreshAll(){const sp=document.getElementById('rSp');sp.style.display='inline-block';let d=0;
-  const f=()=>{d++;if(d>=2){sp.style.display='none';mergeAll();buildHubList();renderAll();alert('✅ Refreshed!')}};
+  const f=()=>{d++;if(d>=2){sp.style.display='none';mergeAll();buildHubList();hubMergerCache={};renderAll();alert('✅ Refreshed!')}};
   Papa.parse(GURL(GID_BASE),{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>{if(r.data?.length){gsD=r.data;gsD.forEach(row=>{if(row.Pincode)row.Pincode=String(row.Pincode).trim().split('.')[0]})}f()},error:f});
   Papa.parse(GURL(GID_HUB),{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>{if(r.data?.length)hmD=r.data;f()},error:f})}
-
 function mergeAll(){const gM={};(gjD.features||[]).forEach(f=>{const p=String(f.properties.Pincode||'').trim().split('.')[0];if(p)gM[p]=f});
   aM=[];const mt=new Set;gsD.forEach(row=>{const p=gv(row,'Pincode'),g=gM[p];aM.push({...row,_g:!!g,_geo:g?g.geometry:null});if(g)mt.add(p)});
   (gjD.features||[]).forEach(f=>{const p=String(f.properties.Pincode||'').trim().split('.')[0];if(!mt.has(p))aM.push({Pincode:p,...f.properties,_g:true,_geo:f.geometry})})}
 function buildHubList(){const hs=new Set;aM.forEach(d=>{['Current Serviceable Hub','Final Hub','S1 Mapping Hub','Proposed Hub Name','Conversion Hub name'].forEach(k=>{const v=gv(d,k);if(v&&v!=='-'&&v.toLowerCase()!=='na')hs.add(v)})});allHubNames=[...hs].sort()}
-
 function mkPop(d){const rm=gv(d,'Serviceability Remarks');let bc='nsvc';if(isSvc(d))bc='svc';else if(isRe(d))bc='react';
   const badge=rm?`<span class="popb ${bc}">${rm}</span>`:'';const st=gv(d,'Expansion Strategy'),sc=st?gSC(st):null;
   let sb='';if(sc&&st)sb=`<div style="text-align:center"><span class="spbdg" style="background:${sc.f};color:${sc.b};border:2px solid ${sc.b}">${st}</span></div>`;
@@ -277,18 +297,17 @@ function mkPop(d){const rm=gv(d,'Serviceability Remarks');let bc='nsvc';if(isSvc
   return`<div style="text-align:center"><div class="popt">📍 ${gv(d,'Pincode')}</div>${badge}</div>${sb}<table class="poptbl">${rows||'<tr><td colspan="2" style="text-align:center;color:#aaa;padding:5px">No data</td></tr>'}</table>`}
 function mkHubPop(nm,items){const s=items.filter(d=>isSvc(d)).length,n=items.filter(d=>isNS(d)).length,adl=items.reduce((a,d)=>a+(parseFloat(gv(d,'Pincode ADL')||gv(d,'Promised ADL'))||0),0),pins=items.slice(0,20).map(d=>gv(d,'Pincode')).filter(Boolean).join(', ');
   return`<div><div class="hp-t">🏠 ${nm}</div><div class="hp-ch"><div class="hp-c">📍${items.length}</div><div class="hp-c">✅${s}</div><div class="hp-c">❌${n}</div><div class="hp-c">ADL:${Math.round(adl)}</div></div><div class="hp-pins"><strong>Pins:</strong> ${pins}${items.length>20?'…':''}</div></div>`}
-
 // Interlinked filter helper — cascade options based on region selection
 function getCascaded(data,regionVal){
   const st=new Set,p=new Set,c=new Set;
   data.forEach(d=>{if(regionVal&&gv(d,'Region')!==regionVal)return;st.add(gv(d,'State'));p.add(gv(d,'POD'));c.add(gv(d,'City'))});
   return{states:[...st].filter(Boolean).sort(),pods:[...p].filter(Boolean).sort(),cities:[...c].filter(Boolean).sort()}}
-
 // TAB 1
 function pf1(){const sets={pt:new Set,r:new Set,st:new Set,p:new Set,c:new Set,sr:new Set};aM.forEach(d=>{sets.pt.add(gv(d,'Pin Type'));sets.r.add(gv(d,'Region'));sets.st.add(gv(d,'State'));sets.p.add(gv(d,'POD'));sets.c.add(gv(d,'City'));sets.sr.add(gv(d,'Serviceability Remarks'))});
   createSS('ss_f1pt',[...sets.pt],'af1()');createSS('ss_f1r',[...sets.r],'cascadeF1()');createSS('ss_f1st',[...sets.st],'af1()');createSS('ss_f1p',[...sets.p],'af1()');createSS('ss_f1c',[...sets.c],'af1()');createSS('ss_f1sr',[...sets.sr],'af1()')}
 function cascadeF1(){const reg=getSSVal('ss_f1r');const cas=getCascaded(aM,reg);
-  createSS('ss_f1st',cas.states,'af1()');createSS('ss_f1p',cas.pods,'af1()');createSS('ss_f1c',cas.cities,'af1()');af1()}function af1(){const f={pt:getSSVal('ss_f1pt'),r:getSSVal('ss_f1r'),st:getSSVal('ss_f1st'),p:getSSVal('ss_f1p'),c:getSSVal('ss_f1c'),sr:getSSVal('ss_f1sr')};
+  createSS('ss_f1st',cas.states,'af1()');createSS('ss_f1p',cas.pods,'af1()');createSS('ss_f1c',cas.cities,'af1()');af1()}
+function af1(){const f={pt:getSSVal('ss_f1pt'),r:getSSVal('ss_f1r'),st:getSSVal('ss_f1st'),p:getSSVal('ss_f1p'),c:getSSVal('ss_f1c'),sr:getSSVal('ss_f1sr')};
   const hasFilter=f.pt||f.r||f.st||f.p||f.c||f.sr;
   fM=aM.filter(d=>{if(f.pt&&gv(d,'Pin Type')!==f.pt)return 0;if(f.r&&gv(d,'Region')!==f.r)return 0;if(f.st&&gv(d,'State')!==f.st)return 0;if(f.p&&gv(d,'POD')!==f.p)return 0;if(f.c&&gv(d,'City')!==f.c)return 0;if(f.sr&&gv(d,'Serviceability Remarks')!==f.sr)return 0;return 1});
   let svc=0,nsvc=0,rct=0,dfN=0,ipsSvc=0,ipsNsvc=0;fM.forEach(d=>{
@@ -297,11 +316,9 @@ function cascadeF1(){const reg=getSSVal('ss_f1r');const cas=getCascaded(aM,reg);
     else if(isNS(d)){nsvc++;if(isIPS)ipsNsvc++}
     else if(isRe(d))rct++;else if(isDfN(d))dfN++});
   document.getElementById('k1t').textContent=fM.length.toLocaleString();document.getElementById('k1s').textContent=svc.toLocaleString();document.getElementById('k1n').textContent=nsvc.toLocaleString();document.getElementById('k1rc').textContent=rct.toLocaleString();document.getElementById('k1ipsp').textContent=ipsSvc.toLocaleString();document.getElementById('k1ipsn').textContent=ipsNsvc.toLocaleString();
-  // Only render map if filter is selected (otherwise too many polygons)
   if(hasFilter){rMap(1,fM,d=>{if(isSvc(d))return SV;if(isRe(d))return RC;if(isNS(d))return NV;return null});buildHL(1,fM)}
   else{if(gL[1])maps[1].removeLayer(gL[1]);gL[1]=null}}
 function rf1(){['ss_f1pt','ss_f1r','ss_f1st','ss_f1p','ss_f1c','ss_f1sr'].forEach(clearSS);clrHub(1);af1()}
-
 // TAB 2
 function pf2(){const sets={pt:new Set,r:new Set,st:new Set,p:new Set,c:new Set,s:new Set};aM.forEach(d=>{const es=gv(d,'Expansion Strategy');if(!es)return;sets.pt.add(gv(d,'Pin Type'));sets.r.add(gv(d,'Region'));sets.st.add(gv(d,'State'));sets.p.add(gv(d,'POD'));sets.c.add(gv(d,'City'));sets.s.add(es)});
   createSS('ss_f2pt',[...sets.pt].filter(Boolean),'af2()');createSS('ss_f2r',[...sets.r].filter(Boolean),'cascadeF2()');createSS('ss_f2st',[...sets.st].filter(Boolean),'af2()');createSS('ss_f2p',[...sets.p].filter(Boolean),'af2()');createSS('ss_f2c',[...sets.c].filter(Boolean),'af2()');createMS('ms_f2s',[...sets.s].filter(Boolean))}
@@ -313,36 +330,42 @@ function af2(){const f={pt:getSSVal('ss_f2pt'),r:getSSVal('ss_f2r'),st:getSSVal(
   let sI=0,sO=0;const ph=new Set,ch=new Set;eF.forEach(d=>{if(isSvc(d)){sI+=parseRaw(gv(d,'IPS Meesho serviceability%'));sO+=parseRaw(gv(d,'Overall Meesho serviceability%'))}const p=gv(d,'Proposed Hub Name');if(p&&p!=='-')ph.add(p);const c=gv(d,'Conversion Hub name');if(c&&c!=='-')ch.add(c)});
   document.getElementById('k2t').textContent=eF.length.toLocaleString();document.getElementById('k2ips').textContent=(sI*100).toFixed(2)+'%';document.getElementById('k2ovr').textContent=(sO*100).toFixed(2)+'%';document.getElementById('k2ph').textContent=ph.size;document.getElementById('k2ch').textContent=ch.size;
   if(hasFilter){rMap(2,eF,d=>gSC(gv(d,'Expansion Strategy')));buildHL(2,eF);
-    // Defunct auto
     if(maps[2]._dA)maps[2].removeLayer(maps[2]._dA);const dA=L.layerGroup();eF.filter(d=>isDf(d)).forEach(d=>{const la=parseFloat(gv(d,'Centroid Lat')),lo=parseFloat(gv(d,'Centroid Long'));if(isNaN(la)||isNaN(lo))return;dA.addLayer(L.marker([la,lo],{icon:L.divIcon({className:'',html:`<svg width="12" height="15" viewBox="0 0 14 18"><path d="M7 0C3.1 0 0 3.1 0 7c0 5.2 7 11 7 11s7-5.8 7-11C14 3.1 10.9 0 7 0z" fill="#e53935" stroke="#b71c1c" stroke-width="1"/><circle cx="7" cy="7" r="2.5" fill="white"/></svg>`,iconSize:[12,15],iconAnchor:[6,15],popupAnchor:[0,-15]})}).bindPopup(mkPop(d),{maxWidth:300}))});dA.addTo(maps[2]);maps[2]._dA=dA;
-    // Legend
     const strats=new Set;eF.forEach(d=>{const s=gv(d,'Expansion Strategy');if(s)strats.add(s)});let leg='<h4>Strategy</h4>';[...strats].sort().forEach(s=>{const sc=gSC(s);leg+=`<div class="li"><div class="lc" style="background:${sc.f};border:1px solid ${sc.b}"></div>${s}</div>`});
     leg+='<div style="border-top:1px solid var(--bdr);margin:2px 0;padding-top:2px"><div class="li"><div style="width:7px;height:9px"><svg width="7" height="9" viewBox="0 0 14 18"><path d="M7 0C3.1 0 0 3.1 0 7c0 5.2 7 11 7 11s7-5.8 7-11C14 3.1 10.9 0 7 0z" fill="#e53935"/></svg></div>Defunct</div></div>';
     document.getElementById('leg2').innerHTML=leg}
   else{if(gL[2])maps[2].removeLayer(gL[2]);gL[2]=null}}
 function rf2(){['ss_f2pt','ss_f2r','ss_f2st','ss_f2p','ss_f2c'].forEach(clearSS);clearMS('ms_f2s');clrHub(2);document.getElementById('insP').classList.remove('show');af2()}
-
 // TAB 3: HUB MERGER
 function pf3(){const sets={pt:new Set,r:new Set,st:new Set,p:new Set,c:new Set,sr:new Set};aM.forEach(d=>{if(!gv(d,'Current Serviceable Hub'))return;sets.pt.add(gv(d,'Pin Type'));sets.r.add(gv(d,'Region'));sets.st.add(gv(d,'State'));sets.p.add(gv(d,'POD'));sets.c.add(gv(d,'City'));sets.sr.add(gv(d,'Serviceability Remarks'))});
-  // Anomaly filter
+  // FIX: These now have matching HTML elements
   createSS('ss_f3anom',['Outside Boundary','Inside Boundary'],'af3()');
-  // Merger check — get unique remarks from hub merger sheet
   const remarks=new Set;hmD.forEach(h=>{const r=gv(h,'Remarks');if(r)remarks.add(r)});
   createSS('ss_f3merger',[...remarks].filter(Boolean),'af3()');
   createSS('ss_f3pt',[...sets.pt],'af3()');createSS('ss_f3r',[...sets.r],'cascadeF3()');createSS('ss_f3st',[...sets.st],'af3()');createSS('ss_f3p',[...sets.p],'af3()');createSS('ss_f3c',[...sets.c],'af3()');createSS('ss_f3sr',[...sets.sr],'af3()');
-  // Default to Outside Boundary
   const anomSel=document.getElementById('ss_f3anom_sel');if(anomSel)anomSel.value='Outside Boundary'}
 function cascadeF3(){const reg=getSSVal('ss_f3r');const hubData=aM.filter(d=>gv(d,'Current Serviceable Hub'));const cas=getCascaded(hubData,reg);
-  createSS('ss_f3st',cas.states,'af3()');createSS('ss_f3p',cas.pods,'af3()');createSS('ss_f3c',cas.cities,'af3()');af3()}function af3(){const f={pt:getSSVal('ss_f3pt'),r:getSSVal('ss_f3r'),st:getSSVal('ss_f3st'),p:getSSVal('ss_f3p'),c:getSSVal('ss_f3c'),sr:getSSVal('ss_f3sr')};
+  createSS('ss_f3st',cas.states,'af3()');createSS('ss_f3p',cas.pods,'af3()');createSS('ss_f3c',cas.cities,'af3()');af3()}
+function af3(){const f={pt:getSSVal('ss_f3pt'),r:getSSVal('ss_f3r'),st:getSSVal('ss_f3st'),p:getSSVal('ss_f3p'),c:getSSVal('ss_f3c'),sr:getSSVal('ss_f3sr')};
   fM3=aM.filter(d=>{if(!gv(d,'Current Serviceable Hub'))return 0;if(f.pt&&gv(d,'Pin Type')!==f.pt)return 0;if(f.r&&gv(d,'Region')!==f.r)return 0;if(f.st&&gv(d,'State')!==f.st)return 0;if(f.p&&gv(d,'POD')!==f.p)return 0;if(f.c&&gv(d,'City')!==f.c)return 0;if(f.sr&&gv(d,'Serviceability Remarks')!==f.sr)return 0;return 1});
   buildHubMerger()}
-function rf3(){['ss_f3pt','ss_f3r','ss_f3st','ss_f3p','ss_f3c','ss_f3sr'].forEach(clearSS);af3()}
-
+function rf3(){['ss_f3anom','ss_f3merger','ss_f3pt','ss_f3r','ss_f3st','ss_f3p','ss_f3c','ss_f3sr'].forEach(clearSS);af3()}
 // Hub merger lookup
 function getHMData(hubName){return hmD.find(h=>gv(h,'Hub name')===hubName)||null}
 
-let hubBdData=[];// store for table
+// FIX: Cache turf.union results per hub so they're not recomputed on every filter change
+let hubMergerCache={};
+function getHubMergedBoundary(hubName,geoItems){
+  if(hubMergerCache[hubName])return hubMergerCache[hubName];
+  let merged=null;
+  geoItems.forEach(d=>{try{const p=turf.feature(d._geo);if(!merged)merged=p;else merged=turf.union(merged,p)}catch(e){}});
+  hubMergerCache[hubName]=merged;
+  return merged;
+}
+
+let hubBdData=[];
 function buildHubMerger(){
+  if(!map3Inited)return;
   hbL3.clearLayers();hmL3.clearLayers();hubBdData=[];
   const anomFilter=getSSVal('ss_f3anom');
   const mergerFilter=getSSVal('ss_f3merger');
@@ -351,7 +374,9 @@ function buildHubMerger(){
   let totalH=0,insideC=0,outsideC=0,mergerC=0,totalP=fM3.length;
   Object.entries(groups).forEach(([name,data])=>{
     const geo=data.pins.filter(d=>d._g&&d._geo);if(!geo.length)return;
-    let merged=null;geo.forEach(d=>{try{const p=turf.feature(d._geo);if(!merged)merged=p;else merged=turf.union(merged,p)}catch(e){}});if(!merged)return;
+    // FIX: Use cached merged boundary
+    let merged=getHubMergedBoundary(name,geo);
+    if(!merged)return;
     let isIn=false;if(data.lat&&data.lng){try{isIn=turf.booleanPointInPolygon(turf.point([data.lng,data.lat]),merged)}catch(e){}}
     if(isIn)insideC++;else if(data.lat)outsideC++;
     totalH++;
@@ -361,12 +386,9 @@ function buildHubMerger(){
     const adl=data.pins.reduce((a,d)=>a+(parseFloat(gv(d,'Pincode ADL')||gv(d,'Promised ADL'))||0),0);
     const status=isIn?'Inside':'Outside';
     hubBdData.push({name,pinCount:data.pins.length,svcC,nsC,adl,isIn,nearHub,hvDist,osmDist,mType,remarks,cityType,cat:data.cat,lat:data.lat,lng:data.lng,status});
-    // Apply anomaly filter
     if(anomFilter==='Outside Boundary'&&isIn)return;
     if(anomFilter==='Inside Boundary'&&!isIn)return;
-    // Apply merger filter
     if(mergerFilter&&remarks!==mergerFilter)return;
-    // Draw boundary
     const col=isIn?'#0B9B8A':'#e53935';
     const bLyr=L.geoJSON(merged,{style:{fillColor:col,fillOpacity:.1,weight:3,color:col,opacity:.7,dashArray:isIn?'':'6,4'}});
     bLyr.on('click',()=>bLyr.bindPopup(mkHubMergerPop(name,data.pins.length,svcC,nsC,adl,isIn,nearHub,hvDist,osmDist,mType,remarks,cityType,data.cat),{maxWidth:400}).openPopup());
@@ -376,7 +398,6 @@ function buildHubMerger(){
       hmL3.addLayer(L.marker([data.lat,data.lng],{icon}).bindPopup(mkHubMergerPop(name,data.pins.length,svcC,nsC,adl,isIn,nearHub,hvDist,osmDist,mType,remarks,cityType,data.cat),{maxWidth:400}))}
   });
   document.getElementById('k3h').textContent=totalH;document.getElementById('k3in').textContent=insideC;document.getElementById('k3out').textContent=outsideC;document.getElementById('k3m').textContent=mergerC;document.getElementById('k3p').textContent=totalP.toLocaleString()}
-
 // Hub Table
 let hubTableVisible=false;
 function toggleHubTable(){
@@ -395,28 +416,21 @@ function toggleHubTable(){
     document.getElementById('hubTableContent').innerHTML=html;
     panel.style.display='block';document.getElementById('hubTableBtn').textContent='📋 Hide Hub List'}
   else{panel.style.display='none';document.getElementById('hubTableBtn').textContent='📋 Show Hub List'}}
-
 function mkHubMergerPop(nm,pins,svc,ns,adl,isIn,near,hvD,osmD,mType,remarks,cityType,cat){
   const status=isIn?'<span style="background:rgba(67,160,71,.1);color:#2e7d32;padding:2px 8px;border-radius:5px;font-size:9px;font-weight:700">✅ Inside</span>':'<span style="background:rgba(229,57,53,.1);color:#c62828;padding:2px 8px;border-radius:5px;font-size:9px;font-weight:700">⚠️ Outside</span>';
   let extra='';if(near)extra+=`<tr><td>Nearest Hub</td><td>${near}</td></tr>`;if(hvD)extra+=`<tr><td>Haversine Dist</td><td>${hvD} km</td></tr>`;if(osmD)extra+=`<tr><td>OSRM Dist</td><td>${osmD} km</td></tr>`;if(mType)extra+=`<tr><td>Merger Type</td><td>${mType}</td></tr>`;if(remarks)extra+=`<tr><td>Remarks</td><td>${remarks}</td></tr>`;if(cityType)extra+=`<tr><td>City Type</td><td>${cityType}</td></tr>`;if(cat)extra+=`<tr><td>Hub Category</td><td>${cat}</td></tr>`;
   return`<div><div class="hp-t">🏠 ${nm}</div><div style="text-align:center;margin-bottom:6px">${status}</div><div class="hp-ch"><div class="hp-c">📍${pins}</div><div class="hp-c">✅${svc}</div><div class="hp-c">❌${ns}</div><div class="hp-c">ADL:${Math.round(adl)}</div></div>${extra?'<table class="poptbl">'+extra+'</table>':''}</div>`}
-
-function zoomHub3(nm){const entries=[...hbL3.getLayers()];hmL3.eachLayer(l=>{if(l.getPopup){const c=l.getPopup()?.getContent()||'';if(c.includes(nm)){maps[3].setView(l.getLatLng(),11);setTimeout(()=>l.openPopup(),200)}}});}
-
-// SHARED: Render map with chunked loading
+function zoomHub3(nm){if(!map3Inited)return;hmL3.eachLayer(l=>{if(l.getPopup){const c=l.getPopup()?.getContent()||'';if(c.includes(nm)){maps[3].setView(l.getLatLng(),11);setTimeout(()=>l.openPopup(),200)}}})}
+// SHARED: Render map — FIX: chunk size back to 1500 for performance
 function rMap(n,data,colorFn){if(gL[n])maps[n].removeLayer(gL[n]);const ft=[];
   data.forEach(d=>{if(!d._g||!d._geo)return;const c=colorFn(d);if(!c)return;ft.push({type:'Feature',geometry:d._geo,properties:d})});
   gL[n]=L.geoJSON(null,{style:f=>{const c=colorFn(f.properties);return{fillColor:c.f,weight:.5,opacity:1,color:c.b,fillOpacity:.45,renderer:cvs[n]}},onEachFeature:(f,l)=>{l.on({mouseover:e=>e.target.setStyle({weight:2,fillOpacity:.8}),mouseout:e=>{if(gL[n])gL[n].resetStyle(e.target)},click:()=>l.bindPopup(mkPop(f.properties),{maxWidth:300}).openPopup()})},renderer:cvs[n]}).addTo(maps[n]);
-  let i=0;const ch=800;(function go(){const end=Math.min(i+ch,ft.length);for(;i<end;i++)gL[n].addData(ft[i]);if(i<ft.length)setTimeout(go,10);else if(ft.length>0&&ft.length<5000)try{maps[n].fitBounds(gL[n].getBounds(),{padding:[20,20],maxZoom:11})}catch(e){}})()}
-
+  let i=0;const ch=1500;(function go(){const end=Math.min(i+ch,ft.length);for(;i<end;i++)gL[n].addData(ft[i]);if(i<ft.length)setTimeout(go,0);else if(ft.length>0&&ft.length<5000)try{maps[n].fitBounds(gL[n].getBounds(),{padding:[20,20],maxZoom:11})}catch(e){}})()}
 // Hub layers from base data
 function buildHL(n,data){hL[n].clearLayers();const seen=new Set;data.forEach(d=>{const la=parseFloat(gv(d,'Hub Lat')),lo=parseFloat(gv(d,'Hub Long'));if(isNaN(la)||isNaN(lo))return;const nm=gv(d,'Current Serviceable Hub')||gv(d,'Final Hub')||'';if(!nm||seen.has(nm))return;seen.add(nm);const sf=(gv(d,'hub_category')||'').toUpperCase().includes('SELF');const hp=aM.filter(dd=>gv(dd,'Current Serviceable Hub')===nm||gv(dd,'Final Hub')===nm);
     hL[n].addLayer(L.marker([la,lo],{icon:L.divIcon({className:'hub-home-icon',html:`<svg viewBox="0 0 24 24" width="16" height="16"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="${sf?'#43a047':'#ff9800'}" stroke="${sf?'#1b5e20':'#e65100'}" stroke-width="1.5" stroke-linejoin="round"/></svg>`,iconSize:[16,16],iconAnchor:[8,16],popupAnchor:[0,-16]})}).bindPopup(mkHubPop(nm,hp),{maxWidth:350}))});if(hOn[n])maps[n].removeLayer(hL[n]),hL[n].addTo(maps[n])}
 function tH(n){const b=document.getElementById('ht'+n);if(hOn[n]){maps[n].removeLayer(hL[n]);hOn[n]=0;b.classList.remove('on');b.textContent='🏠 Show Hubs'}else{hL[n].addTo(maps[n]);hOn[n]=1;b.classList.add('on');b.textContent='🏠 Hide Hubs'}}
-
-// Centroid toggle
 function tCent(n){const b=document.getElementById('cd'+n);if(centOn[n]){maps[n].removeLayer(centL[n]);centOn[n]=0;b.classList.remove('on');b.textContent='📍 Defunct Centroids'}else{centL[n].clearLayers();(n===1?fM:eF).forEach(d=>{const la=parseFloat(gv(d,'Centroid Lat')),lo=parseFloat(gv(d,'Centroid Long'));if(isNaN(la)||isNaN(lo))return;centL[n].addLayer(L.marker([la,lo],{icon:L.divIcon({className:'',html:`<svg width="12" height="15" viewBox="0 0 14 18"><path d="M7 0C3.1 0 0 3.1 0 7c0 5.2 7 11 7 11s7-5.8 7-11C14 3.1 10.9 0 7 0z" fill="#e53935" stroke="#b71c1c" stroke-width="1"/><circle cx="7" cy="7" r="2.5" fill="white"/></svg>`,iconSize:[12,15],iconAnchor:[6,15],popupAnchor:[0,-15]})}).bindPopup(mkPop(d),{maxWidth:300}))});centL[n].addTo(maps[n]);centOn[n]=1;b.classList.add('on');b.textContent='📍 Hide Centroids'}}
-
 // Hub search dropdown
 function hubDD(n){const inp=document.getElementById('hdi'+n),list=document.getElementById('hdl'+n),q=inp.value.toLowerCase();
   let hl=allHubNames;if(n===2){const ss=getMSVals('ms_f2s');if(ss.size){const sh=new Set;aM.forEach(d=>{if(!ss.has(gv(d,'Expansion Strategy')))return;['Current Serviceable Hub','Final Hub','S1 Mapping Hub','Proposed Hub Name','Conversion Hub name'].forEach(k=>{const v=gv(d,k);if(v&&v!=='-')sh.add(v)})});hl=[...sh].sort()}}
@@ -424,7 +438,6 @@ function hubDD(n){const inp=document.getElementById('hdi'+n),list=document.getEl
   list.innerHTML=m.map(h=>`<div class="hub-dd-item" onclick="selHub(${n},'${h.replace(/'/g,"\\'")}')">${h}</div>`).join('');list.classList.add('open')}
 function selHub(n,nm){document.getElementById('hdi'+n).value=nm;document.getElementById('hdl'+n).classList.remove('open');doHubSrch(n,nm)}
 document.addEventListener('click',e=>{[1,2,3].forEach(n=>{const l=document.getElementById('hdl'+n);if(l&&!l.parentElement.contains(e.target))l.classList.remove('open')})});
-
 function doHubSrch(n,nm){const vl=nm.toLowerCase(),ds=aM;
   const hp=ds.filter(d=>{const h=gv(d,'Current Serviceable Hub').toLowerCase();return h.includes(vl)&&d._g&&d._geo});
   if(!hp.length){alert('Hub not found');return}
@@ -438,7 +451,6 @@ function doHubSrch(n,nm){const vl=nm.toLowerCase(),ds=aM;
   try{maps[n].fitBounds(L.geoJSON({type:'FeatureCollection',features:hp.map(d=>({type:'Feature',geometry:d._geo}))}).getBounds(),{padding:[30,30]})}catch(e){if(hLat)maps[n].setView([hLat,hLng],12)}}
 function clrHub(n){if(hsL[n]){maps[n].removeLayer(hsL[n]);hsL[n]=null}document.getElementById('hdi'+n).value='';if(n<=2)document.getElementById('hsc'+n).style.display='none'}
 function sPin(n){const v=document.getElementById('ps'+n).value.trim();if(!v||!gL[n])return;let found=0;gL[n].eachLayer(l=>{if(found)return;if(String(l.feature?.properties?.Pincode)===v){found=1;maps[n].fitBounds(l.getBounds(),{maxZoom:13});l.setStyle({weight:3,color:'#D4CF1F',fillOpacity:.9});setTimeout(()=>l.fire('click'),300);setTimeout(()=>gL[n].resetStyle(l),5000)}});if(!found)alert('Pincode not found')}
-
 // Insights
 function genIns(){const box=document.getElementById('insC'),panel=document.getElementById('insP');if(!eF.length){panel.classList.remove('show');return}
   const t=eF.length,stCnt={};eF.forEach(d=>{const s=gv(d,'Expansion Strategy');stCnt[s]=(stCnt[s]||0)+1});const sorted=Object.entries(stCnt).sort((a,b)=>b[1]-a[1]),top=sorted[0];
@@ -455,18 +467,19 @@ function genIns(){const box=document.getElementById('insC'),panel=document.getEl
   if(comp)ins.push(`<strong>${comp}</strong> have <strong>competition</strong> — prioritize.`);
   if(hcv)ins.push(`<strong>${hcv}</strong> via <strong>hub conversion</strong>.`);
   box.innerHTML=ins.slice(0,5).map((t,i)=>`<div class="ins-i"><div class="ins-n">${i+1}</div><div class="ins-t">${t}</div></div>`).join('');panel.classList.add('show')}
-
 let t3Rendered=false;
 function swTab(id,btn){document.querySelectorAll('.tab-c').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');
-  const n=id==='t1'?1:id==='t2'?2:3;setTimeout(()=>maps[n].invalidateSize(),100);
-  // Lazy render Hub Merger
-  if(id==='t3'&&!t3Rendered&&aM.length){t3Rendered=true;setTimeout(()=>af3(),200)}}
-function renderAll(){pf1();pf2();pf3();af1();af2();t3Rendered=false}
-
+  const n=id==='t1'?1:id==='t2'?2:3;
+  // FIX: Lazy-init map 3 only when tab is first opened
+  if(id==='t3'){
+    initMap3();
+    setTimeout(()=>{maps[3].invalidateSize();if(!t3Rendered&&aM.length){t3Rendered=true;setTimeout(()=>{try{pf3();af3()}catch(e){console.warn('Tab3 error:',e)}},200)}},100);
+  }else{setTimeout(()=>maps[n].invalidateSize(),100)}}
+function renderAll(){pf1();pf2();af1();af2();if(t3Rendered){hubMergerCache={};try{pf3();af3()}catch(e){}}else{t3Rendered=false}}
 // File handlers
 document.getElementById('geoF').addEventListener('change',function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{gjD=JSON.parse(ev.target.result);if(gsD.length)finishLoad()}catch(err){alert(err.message)}};r.readAsText(f)});
 document.getElementById('csvF').addEventListener('change',function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const p=Papa.parse(ev.target.result,{header:true,skipEmptyLines:true,dynamicTyping:false});if(p.data?.length){gsD=p.data;gsD.forEach(row=>{if(row.Pincode)row.Pincode=String(row.Pincode).trim().split('.')[0]});if(gjD)finishLoad()}};r.readAsText(f)});
-document.getElementById('gfT').addEventListener('change',function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{gjD=JSON.parse(ev.target.result);mergeAll();buildHubList();renderAll()}catch(err){alert(err.message)}};r.readAsText(f)});
+document.getElementById('gfT').addEventListener('change',function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{gjD=JSON.parse(ev.target.result);hubMergerCache={};mergeAll();buildHubList();renderAll()}catch(err){alert(err.message)}};r.readAsText(f)});
 </script>
 </body>
 </html>
