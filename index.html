@@ -118,9 +118,9 @@ input[type="file"]{display:none}
   <div class="hdr">
     <div class="br"><div><div style="font-size:13px;font-weight:800;color:var(--teal);letter-spacing:-.3px">SHADOWFAX</div><div style="font-size:6px;color:var(--tl);font-style:italic;margin-top:-1px;text-align:right">Think ahead!</div></div><div class="pn">LM Planning Dashboard</div></div>
     <div class="tbar">
-      <button class="tbtn active" onclick="swTab('t1',this)">📊 Pan India</button>
-      <button class="tbtn" onclick="swTab('t2',this)">🚀 Expansion</button>
-      <button class="tbtn" onclick="swTab('t3',this)">🔲 Hub Merger</button>
+      <button class="tbtn active" onclick="swTab('t1',this)">Pan India View</button>
+      <button class="tbtn" onclick="swTab('t2',this)">Expansion Plan</button>
+      <button class="tbtn" onclick="swTab('t3',this)">Hub anomaly</button>
     </div>
     <div class="hacts"><button class="hbtn" onclick="refreshAll()">🔄 Refresh <span class="sp" id="rSp"></span></button><label class="hbtn">🗺️ GeoJSON<input type="file" id="gfT" accept=".geojson,.json"></label></div>
   </div>
@@ -162,7 +162,7 @@ input[type="file"]{display:none}
     <div class="tab-c" id="tab-t3">
       <div class="map-w"><div id="map3"></div></div>
       <div class="kstrip"><div class="kp tot"><div class="kl">Total Hubs</div><div class="kv" id="k3h">—</div></div><div class="kp svc"><div class="kl">Inside Boundary</div><div class="kv" id="k3in">—</div></div><div class="kp nsvc"><div class="kl">Outside</div><div class="kv" id="k3out">—</div></div><div class="kp hub"><div class="kl">Merger Hubs</div><div class="kv" id="k3m">—</div></div><div class="kp pct"><div class="kl">Total Pins</div><div class="kv" id="k3p">—</div></div></div>
-      <div class="sidebar" id="sb3"><div class="sb-tgl" onclick="tgSB('sb3')">◀</div><div class="sb-hd">🔲 Hub Merger</div>
+      <div class="sidebar" id="sb3"><div class="sb-tgl" onclick="tgSB('sb3')">◀</div><div class="sb-hd">Hub anomaly</div>
         <div class="sb-bd"><div class="sb-s"><div class="sb-st">Filters</div>
           <div class="sb-f"><label>Pin Type</label><div id="ss_f3pt"></div></div><div class="sb-f"><label>Region</label><div id="ss_f3r"></div></div><div class="sb-f"><label>State</label><div id="ss_f3st"></div></div><div class="sb-f"><label>POD</label><div id="ss_f3p"></div></div><div class="sb-f"><label>City</label><div id="ss_f3c"></div></div><div class="sb-f"><label>Svc Remarks</label><div id="ss_f3sr"></div></div>
           <div class="sb-rst" onclick="rf3()">↺ Reset All</div></div>
