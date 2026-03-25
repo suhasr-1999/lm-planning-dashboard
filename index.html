@@ -243,7 +243,19 @@ function autoLoad(){const st=document.getElementById('gsSt');setProg(5,'Loading.
     st.textContent='⚠️ GeoJSON not found — upload manually';st.className='gs err';document.getElementById('startBtn').classList.add('show');gDone=1;check()});
   setTimeout(()=>{if(!gDone){st.textContent='⚠️ Large file loading... please wait';setProg(35,'Still loading...')}},8000);
   setTimeout(()=>{if(sDone<need||!gDone){st.textContent='⚠️ Slow — upload manually';st.className='gs err';document.getElementById('startBtn').classList.add('show')}},30000)}
-function finishLoad(){if(gjD&&gsD.length){setProg(60,'Merging...');setTimeout(()=>{mergeAll();buildHubList();setProg(75,'Rendering Tab 1...');setTimeout(()=>{pf1();pf2();pf3();af1();setProg(90,'Rendering Tab 2...');setTimeout(()=>{af2();setProg(100,'Done!');document.getElementById('gsSt').textContent='✅ All loaded';document.getElementById('gsSt').className='gs ok';document.getElementById('app').style.display='flex';setTimeout(()=>{document.getElementById('lo').classList.add('hide');[1,2,3].forEach(n=>maps[n].invalidateSize())},200)},100)},100)},100)}
+function finishLoad(){if(gjD&&gsD.length){setProg(60,'Merging...');setTimeout(()=>{mergeAll();buildHubList();setProg(80,'Setting up filters...');setTimeout(()=>{pf1();pf2();pf3();
+        // Don't render all 25K polygons on load — just show KPIs
+        fM=aM;eF=aM.filter(d=>gv(d,'Expansion Strategy'));
+        // KPIs only — no map render
+        let svc=0,nsvc=0,rct=0,dfN=0,ipsSvc=0,ipsNsvc=0;fM.forEach(d=>{const isIPS=gv(d,'Pin Type').toLowerCase().includes('ips');if(isSvc(d)){svc++;if(isIPS)ipsSvc++}else if(isNS(d)){nsvc++;if(isIPS)ipsNsvc++}else if(isRe(d))rct++;else if(isDfN(d))dfN++});
+        document.getElementById('k1t').textContent=fM.length.toLocaleString();document.getElementById('k1s').textContent=svc.toLocaleString();document.getElementById('k1n').textContent=nsvc.toLocaleString();document.getElementById('k1rc').textContent=rct.toLocaleString();document.getElementById('k1ipsp').textContent=ipsSvc.toLocaleString();document.getElementById('k1ipsn').textContent=ipsNsvc.toLocaleString();
+        // Tab 2 KPIs
+        let sI=0,sO=0;const ph=new Set,ch=new Set;eF.forEach(d=>{if(isSvc(d)){sI+=parseRaw(gv(d,'IPS Meesho serviceability%'));sO+=parseRaw(gv(d,'Overall Meesho serviceability%'))}const p=gv(d,'Proposed Hub Name');if(p&&p!=='-')ph.add(p);const c=gv(d,'Conversion Hub name');if(c&&c!=='-')ch.add(c)});
+        document.getElementById('k2t').textContent=eF.length.toLocaleString();document.getElementById('k2ips').textContent=(sI*100).toFixed(2)+'%';document.getElementById('k2ovr').textContent=(sO*100).toFixed(2)+'%';document.getElementById('k2ph').textContent=ph.size;document.getElementById('k2ch').textContent=ch.size;
+        setProg(100,'Done! Select a filter to view map.');
+        document.getElementById('gsSt').textContent='✅ Loaded — select Region/State/POD to render map';document.getElementById('gsSt').className='gs ok';
+        document.getElementById('app').style.display='flex';
+        setTimeout(()=>{document.getElementById('lo').classList.add('hide');[1,2,3].forEach(n=>maps[n].invalidateSize())},200)},100)},100)}
   else{document.getElementById('startBtn').classList.add('show');setProg(100,'Upload manually')}}
 function startPortal(){document.getElementById('startBtn').style.display='none';finishLoad()}
 window.addEventListener('DOMContentLoaded',()=>setTimeout(autoLoad,300));
@@ -277,6 +289,7 @@ function pf1(){const sets={pt:new Set,r:new Set,st:new Set,p:new Set,c:new Set,s
   createSS('ss_f1pt',[...sets.pt],'af1()');createSS('ss_f1r',[...sets.r],'cascadeF1()');createSS('ss_f1st',[...sets.st],'af1()');createSS('ss_f1p',[...sets.p],'af1()');createSS('ss_f1c',[...sets.c],'af1()');createSS('ss_f1sr',[...sets.sr],'af1()')}
 function cascadeF1(){const reg=getSSVal('ss_f1r');const cas=getCascaded(aM,reg);
   createSS('ss_f1st',cas.states,'af1()');createSS('ss_f1p',cas.pods,'af1()');createSS('ss_f1c',cas.cities,'af1()');af1()}function af1(){const f={pt:getSSVal('ss_f1pt'),r:getSSVal('ss_f1r'),st:getSSVal('ss_f1st'),p:getSSVal('ss_f1p'),c:getSSVal('ss_f1c'),sr:getSSVal('ss_f1sr')};
+  const hasFilter=f.pt||f.r||f.st||f.p||f.c||f.sr;
   fM=aM.filter(d=>{if(f.pt&&gv(d,'Pin Type')!==f.pt)return 0;if(f.r&&gv(d,'Region')!==f.r)return 0;if(f.st&&gv(d,'State')!==f.st)return 0;if(f.p&&gv(d,'POD')!==f.p)return 0;if(f.c&&gv(d,'City')!==f.c)return 0;if(f.sr&&gv(d,'Serviceability Remarks')!==f.sr)return 0;return 1});
   let svc=0,nsvc=0,rct=0,dfN=0,ipsSvc=0,ipsNsvc=0;fM.forEach(d=>{
     const isIPS=gv(d,'Pin Type').toLowerCase().includes('ips');
@@ -284,7 +297,9 @@ function cascadeF1(){const reg=getSSVal('ss_f1r');const cas=getCascaded(aM,reg);
     else if(isNS(d)){nsvc++;if(isIPS)ipsNsvc++}
     else if(isRe(d))rct++;else if(isDfN(d))dfN++});
   document.getElementById('k1t').textContent=fM.length.toLocaleString();document.getElementById('k1s').textContent=svc.toLocaleString();document.getElementById('k1n').textContent=nsvc.toLocaleString();document.getElementById('k1rc').textContent=rct.toLocaleString();document.getElementById('k1ipsp').textContent=ipsSvc.toLocaleString();document.getElementById('k1ipsn').textContent=ipsNsvc.toLocaleString();
-  rMap(1,fM,d=>{if(isSvc(d))return SV;if(isRe(d))return RC;if(isNS(d))return NV;return null});buildHL(1,fM)}
+  // Only render map if filter is selected (otherwise too many polygons)
+  if(hasFilter){rMap(1,fM,d=>{if(isSvc(d))return SV;if(isRe(d))return RC;if(isNS(d))return NV;return null});buildHL(1,fM)}
+  else{if(gL[1])maps[1].removeLayer(gL[1]);gL[1]=null}}
 function rf1(){['ss_f1pt','ss_f1r','ss_f1st','ss_f1p','ss_f1c','ss_f1sr'].forEach(clearSS);clrHub(1);af1()}
 
 // TAB 2
@@ -293,16 +308,18 @@ function pf2(){const sets={pt:new Set,r:new Set,st:new Set,p:new Set,c:new Set,s
 function cascadeF2(){const reg=getSSVal('ss_f2r');const expData=aM.filter(d=>gv(d,'Expansion Strategy'));const cas=getCascaded(expData,reg);
   createSS('ss_f2st',cas.states,'af2()');createSS('ss_f2p',cas.pods,'af2()');createSS('ss_f2c',cas.cities,'af2()');af2()}
 function af2(){const f={pt:getSSVal('ss_f2pt'),r:getSSVal('ss_f2r'),st:getSSVal('ss_f2st'),p:getSSVal('ss_f2p'),c:getSSVal('ss_f2c')},stS=getMSVals('ms_f2s');
+  const hasFilter=f.pt||f.r||f.st||f.p||f.c||stS.size;
   eF=aM.filter(d=>{const es=gv(d,'Expansion Strategy');if(!es)return 0;if(f.pt&&gv(d,'Pin Type')!==f.pt)return 0;if(f.r&&gv(d,'Region')!==f.r)return 0;if(f.st&&gv(d,'State')!==f.st)return 0;if(f.p&&gv(d,'POD')!==f.p)return 0;if(f.c&&gv(d,'City')!==f.c)return 0;if(stS.size&&!stS.has(es))return 0;return 1});
   let sI=0,sO=0;const ph=new Set,ch=new Set;eF.forEach(d=>{if(isSvc(d)){sI+=parseRaw(gv(d,'IPS Meesho serviceability%'));sO+=parseRaw(gv(d,'Overall Meesho serviceability%'))}const p=gv(d,'Proposed Hub Name');if(p&&p!=='-')ph.add(p);const c=gv(d,'Conversion Hub name');if(c&&c!=='-')ch.add(c)});
   document.getElementById('k2t').textContent=eF.length.toLocaleString();document.getElementById('k2ips').textContent=(sI*100).toFixed(2)+'%';document.getElementById('k2ovr').textContent=(sO*100).toFixed(2)+'%';document.getElementById('k2ph').textContent=ph.size;document.getElementById('k2ch').textContent=ch.size;
-  rMap(2,eF,d=>gSC(gv(d,'Expansion Strategy')));buildHL(2,eF);
-  // Defunct auto
-  if(maps[2]._dA)maps[2].removeLayer(maps[2]._dA);const dA=L.layerGroup();eF.filter(d=>isDf(d)).forEach(d=>{const la=parseFloat(gv(d,'Centroid Lat')),lo=parseFloat(gv(d,'Centroid Long'));if(isNaN(la)||isNaN(lo))return;dA.addLayer(L.marker([la,lo],{icon:L.divIcon({className:'',html:`<svg width="12" height="15" viewBox="0 0 14 18"><path d="M7 0C3.1 0 0 3.1 0 7c0 5.2 7 11 7 11s7-5.8 7-11C14 3.1 10.9 0 7 0z" fill="#e53935" stroke="#b71c1c" stroke-width="1"/><circle cx="7" cy="7" r="2.5" fill="white"/></svg>`,iconSize:[12,15],iconAnchor:[6,15],popupAnchor:[0,-15]})}).bindPopup(mkPop(d),{maxWidth:300}))});dA.addTo(maps[2]);maps[2]._dA=dA;
-  // Legend
-  const strats=new Set;eF.forEach(d=>{const s=gv(d,'Expansion Strategy');if(s)strats.add(s)});let leg='<h4>Strategy</h4>';[...strats].sort().forEach(s=>{const sc=gSC(s);leg+=`<div class="li"><div class="lc" style="background:${sc.f};border:1px solid ${sc.b}"></div>${s}</div>`});
-  leg+='<div style="border-top:1px solid var(--bdr);margin:2px 0;padding-top:2px"><div class="li"><div style="width:7px;height:9px"><svg width="7" height="9" viewBox="0 0 14 18"><path d="M7 0C3.1 0 0 3.1 0 7c0 5.2 7 11 7 11s7-5.8 7-11C14 3.1 10.9 0 7 0z" fill="#e53935"/></svg></div>Defunct</div></div>';
-  document.getElementById('leg2').innerHTML=leg}
+  if(hasFilter){rMap(2,eF,d=>gSC(gv(d,'Expansion Strategy')));buildHL(2,eF);
+    // Defunct auto
+    if(maps[2]._dA)maps[2].removeLayer(maps[2]._dA);const dA=L.layerGroup();eF.filter(d=>isDf(d)).forEach(d=>{const la=parseFloat(gv(d,'Centroid Lat')),lo=parseFloat(gv(d,'Centroid Long'));if(isNaN(la)||isNaN(lo))return;dA.addLayer(L.marker([la,lo],{icon:L.divIcon({className:'',html:`<svg width="12" height="15" viewBox="0 0 14 18"><path d="M7 0C3.1 0 0 3.1 0 7c0 5.2 7 11 7 11s7-5.8 7-11C14 3.1 10.9 0 7 0z" fill="#e53935" stroke="#b71c1c" stroke-width="1"/><circle cx="7" cy="7" r="2.5" fill="white"/></svg>`,iconSize:[12,15],iconAnchor:[6,15],popupAnchor:[0,-15]})}).bindPopup(mkPop(d),{maxWidth:300}))});dA.addTo(maps[2]);maps[2]._dA=dA;
+    // Legend
+    const strats=new Set;eF.forEach(d=>{const s=gv(d,'Expansion Strategy');if(s)strats.add(s)});let leg='<h4>Strategy</h4>';[...strats].sort().forEach(s=>{const sc=gSC(s);leg+=`<div class="li"><div class="lc" style="background:${sc.f};border:1px solid ${sc.b}"></div>${s}</div>`});
+    leg+='<div style="border-top:1px solid var(--bdr);margin:2px 0;padding-top:2px"><div class="li"><div style="width:7px;height:9px"><svg width="7" height="9" viewBox="0 0 14 18"><path d="M7 0C3.1 0 0 3.1 0 7c0 5.2 7 11 7 11s7-5.8 7-11C14 3.1 10.9 0 7 0z" fill="#e53935"/></svg></div>Defunct</div></div>';
+    document.getElementById('leg2').innerHTML=leg}
+  else{if(gL[2])maps[2].removeLayer(gL[2]);gL[2]=null}}
 function rf2(){['ss_f2pt','ss_f2r','ss_f2st','ss_f2p','ss_f2c'].forEach(clearSS);clearMS('ms_f2s');clrHub(2);document.getElementById('insP').classList.remove('show');af2()}
 
 // TAB 3: HUB MERGER
