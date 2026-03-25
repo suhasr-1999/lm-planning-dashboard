@@ -209,7 +209,13 @@ function isNS(d){return sr(d)==='non serviceable'}
 function isRe(d){return sr(d)==='need reactivation'}
 function isDfN(d){return sr(d)==='defunct non serviceable'}
 function isDf(d){return sr(d).includes('defunct')}
-function setProg(p,l){document.getElementById('pf').style.width=p+'%';if(l)document.getElementById('pl').textContent=l}
+function setProg(p,l){
+  const pf = document.getElementById('pf');
+  const pl = document.getElementById('pl');
+
+  if (pf) pf.style.width = p + '%';
+  if (l && pl) pl.textContent = l;
+}
 function tgSB(id){const sb=document.getElementById(id);sb.classList.toggle('collapsed');sb.querySelector('.sb-tgl').textContent=sb.classList.contains('collapsed')?'▶':'◀'}
 function haversine(a,b,c,d){const R=6371,dL=(c-a)*Math.PI/180,dN=(d-b)*Math.PI/180,x=Math.sin(dL/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dN/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
 function createSS(id,items,onChange){const el=document.getElementById(id);if(!el)return;let h=`<select class="sb-sel" id="${id}_sel" onchange="${onChange}"><option value="">All</option>`;[...items].sort().forEach(i=>{if(i)h+=`<option value="${i}">${i}</option>`});el.innerHTML=h+'</select>'}
@@ -265,7 +271,9 @@ function finishLoad(){if(gjD&&gsD.length){setProg(60,'Merging...');setTimeout(()
   },100)}
   else{document.getElementById('startBtn').classList.add('show');setProg(100,'Upload manually')}}
 function startPortal(){document.getElementById('startBtn').style.display='none';finishLoad()}
-window.addEventListener('DOMContentLoaded',()=>setTimeout(autoLoad,300));
+document.addEventListener("DOMContentLoaded", function () {
+  setTimeout(autoLoad, 300);
+});
 function refreshAll(){const sp=document.getElementById('rSp');sp.style.display='inline-block';let d=0;
   const f=()=>{d++;if(d>=2){sp.style.display='none';mergeAll();buildHubList();hubMergerCache={};renderAll();alert('Refreshed!')}};
   Papa.parse(GURL(GID_BASE),{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>{if(r.data?.length){gsD=r.data;gsD.forEach(row=>{if(row.Pincode)row.Pincode=String(row.Pincode).trim().split('.')[0]})}f()},error:f});
