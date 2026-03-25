@@ -79,6 +79,7 @@ label.hbtn{cursor:pointer}
 .hub-dd-item{padding:4px 7px;font-size:8px;cursor:pointer;transition:background .1s;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hub-dd-item:hover{background:var(--tbg);color:var(--teal)}
 
 .sb-btn{width:100%;padding:4px;border:1px solid var(--bdr);border-radius:5px;background:var(--w);color:var(--txl);font-size:7px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:2px;margin-bottom:3px}.sb-btn:hover{border-color:var(--teal);color:var(--teal)}.sb-btn.on{background:var(--teal);color:var(--w);border-color:var(--teal)}
+.sb-apply{width:100%;padding:6px;border:none;border-radius:6px;background:linear-gradient(135deg,var(--teal),var(--td));color:var(--w);font-size:9px;font-weight:700;cursor:pointer;margin-top:6px;transition:all .15s;box-shadow:0 2px 8px rgba(11,155,138,.25)}.sb-apply:hover{box-shadow:0 4px 12px rgba(11,155,138,.35);transform:translateY(-1px)}.sb-apply:active{transform:translateY(0)}
 .sb-rst{width:100%;padding:4px;border:1px solid var(--bdr);border-radius:5px;background:var(--bg);color:var(--txm);font-size:7px;cursor:pointer;text-align:center;margin-top:3px}.sb-rst:hover{color:var(--teal);border-color:var(--teal)}
 .sb-rst.hs-clear{background:#fff3e0;color:#e65100;border-color:#ffe0b2;display:none}
 
@@ -115,10 +116,9 @@ input[type="file"]{display:none}
 <body>
 <div class="lo" id="lo">
   <div class="lo-brand">
-    <svg width="50" height="44" viewBox="0 0 120 100"><path d="M28,82 C28,82 18,50 30,30 C35,22 42,12 50,8 L58,38 Z" fill="#C8C820"/><path d="M50,8 C58,5 68,12 78,28 C88,44 82,58 78,62 L58,38 Z" fill="#D6D43A"/><path d="M28,82 L58,38 L78,62 C72,72 58,80 44,84 Z" fill="#A8A41A"/></svg>
-    <div><div style="font-size:22px;font-weight:800;color:var(--teal)">SHADOWFAX</div><div style="font-size:10px;color:var(--tl);font-style:italic;margin-top:-3px">Think ahead!</div></div>
+    <div><div style="font-size:32px;font-weight:800;color:var(--teal);letter-spacing:-1px">SHADOWFAX</div><div style="font-size:13px;color:var(--tl);font-style:italic;margin-top:-4px;text-align:right">Think ahead!</div></div>
   </div>
-  <p class="lo-sub">LM Planning Dashboard</p>
+  <p class="lo-sub" style="font-size:18px;margin-top:8px">LM Planning Dashboard</p>
   <p class="lo-sub2">Loading data automatically...</p>
   <div class="ua">
     <div class="pw show" id="pw"><div class="pl" id="pl">Initializing...</div><div class="pbw"><div class="pfl" id="pf"></div></div></div>
@@ -137,8 +137,7 @@ input[type="file"]{display:none}
 <div class="app" id="app">
   <div class="hdr">
     <div class="br">
-      <svg width="24" height="22" viewBox="0 0 120 100"><path d="M28,82 C28,82 18,50 30,30 C35,22 42,12 50,8 L58,38 Z" fill="#C8C820"/><path d="M50,8 C58,5 68,12 78,28 C88,44 82,58 78,62 L58,38 Z" fill="#D6D43A"/><path d="M28,82 L58,38 L78,62 C72,72 58,80 44,84 Z" fill="#A8A41A"/></svg>
-      <div><div style="font-size:11px;font-weight:800;color:var(--teal)">SHADOWFAX</div><div style="font-size:6px;color:var(--tl);font-style:italic;margin-top:-1px">Think ahead!</div></div>
+      <div><div style="font-size:13px;font-weight:800;color:var(--teal);letter-spacing:-0.3px">SHADOWFAX</div><div style="font-size:6px;color:var(--tl);font-style:italic;margin-top:-1px;text-align:right">Think ahead!</div></div>
       <div class="pn">LM Planning Dashboard</div>
     </div>
     <div class="tbar">
@@ -171,6 +170,7 @@ input[type="file"]{display:none}
             <div class="sb-f"><label>POD</label><div id="ms_f1p"></div></div>
             <div class="sb-f"><label>City</label><div id="ms_f1c"></div></div>
             <div class="sb-f"><label>Svc Remarks</label><div id="ms_f1sr"></div></div>
+            <button class="sb-apply" onclick="af1()">▶ Apply Filters</button>
             <div class="sb-rst" onclick="rf1()">↺ Reset All</div>
           </div>
           <div class="sb-s"><div class="sb-st">Search</div>
@@ -216,6 +216,7 @@ input[type="file"]{display:none}
             <div class="sb-f"><label>POD</label><div id="ms_f2p"></div></div>
             <div class="sb-f"><label>City</label><div id="ms_f2c"></div></div>
             <div class="sb-f"><label>Strategy</label><div id="ms_f2s"></div></div>
+            <button class="sb-apply" onclick="af2()">▶ Apply Filters</button>
             <div class="sb-rst" onclick="rf2()">↺ Reset All</div>
           </div>
           <div class="sb-s"><div class="sb-st">Search</div>
@@ -258,20 +259,18 @@ let allHubNames=[];
 const msState={};
 function createMS(containerId,items,onChange){
   const el=document.getElementById(containerId);
-  msState[containerId]={selected:new Set,items:[...items].sort()};
+  msState[containerId]={selected:new Set,items:[...items].sort(),onChange:null};
   const state=msState[containerId];
   let html=`<div class="ms-wrap"><button class="ms-btn" onclick="toggleMSDD('${containerId}')">All</button><div class="ms-dd" id="${containerId}_dd"><input class="ms-search" placeholder="Search..." oninput="filterMS('${containerId}',this.value)"><div id="${containerId}_opts"></div></div><div class="ms-tags" id="${containerId}_tags"></div></div>`;
   el.innerHTML=html;
   renderMSOpts(containerId);
-  // Close on outside click
   document.addEventListener('click',e=>{const dd=document.getElementById(containerId+'_dd');if(dd&&dd.classList.contains('open')&&!el.contains(e.target))dd.classList.remove('open')});
-  msState[containerId].onChange=onChange;
 }
 function toggleMSDD(id){document.getElementById(id+'_dd').classList.toggle('open')}
 function filterMS(id,q){const ql=q.toLowerCase();const state=msState[id];const optsEl=document.getElementById(id+'_opts');
   optsEl.innerHTML=state.items.filter(i=>i.toLowerCase().includes(ql)).map(i=>`<label class="ms-opt"><input type="checkbox" ${state.selected.has(i)?'checked':''} onchange="toggleMSItem('${id}',\`${i.replace(/`/g,'')}\`,this.checked)"><span>${i}</span></label>`).join('')}
 function renderMSOpts(id){filterMS(id,'')}
-function toggleMSItem(id,item,checked){const state=msState[id];if(checked)state.selected.add(item);else state.selected.delete(item);updateMSDisplay(id);if(state.onChange)state.onChange()}
+function toggleMSItem(id,item,checked){const state=msState[id];if(checked)state.selected.add(item);else state.selected.delete(item);updateMSDisplay(id)}
 function updateMSDisplay(id){const state=msState[id];const btn=document.querySelector(`#${id} .ms-btn`);const tags=document.getElementById(id+'_tags');
   if(state.selected.size===0){btn.textContent='All';tags.innerHTML=''}
   else{btn.textContent=state.selected.size+' selected';tags.innerHTML=[...state.selected].slice(0,3).map(t=>`<span class="ms-tag">${t.length>15?t.slice(0,15)+'…':t}<span class="ms-tag-x" onclick="event.stopPropagation();toggleMSItem('${id}','${t.replace(/'/g,"\\'")}',false);renderMSOpts('${id}')">✕</span></span>`).join('')+(state.selected.size>3?`<span class="ms-tag">+${state.selected.size-3}</span>`:'')}}
@@ -370,7 +369,7 @@ function mkHubPop(name,items){
 
 // TAB 1
 function pf1(){const r=new Set,p=new Set,c=new Set,pt=new Set,st=new Set,srem=new Set;aM.forEach(d=>{const rv=gv(d,'Region');if(rv)r.add(rv);const pv=gv(d,'POD');if(pv)p.add(pv);const cv=gv(d,'City');if(cv)c.add(cv);const ptv=gv(d,'Pin Type');if(ptv)pt.add(ptv);const sv=gv(d,'State');if(sv)st.add(sv);const srm=gv(d,'Serviceability Remarks');if(srm)srem.add(srm)});
-  createMS('ms_f1pt',[...pt],af1);createMS('ms_f1r',[...r],af1);createMS('ms_f1st',[...st],af1);createMS('ms_f1p',[...p],af1);createMS('ms_f1c',[...c],af1);createMS('ms_f1sr',[...srem],af1)}
+  createMS('ms_f1pt',[...pt]);createMS('ms_f1r',[...r]);createMS('ms_f1st',[...st]);createMS('ms_f1p',[...p]);createMS('ms_f1c',[...c]);createMS('ms_f1sr',[...srem])}
 function af1(){
   fM=aM.filter(d=>msMatch('ms_f1pt',gv(d,'Pin Type'))&&msMatch('ms_f1r',gv(d,'Region'))&&msMatch('ms_f1st',gv(d,'State'))&&msMatch('ms_f1p',gv(d,'POD'))&&msMatch('ms_f1c',gv(d,'City'))&&msMatch('ms_f1sr',gv(d,'Serviceability Remarks')));
   uK1();rM1();buildHubLayer(1,fM)}
