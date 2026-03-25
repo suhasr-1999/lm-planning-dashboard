@@ -57,6 +57,8 @@ label.hbtn{cursor:pointer}
 .sb-s{margin-bottom:8px}.sb-st{font-size:7px;font-weight:600;color:var(--txm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
 .sb-f{margin-bottom:5px}.sb-f>label{font-size:7px;font-weight:600;color:var(--txm);display:block;margin-bottom:1px;text-transform:uppercase}
 
+.sb-sel{width:100%;padding:6px 24px 6px 9px;border:1px solid var(--bdr);border-radius:5px;font-size:11px;font-family:'Inter',sans-serif;background:var(--w);color:var(--tx);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;cursor:pointer}.sb-sel:focus{outline:none;border-color:var(--teal)}
+
 /* MULTI-SELECT DROPDOWN */
 .ms-wrap{position:relative}
 .ms-btn{width:100%;padding:6px 20px 6px 9px;border:1px solid var(--bdr);border-radius:5px;font-size:11px;background:var(--w);color:var(--tx);cursor:pointer;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:28px}
@@ -78,10 +80,10 @@ label.hbtn{cursor:pointer}
 .hub-dd-list.open{display:block}
 .hub-dd-item{padding:6px 9px;font-size:11px;cursor:pointer;transition:background .1s;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hub-dd-item:hover{background:var(--tbg);color:var(--teal)}
 
-.sb-btn{width:100%;padding:4px;border:1px solid var(--bdr);border-radius:5px;background:var(--w);color:var(--txl);font-size:7px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:2px;margin-bottom:3px}.sb-btn:hover{border-color:var(--teal);color:var(--teal)}.sb-btn.on{background:var(--teal);color:var(--w);border-color:var(--teal)}
-.sb-apply{width:100%;padding:6px;border:none;border-radius:6px;background:linear-gradient(135deg,var(--teal),var(--td));color:var(--w);font-size:9px;font-weight:700;cursor:pointer;margin-top:6px;transition:all .15s;box-shadow:0 2px 8px rgba(11,155,138,.25)}.sb-apply:hover{box-shadow:0 4px 12px rgba(11,155,138,.35);transform:translateY(-1px)}.sb-apply:active{transform:translateY(0)}
-.sb-rst{width:100%;padding:4px;border:1px solid var(--bdr);border-radius:5px;background:var(--bg);color:var(--txm);font-size:7px;cursor:pointer;text-align:center;margin-top:3px}.sb-rst:hover{color:var(--teal);border-color:var(--teal)}
-.sb-rst.hs-clear{background:#fff3e0;color:#e65100;border-color:#ffe0b2;display:none}
+.sb-btn{width:100%;padding:6px;border:1px solid var(--bdr);border-radius:5px;background:var(--w);color:var(--txl);font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px;margin-bottom:4px}.sb-btn:hover{border-color:var(--teal);color:var(--teal)}.sb-btn.on{background:var(--teal);color:var(--w);border-color:var(--teal)}
+.sb-apply{width:100%;padding:8px;border:none;border-radius:6px;background:linear-gradient(135deg,var(--teal),var(--td));color:var(--w);font-size:12px;font-weight:700;cursor:pointer;margin-top:6px;transition:all .15s;box-shadow:0 2px 8px rgba(11,155,138,.25)}.sb-apply:hover{box-shadow:0 4px 12px rgba(11,155,138,.35);transform:translateY(-1px)}.sb-apply:active{transform:translateY(0)}
+.sb-rst{width:100%;padding:6px;border:1px solid var(--bdr);border-radius:5px;background:var(--bg);color:var(--txm);font-size:10px;cursor:pointer;text-align:center;margin-top:4px}.sb-rst:hover{color:var(--teal);border-color:var(--teal)}
+.sb-rst.hs-clear{background:#fff3e0;color:#e65100;border-color:#ffe0b2;display:none;font-size:10px}
 
 /* INSIGHTS */
 .ins-p{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);z-index:999;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border:1px solid var(--bdr);border-radius:9px;padding:8px 12px;max-width:560px;width:88%;box-shadow:var(--shl);max-height:160px;overflow-y:auto;display:none}.ins-p.show{display:block}
@@ -170,11 +172,10 @@ input[type="file"]{display:none}
             <div class="sb-f"><label>POD</label><div id="ms_f1p"></div></div>
             <div class="sb-f"><label>City</label><div id="ms_f1c"></div></div>
             <div class="sb-f"><label>Svc Remarks</label><div id="ms_f1sr"></div></div>
-            <button class="sb-apply" onclick="af1()">▶ Apply Filters</button>
             <div class="sb-rst" onclick="rf1()">↺ Reset All</div>
           </div>
           <div class="sb-s"><div class="sb-st">Search</div>
-            <div class="sb-f"><label>Pincode</label><div style="display:flex;gap:2px"><input type="text" id="ps1" style="flex:1;padding:4px 6px;border:1px solid var(--bdr);border-radius:5px;font-size:8px;font-family:'Inter',sans-serif" placeholder="Pincode..." onkeydown="if(event.key==='Enter')sPin(1)"><button onclick="sPin(1)" style="padding:4px 6px;background:var(--teal);color:var(--w);border:none;border-radius:5px;cursor:pointer;font-size:8px">🔍</button></div></div>
+            <div class="sb-f"><label>Pincode</label><div style="display:flex;gap:3px"><input type="text" id="ps1" style="flex:1;padding:6px 8px;border:1px solid var(--bdr);border-radius:5px;font-size:11px;font-family:'Inter',sans-serif" placeholder="Pincode..." onkeydown="if(event.key==='Enter')sPin(1)"><button onclick="sPin(1)" style="padding:6px 8px;background:var(--teal);color:var(--w);border:none;border-radius:5px;cursor:pointer;font-size:11px">🔍</button></div></div>
             <div class="sb-f"><label>Hub</label><div class="hub-dd-wrap"><input class="hub-dd-input" id="hdi1" placeholder="Type hub name..." oninput="hubDD(1)" onfocus="hubDD(1)"><div class="hub-dd-list" id="hdl1"></div></div></div>
             <div class="sb-rst hs-clear" id="hsc1" onclick="clrHub(1)">✕ Clear Hub Search</div>
           </div>
@@ -215,12 +216,12 @@ input[type="file"]{display:none}
             <div class="sb-f"><label>State</label><div id="ms_f2st"></div></div>
             <div class="sb-f"><label>POD</label><div id="ms_f2p"></div></div>
             <div class="sb-f"><label>City</label><div id="ms_f2c"></div></div>
-            <div class="sb-f"><label>Strategy</label><div id="ms_f2s"></div></div>
+            <div class="sb-f"><label>Strategy (Multi-Select)</label><div id="ms_f2s"></div></div>
             <button class="sb-apply" onclick="af2()">▶ Apply Filters</button>
             <div class="sb-rst" onclick="rf2()">↺ Reset All</div>
           </div>
           <div class="sb-s"><div class="sb-st">Search</div>
-            <div class="sb-f"><label>Pincode</label><div style="display:flex;gap:2px"><input type="text" id="ps2" style="flex:1;padding:4px 6px;border:1px solid var(--bdr);border-radius:5px;font-size:8px;font-family:'Inter',sans-serif" placeholder="Pincode..." onkeydown="if(event.key==='Enter')sPin(2)"><button onclick="sPin(2)" style="padding:4px 6px;background:var(--teal);color:var(--w);border:none;border-radius:5px;cursor:pointer;font-size:8px">🔍</button></div></div>
+            <div class="sb-f"><label>Pincode</label><div style="display:flex;gap:3px"><input type="text" id="ps2" style="flex:1;padding:6px 8px;border:1px solid var(--bdr);border-radius:5px;font-size:11px;font-family:'Inter',sans-serif" placeholder="Pincode..." onkeydown="if(event.key==='Enter')sPin(2)"><button onclick="sPin(2)" style="padding:6px 8px;background:var(--teal);color:var(--w);border:none;border-radius:5px;cursor:pointer;font-size:11px">🔍</button></div></div>
             <div class="sb-f"><label>Hub</label><div class="hub-dd-wrap"><input class="hub-dd-input" id="hdi2" placeholder="Type hub name..." oninput="hubDD(2)" onfocus="hubDD(2)"><div class="hub-dd-list" id="hdl2"></div></div></div>
             <div class="sb-rst hs-clear" id="hsc2" onclick="clrHub(2)">✕ Clear Hub Search</div>
           </div>
@@ -255,11 +256,23 @@ let maps=[],gL=[null,null,null],hL=[null,L.layerGroup(),L.layerGroup()],centL=[n
 let hsL=[null,null,null],hOn=[0,0,0],centOn=[0,0,0];
 let allHubNames=[];
 
-// Multi-select state
+// Single-select dropdown (instant, no lag)
+function createSS(containerId,items,onChange){
+  const el=document.getElementById(containerId);
+  let html=`<select class="sb-sel" id="${containerId}_sel" onchange="${onChange}">`;
+  html+=`<option value="">All</option>`;
+  [...items].sort().forEach(i=>{if(i)html+=`<option value="${i}">${i}</option>`});
+  html+=`</select>`;
+  el.innerHTML=html;
+}
+function getSSVal(id){const sel=document.getElementById(id+'_sel');return sel?sel.value:''}
+function clearSS(id){const sel=document.getElementById(id+'_sel');if(sel)sel.value=''}
+
+// Multi-select ONLY for Strategy
 const msState={};
 function createMS(containerId,items,onChange){
   const el=document.getElementById(containerId);
-  msState[containerId]={selected:new Set,items:[...items].sort(),onChange:null};
+  msState[containerId]={selected:new Set,items:[...items].sort(),onChange:onChange||null};
   const state=msState[containerId];
   let html=`<div class="ms-wrap"><button class="ms-btn" onclick="toggleMSDD('${containerId}')">All</button><div class="ms-dd" id="${containerId}_dd"><input class="ms-search" placeholder="Search..." oninput="filterMS('${containerId}',this.value)"><div id="${containerId}_opts"></div></div><div class="ms-tags" id="${containerId}_tags"></div></div>`;
   el.innerHTML=html;
@@ -369,11 +382,12 @@ function mkHubPop(name,items){
 
 // TAB 1
 function pf1(){const r=new Set,p=new Set,c=new Set,pt=new Set,st=new Set,srem=new Set;aM.forEach(d=>{const rv=gv(d,'Region');if(rv)r.add(rv);const pv=gv(d,'POD');if(pv)p.add(pv);const cv=gv(d,'City');if(cv)c.add(cv);const ptv=gv(d,'Pin Type');if(ptv)pt.add(ptv);const sv=gv(d,'State');if(sv)st.add(sv);const srm=gv(d,'Serviceability Remarks');if(srm)srem.add(srm)});
-  createMS('ms_f1pt',[...pt]);createMS('ms_f1r',[...r]);createMS('ms_f1st',[...st]);createMS('ms_f1p',[...p]);createMS('ms_f1c',[...c]);createMS('ms_f1sr',[...srem])}
+  createSS('ms_f1pt',[...pt],'af1()');createSS('ms_f1r',[...r],'af1()');createSS('ms_f1st',[...st],'af1()');createSS('ms_f1p',[...p],'af1()');createSS('ms_f1c',[...c],'af1()');createSS('ms_f1sr',[...srem],'af1()')}
 function af1(){
-  fM=aM.filter(d=>msMatch('ms_f1pt',gv(d,'Pin Type'))&&msMatch('ms_f1r',gv(d,'Region'))&&msMatch('ms_f1st',gv(d,'State'))&&msMatch('ms_f1p',gv(d,'POD'))&&msMatch('ms_f1c',gv(d,'City'))&&msMatch('ms_f1sr',gv(d,'Serviceability Remarks')));
+  const pt=getSSVal('ms_f1pt'),reg=getSSVal('ms_f1r'),state=getSSVal('ms_f1st'),pod=getSSVal('ms_f1p'),city=getSSVal('ms_f1c'),srem=getSSVal('ms_f1sr');
+  fM=aM.filter(d=>{if(pt&&gv(d,'Pin Type')!==pt)return 0;if(reg&&gv(d,'Region')!==reg)return 0;if(state&&gv(d,'State')!==state)return 0;if(pod&&gv(d,'POD')!==pod)return 0;if(city&&gv(d,'City')!==city)return 0;if(srem&&gv(d,'Serviceability Remarks')!==srem)return 0;return 1});
   uK1();rM1();buildHubLayer(1,fM)}
-function rf1(){['ms_f1pt','ms_f1r','ms_f1st','ms_f1p','ms_f1c','ms_f1sr'].forEach(clearMS);clrHub(1);af1()}
+function rf1(){['ms_f1pt','ms_f1r','ms_f1st','ms_f1p','ms_f1c','ms_f1sr'].forEach(clearSS);clrHub(1);af1()}
 function uK1(){let svc=0,nsvc=0,rct=0,dfN=0,sI=0,sO=0;
   fM.forEach(d=>{if(isSvc(d)){svc++;sI+=parseP(gv(d,'IPS Meesho serviceability%'));sO+=parseP(gv(d,'Overall Meesho serviceability%'))}else if(isNS(d))nsvc++;else if(isRe(d))rct++;else if(isDfN(d))dfN++});
   document.getElementById('k1t').textContent=fM.length.toLocaleString();document.getElementById('k1s').textContent=svc.toLocaleString();document.getElementById('k1n').textContent=nsvc.toLocaleString();document.getElementById('k1rc').textContent=rct.toLocaleString();
@@ -454,7 +468,23 @@ function tH(n){const b=document.getElementById('ht'+n);if(hOn[n]){maps[n].remove
 
 // HUB DROPDOWN
 function hubDD(n){const inp=document.getElementById('hdi'+n);const list=document.getElementById('hdl'+n);const q=inp.value.toLowerCase();
-  const matches=allHubNames.filter(h=>h.toLowerCase().includes(q)).slice(0,20);
+  // For expansion tab, filter hubs based on selected strategy
+  let hubList=allHubNames;
+  if(n===2){
+    const selStrats=getMSVals('ms_f2s');
+    if(selStrats.size>0){
+      const stratHubs=new Set;
+      aM.forEach(d=>{
+        const es=gv(d,'Expansion Strategy');
+        if(!selStrats.has(es))return;
+        // Map strategy to relevant hub column
+        ['Current Serviceable Hub','Final Hub','S1 Mapping Hub','Proposed Hub Name','Conversion Hub name'].forEach(k=>{
+          const v=gv(d,k);if(v&&v!=='-'&&v.toLowerCase()!=='na')stratHubs.add(v)});
+      });
+      hubList=[...stratHubs].sort();
+    }
+  }
+  const matches=hubList.filter(h=>h.toLowerCase().includes(q)).slice(0,25);
   if(matches.length===0||!q){list.classList.remove('open');return}
   list.innerHTML=matches.map(h=>`<div class="hub-dd-item" onclick="selectHub(${n},'${h.replace(/'/g,"\\'")}')">${h}</div>`).join('');list.classList.add('open')}
 function selectHub(n,name){document.getElementById('hdi'+n).value=name;document.getElementById('hdl'+n).classList.remove('open');doHubSearch(n,name)}
