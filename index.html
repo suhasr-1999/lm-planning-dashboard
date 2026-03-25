@@ -57,33 +57,36 @@ label.hbtn{cursor:pointer}
 .sb-s{margin-bottom:8px}.sb-st{font-size:7px;font-weight:600;color:var(--txm);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
 .sb-f{margin-bottom:5px}.sb-f>label{font-size:7px;font-weight:600;color:var(--txm);display:block;margin-bottom:1px;text-transform:uppercase}
 
-.sb-sel{width:100%;padding:6px 24px 6px 9px;border:1px solid var(--bdr);border-radius:5px;font-size:11px;font-family:'Inter',sans-serif;background:var(--w);color:var(--tx);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;cursor:pointer}.sb-sel:focus{outline:none;border-color:var(--teal)}
+.sb-sel{width:100%;padding:6px 24px 6px 9px;border:1px solid var(--bdr);border-radius:5px;font-size:12px;font-family:'Inter',sans-serif;background:var(--w);color:var(--txl);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;cursor:pointer}.sb-sel:focus{outline:none;border-color:var(--teal)}
 
 /* MULTI-SELECT DROPDOWN */
 .ms-wrap{position:relative}
-.ms-btn{width:100%;padding:6px 20px 6px 9px;border:1px solid var(--bdr);border-radius:5px;font-size:11px;background:var(--w);color:var(--tx);cursor:pointer;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:28px}
+.ms-btn{width:100%;padding:6px 20px 6px 9px;border:1px solid var(--bdr);border-radius:5px;font-size:12px;background:var(--w);color:var(--txl);cursor:pointer;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:30px}
 .ms-btn:focus{outline:none;border-color:var(--teal)}
-.ms-dd{position:absolute;top:100%;left:0;right:0;background:var(--w);border:1px solid var(--bdr);border-radius:5px;box-shadow:var(--shl);z-index:2000;max-height:200px;overflow-y:auto;display:none;margin-top:1px}
+.ms-dd{position:absolute;top:100%;left:0;right:0;background:var(--w);border:1px solid var(--bdr);border-radius:5px;box-shadow:var(--shl);z-index:2000;max-height:250px;overflow-y:auto;display:none;margin-top:1px}
 .ms-dd.open{display:block}
-.ms-dd .ms-search{width:100%;padding:6px 8px;border:none;border-bottom:1px solid var(--bdr);font-size:11px;font-family:'Inter',sans-serif;outline:none}
-.ms-opt{padding:5px 8px;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .1s}.ms-opt:hover{background:var(--tbg)}
-.ms-opt input{width:14px;height:14px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
+.ms-dd .ms-search{width:100%;padding:6px 8px;border:none;border-bottom:1px solid var(--bdr);font-size:12px;font-family:'Inter',sans-serif;outline:none}
+.ms-opt{padding:5px 8px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .1s}.ms-opt:hover{background:var(--tbg)}
+.ms-opt input{width:15px;height:15px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
 .ms-opt span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ms-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}
-.ms-tag{background:var(--tbg);color:var(--teal);padding:2px 6px;border-radius:4px;font-size:9px;font-weight:600;display:flex;align-items:center;gap:3px}
-.ms-tag .ms-tag-x{cursor:pointer;font-size:10px;opacity:.6}.ms-tag .ms-tag-x:hover{opacity:1}
+.ms-tag{background:var(--tbg);color:var(--teal);padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600;display:flex;align-items:center;gap:3px}
+.ms-tag .ms-tag-x{cursor:pointer;font-size:11px;opacity:.6}.ms-tag .ms-tag-x:hover{opacity:1}
+.ms-actions{display:flex;gap:4px;padding:6px 8px;border-top:1px solid var(--bdr);background:var(--bg)}
+.ms-ok{flex:1;padding:5px;border:none;border-radius:5px;background:var(--teal);color:var(--w);font-size:11px;font-weight:600;cursor:pointer}.ms-ok:hover{background:var(--td)}
+.ms-clr{flex:1;padding:5px;border:1px solid var(--bdr);border-radius:5px;background:var(--w);color:var(--txm);font-size:11px;cursor:pointer}.ms-clr:hover{color:var(--teal);border-color:var(--teal)}
 
 /* Hub dropdown */
 .hub-dd-wrap{position:relative}
-.hub-dd-input{width:100%;padding:6px 9px;border:1px solid var(--bdr);border-radius:5px;font-size:11px;font-family:'Inter',sans-serif;background:var(--w)}.hub-dd-input:focus{outline:none;border-color:var(--teal)}
+.hub-dd-input{width:100%;padding:6px 9px;border:1px solid var(--bdr);border-radius:5px;font-size:12px;font-family:'Inter',sans-serif;background:var(--w);color:var(--txl)}.hub-dd-input:focus{outline:none;border-color:var(--teal)}
 .hub-dd-list{position:absolute;top:100%;left:0;right:0;background:var(--w);border:1px solid var(--bdr);border-radius:5px;box-shadow:var(--shl);z-index:2000;max-height:180px;overflow-y:auto;display:none;margin-top:1px}
 .hub-dd-list.open{display:block}
-.hub-dd-item{padding:6px 9px;font-size:11px;cursor:pointer;transition:background .1s;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hub-dd-item:hover{background:var(--tbg);color:var(--teal)}
+.hub-dd-item{padding:6px 9px;font-size:12px;cursor:pointer;transition:background .1s;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hub-dd-item:hover{background:var(--tbg);color:var(--teal)}
 
-.sb-btn{width:100%;padding:6px;border:1px solid var(--bdr);border-radius:5px;background:var(--w);color:var(--txl);font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px;margin-bottom:4px}.sb-btn:hover{border-color:var(--teal);color:var(--teal)}.sb-btn.on{background:var(--teal);color:var(--w);border-color:var(--teal)}
-.sb-apply{width:100%;padding:8px;border:none;border-radius:6px;background:linear-gradient(135deg,var(--teal),var(--td));color:var(--w);font-size:12px;font-weight:700;cursor:pointer;margin-top:6px;transition:all .15s;box-shadow:0 2px 8px rgba(11,155,138,.25)}.sb-apply:hover{box-shadow:0 4px 12px rgba(11,155,138,.35);transform:translateY(-1px)}.sb-apply:active{transform:translateY(0)}
-.sb-rst{width:100%;padding:6px;border:1px solid var(--bdr);border-radius:5px;background:var(--bg);color:var(--txm);font-size:10px;cursor:pointer;text-align:center;margin-top:4px}.sb-rst:hover{color:var(--teal);border-color:var(--teal)}
-.sb-rst.hs-clear{background:#fff3e0;color:#e65100;border-color:#ffe0b2;display:none;font-size:10px}
+.sb-btn{width:100%;padding:7px;border:1px solid var(--bdr);border-radius:5px;background:var(--w);color:var(--txl);font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px;margin-bottom:4px}.sb-btn:hover{border-color:var(--teal);color:var(--teal)}.sb-btn.on{background:var(--teal);color:var(--w);border-color:var(--teal)}
+.sb-apply{width:100%;padding:8px;border:none;border-radius:6px;background:linear-gradient(135deg,var(--teal),var(--td));color:var(--w);font-size:12px;font-weight:700;cursor:pointer;margin-top:6px;transition:all .15s;box-shadow:0 2px 8px rgba(11,155,138,.25);display:none}.sb-apply:hover{box-shadow:0 4px 12px rgba(11,155,138,.35);transform:translateY(-1px)}.sb-apply:active{transform:translateY(0)}
+.sb-rst{width:100%;padding:6px;border:1px solid var(--bdr);border-radius:5px;background:var(--bg);color:var(--txm);font-size:11px;cursor:pointer;text-align:center;margin-top:4px}.sb-rst:hover{color:var(--teal);border-color:var(--teal)}
+.sb-rst.hs-clear{background:#fff3e0;color:#e65100;border-color:#ffe0b2;display:none;font-size:11px}
 
 /* INSIGHTS */
 .ins-p{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);z-index:999;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border:1px solid var(--bdr);border-radius:9px;padding:8px 12px;max-width:560px;width:88%;box-shadow:var(--shl);max-height:160px;overflow-y:auto;display:none}.ins-p.show{display:block}
@@ -175,7 +178,7 @@ input[type="file"]{display:none}
             <div class="sb-rst" onclick="rf1()">↺ Reset All</div>
           </div>
           <div class="sb-s"><div class="sb-st">Search</div>
-            <div class="sb-f"><label>Pincode</label><div style="display:flex;gap:3px"><input type="text" id="ps1" style="flex:1;padding:6px 8px;border:1px solid var(--bdr);border-radius:5px;font-size:11px;font-family:'Inter',sans-serif" placeholder="Pincode..." onkeydown="if(event.key==='Enter')sPin(1)"><button onclick="sPin(1)" style="padding:6px 8px;background:var(--teal);color:var(--w);border:none;border-radius:5px;cursor:pointer;font-size:11px">🔍</button></div></div>
+            <div class="sb-f"><label>Pincode</label><div style="display:flex;gap:3px"><input type="text" id="ps1" style="flex:1;padding:6px 8px;border:1px solid var(--bdr);border-radius:5px;font-size:12px;font-family:'Inter',sans-serif;color:var(--txl)" placeholder="Pincode..." onkeydown="if(event.key==='Enter')sPin(1)"><button onclick="sPin(1)" style="padding:6px 8px;background:var(--teal);color:var(--w);border:none;border-radius:5px;cursor:pointer;font-size:12px">🔍</button></div></div>
             <div class="sb-f"><label>Hub</label><div class="hub-dd-wrap"><input class="hub-dd-input" id="hdi1" placeholder="Type hub name..." oninput="hubDD(1)" onfocus="hubDD(1)"><div class="hub-dd-list" id="hdl1"></div></div></div>
             <div class="sb-rst hs-clear" id="hsc1" onclick="clrHub(1)">✕ Clear Hub Search</div>
           </div>
@@ -217,11 +220,10 @@ input[type="file"]{display:none}
             <div class="sb-f"><label>POD</label><div id="ms_f2p"></div></div>
             <div class="sb-f"><label>City</label><div id="ms_f2c"></div></div>
             <div class="sb-f"><label>Strategy (Multi-Select)</label><div id="ms_f2s"></div></div>
-            <button class="sb-apply" onclick="af2()">▶ Apply Filters</button>
             <div class="sb-rst" onclick="rf2()">↺ Reset All</div>
           </div>
           <div class="sb-s"><div class="sb-st">Search</div>
-            <div class="sb-f"><label>Pincode</label><div style="display:flex;gap:3px"><input type="text" id="ps2" style="flex:1;padding:6px 8px;border:1px solid var(--bdr);border-radius:5px;font-size:11px;font-family:'Inter',sans-serif" placeholder="Pincode..." onkeydown="if(event.key==='Enter')sPin(2)"><button onclick="sPin(2)" style="padding:6px 8px;background:var(--teal);color:var(--w);border:none;border-radius:5px;cursor:pointer;font-size:11px">🔍</button></div></div>
+            <div class="sb-f"><label>Pincode</label><div style="display:flex;gap:3px"><input type="text" id="ps2" style="flex:1;padding:6px 8px;border:1px solid var(--bdr);border-radius:5px;font-size:12px;font-family:'Inter',sans-serif;color:var(--txl)" placeholder="Pincode..." onkeydown="if(event.key==='Enter')sPin(2)"><button onclick="sPin(2)" style="padding:6px 8px;background:var(--teal);color:var(--w);border:none;border-radius:5px;cursor:pointer;font-size:12px">🔍</button></div></div>
             <div class="sb-f"><label>Hub</label><div class="hub-dd-wrap"><input class="hub-dd-input" id="hdi2" placeholder="Type hub name..." oninput="hubDD(2)" onfocus="hubDD(2)"><div class="hub-dd-list" id="hdl2"></div></div></div>
             <div class="sb-rst hs-clear" id="hsc2" onclick="clrHub(2)">✕ Clear Hub Search</div>
           </div>
@@ -268,25 +270,26 @@ function createSS(containerId,items,onChange){
 function getSSVal(id){const sel=document.getElementById(id+'_sel');return sel?sel.value:''}
 function clearSS(id){const sel=document.getElementById(id+'_sel');if(sel)sel.value=''}
 
-// Multi-select ONLY for Strategy
+// Multi-select ONLY for Strategy — with OK/Clear inside dropdown
 const msState={};
 function createMS(containerId,items,onChange){
   const el=document.getElementById(containerId);
   msState[containerId]={selected:new Set,items:[...items].sort(),onChange:onChange||null};
-  const state=msState[containerId];
-  let html=`<div class="ms-wrap"><button class="ms-btn" onclick="toggleMSDD('${containerId}')">All</button><div class="ms-dd" id="${containerId}_dd"><input class="ms-search" placeholder="Search..." oninput="filterMS('${containerId}',this.value)"><div id="${containerId}_opts"></div></div><div class="ms-tags" id="${containerId}_tags"></div></div>`;
+  let html=`<div class="ms-wrap"><button class="ms-btn" onclick="toggleMSDD('${containerId}')">All Strategies</button><div class="ms-dd" id="${containerId}_dd"><input class="ms-search" placeholder="Search strategy..." oninput="filterMS('${containerId}',this.value)"><div id="${containerId}_opts" style="max-height:160px;overflow-y:auto"></div><div class="ms-actions"><button class="ms-ok" onclick="applyMS('${containerId}')">✓ OK</button><button class="ms-clr" onclick="clearMSAndApply('${containerId}')">✕ Clear</button></div></div><div class="ms-tags" id="${containerId}_tags"></div></div>`;
   el.innerHTML=html;
   renderMSOpts(containerId);
   document.addEventListener('click',e=>{const dd=document.getElementById(containerId+'_dd');if(dd&&dd.classList.contains('open')&&!el.contains(e.target))dd.classList.remove('open')});
 }
+function applyMS(id){document.getElementById(id+'_dd').classList.remove('open');af2()}
+function clearMSAndApply(id){msState[id].selected.clear();updateMSDisplay(id);renderMSOpts(id);document.getElementById(id+'_dd').classList.remove('open');af2()}
 function toggleMSDD(id){document.getElementById(id+'_dd').classList.toggle('open')}
 function filterMS(id,q){const ql=q.toLowerCase();const state=msState[id];const optsEl=document.getElementById(id+'_opts');
   optsEl.innerHTML=state.items.filter(i=>i.toLowerCase().includes(ql)).map(i=>`<label class="ms-opt"><input type="checkbox" ${state.selected.has(i)?'checked':''} onchange="toggleMSItem('${id}',\`${i.replace(/`/g,'')}\`,this.checked)"><span>${i}</span></label>`).join('')}
 function renderMSOpts(id){filterMS(id,'')}
 function toggleMSItem(id,item,checked){const state=msState[id];if(checked)state.selected.add(item);else state.selected.delete(item);updateMSDisplay(id)}
 function updateMSDisplay(id){const state=msState[id];const btn=document.querySelector(`#${id} .ms-btn`);const tags=document.getElementById(id+'_tags');
-  if(state.selected.size===0){btn.textContent='All';tags.innerHTML=''}
-  else{btn.textContent=state.selected.size+' selected';tags.innerHTML=[...state.selected].slice(0,3).map(t=>`<span class="ms-tag">${t.length>15?t.slice(0,15)+'…':t}<span class="ms-tag-x" onclick="event.stopPropagation();toggleMSItem('${id}','${t.replace(/'/g,"\\'")}',false);renderMSOpts('${id}')">✕</span></span>`).join('')+(state.selected.size>3?`<span class="ms-tag">+${state.selected.size-3}</span>`:'')}}
+  if(state.selected.size===0){btn.textContent='All Strategies';tags.innerHTML=''}
+  else{btn.textContent=state.selected.size+' selected';tags.innerHTML=[...state.selected].slice(0,4).map(t=>`<span class="ms-tag">${t.length>18?t.slice(0,18)+'…':t}<span class="ms-tag-x" onclick="event.stopPropagation();toggleMSItem('${id}','${t.replace(/'/g,"\\'")}',false);renderMSOpts('${id}')">✕</span></span>`).join('')+(state.selected.size>4?`<span class="ms-tag">+${state.selected.size-4}</span>`:'')}}
 function getMSVals(id){return msState[id]?msState[id].selected:new Set}
 function clearMS(id){if(msState[id]){msState[id].selected.clear();updateMSDisplay(id);renderMSOpts(id)}}
 function msMatch(id,val){const s=getMSVals(id);return s.size===0||s.has(val)}
@@ -394,8 +397,11 @@ function uK1(){let svc=0,nsvc=0,rct=0,dfN=0,sI=0,sO=0;
   document.getElementById('k1ips').textContent=sI.toFixed(2)+'%';document.getElementById('k1ovr').textContent=sO.toFixed(2)+'%';document.getElementById('k1d').textContent=dfN.toLocaleString()}
 function gM1C(d){if(isSvc(d))return SV;if(isRe(d))return RC;if(isNS(d))return NV;return null}
 function rM1(){if(gL[1])maps[1].removeLayer(gL[1]);const ft=[];fM.forEach(d=>{if(!d._g||!d._geo)return;const c=gM1C(d);if(!c)return;ft.push({type:'Feature',geometry:d._geo,properties:d})});
-  gL[1]=L.geoJSON({type:'FeatureCollection',features:ft},{style:f=>{const c=gM1C(f.properties);return{fillColor:c.f,weight:.6,opacity:1,color:c.b,fillOpacity:.5,renderer:cv[1]}},onEachFeature:(f,l)=>{l.on({mouseover:e=>e.target.setStyle({weight:2,fillOpacity:.8}),mouseout:e=>{if(gL[1])gL[1].resetStyle(e.target)},click:()=>l.bindPopup(mkPop(f.properties),{maxWidth:300}).openPopup()})},renderer:cv[1]}).addTo(maps[1]);
-  if(ft.length>0&&ft.length<5000)try{maps[1].fitBounds(gL[1].getBounds(),{padding:[20,20],maxZoom:11})}catch(e){}}
+  gL[1]=L.geoJSON(null,{style:f=>{const c=gM1C(f.properties);return{fillColor:c.f,weight:.5,opacity:1,color:c.b,fillOpacity:.45,renderer:cv[1]}},onEachFeature:(f,l)=>{l.on({mouseover:e=>e.target.setStyle({weight:2,fillOpacity:.8}),mouseout:e=>{if(gL[1])gL[1].resetStyle(e.target)},click:()=>l.bindPopup(mkPop(f.properties),{maxWidth:300}).openPopup()})},renderer:cv[1]}).addTo(maps[1]);
+  // Chunked add for performance
+  let i=0;const chunk=1500;function addChunk(){const end=Math.min(i+chunk,ft.length);for(;i<end;i++)gL[1].addData(ft[i]);if(i<ft.length)setTimeout(addChunk,0);
+    else if(ft.length>0&&ft.length<5000)try{maps[1].fitBounds(gL[1].getBounds(),{padding:[20,20],maxZoom:11})}catch(e){}}
+  addChunk()}
 
 // TAB 2
 function pf2(){const r=new Set,p=new Set,c=new Set,s=new Set,pt=new Set,st=new Set;aM.forEach(d=>{const es=gv(d,'Expansion Strategy');if(!es)return;r.add(gv(d,'Region'));p.add(gv(d,'POD'));c.add(gv(d,'City'));s.add(es);const ptv=gv(d,'Pin Type');if(ptv)pt.add(ptv);const sv=gv(d,'State');if(sv)st.add(sv)});
@@ -410,7 +416,11 @@ function uK2(){let sI=0,sO=0;const ph=new Set,ch=new Set;
   document.getElementById('k2t').textContent=eF.length.toLocaleString();document.getElementById('k2ips').textContent=(sI*100).toFixed(2)+'%';document.getElementById('k2ovr').textContent=(sO*100).toFixed(2)+'%';document.getElementById('k2ph').textContent=ph.size;document.getElementById('k2ch').textContent=ch.size}
 function rM2(){if(gL[2])maps[2].removeLayer(gL[2]);const ft=[];
   eF.forEach(d=>{if(!d._g||!d._geo)return;ft.push({type:'Feature',geometry:d._geo,properties:d})});
-  gL[2]=L.geoJSON({type:'FeatureCollection',features:ft},{style:f=>{const sc=gSC(gv(f.properties,'Expansion Strategy'));return{fillColor:sc.f,weight:.7,opacity:1,color:sc.b,fillOpacity:.5,renderer:cv[2]}},onEachFeature:(f,l)=>{l.on({mouseover:e=>e.target.setStyle({weight:2,fillOpacity:.8}),mouseout:e=>{if(gL[2])gL[2].resetStyle(e.target)},click:()=>l.bindPopup(mkPop(f.properties),{maxWidth:300}).openPopup()})},renderer:cv[2]}).addTo(maps[2]);
+  gL[2]=L.geoJSON(null,{style:f=>{const sc=gSC(gv(f.properties,'Expansion Strategy'));return{fillColor:sc.f,weight:.5,opacity:1,color:sc.b,fillOpacity:.45,renderer:cv[2]}},onEachFeature:(f,l)=>{l.on({mouseover:e=>e.target.setStyle({weight:2,fillOpacity:.8}),mouseout:e=>{if(gL[2])gL[2].resetStyle(e.target)},click:()=>l.bindPopup(mkPop(f.properties),{maxWidth:300}).openPopup()})},renderer:cv[2]}).addTo(maps[2]);
+  // Chunked add
+  let i=0;const chunk=1500;function addChunk(){const end=Math.min(i+chunk,ft.length);for(;i<end;i++)gL[2].addData(ft[i]);if(i<ft.length)setTimeout(addChunk,0);
+    else{if(ft.length>0&&ft.length<5000)try{maps[2].fitBounds(gL[2].getBounds(),{padding:[20,20],maxZoom:11})}catch(e){}}}
+  addChunk();
   // Defunct centroids auto
   if(maps[2]._dA)maps[2].removeLayer(maps[2]._dA);const dA=L.layerGroup();
   eF.filter(d=>isDf(d)).forEach(d=>{const lat=parseFloat(gv(d,'Centroid Lat')),lng=parseFloat(gv(d,'Centroid Long'));if(isNaN(lat)||isNaN(lng))return;
