@@ -260,7 +260,13 @@ function finishLoad(){if(gjD&&gsD.length){setProg(60,'Merging...');setTimeout(()
         buildHL(1,fM);
         // Tab 2 KPIs (no Meesho% needed)
         const ph=new Set,ch=new Set;eF.forEach(d=>{const p=gv(d,'Proposed Hub Name');if(p&&p!=='-')ph.add(p);const c=gv(d,'Conversion Hub name');if(c&&c!=='-')ch.add(c)});
-        document.getElementById('k2t').textContent=eF.length.toLocaleString();document.getElementById('k2ph').textContent=ph.size;document.getElementById('k2ch').textContent=ch.size;
+const k2t = document.getElementById('k2t');
+const k2ph = document.getElementById('k2ph');
+const k2ch = document.getElementById('k2ch');
+
+if (k2t) k2t.textContent = eF.length.toLocaleString();
+if (k2ph) k2ph.textContent = ph.size;
+if (k2ch) k2ch.textContent = ch.size;
         setProg(100,'Done!');
         document.getElementById('gsSt').textContent='Loaded successfully';document.getElementById('gsSt').className='gs ok';
         document.getElementById('app').style.display='flex';
@@ -309,8 +315,14 @@ function af2(){const f={pt:getSSVal('ss_f2pt'),r:getSSVal('ss_f2r'),st:getSSVal(
   const hasFilter=f.pt||f.r||f.st||f.p||f.c||stS.size;
   eF=aM.filter(d=>{const es=gv(d,'Expansion Strategy');if(!es)return 0;if(f.pt&&gv(d,'Pin Type')!==f.pt)return 0;if(f.r&&gv(d,'Region')!==f.r)return 0;if(f.st&&gv(d,'State')!==f.st)return 0;if(f.p&&gv(d,'POD')!==f.p)return 0;if(f.c&&gv(d,'City')!==f.c)return 0;if(stS.size&&!stS.has(es))return 0;return 1});
   const ph=new Set,ch=new Set;eF.forEach(d=>{const p=gv(d,'Proposed Hub Name');if(p&&p!=='-')ph.add(p);const c=gv(d,'Conversion Hub name');if(c&&c!=='-')ch.add(c)});
-  document.getElementById('k2t').textContent=eF.length.toLocaleString();document.getElementById('k2ph').textContent=ph.size;document.getElementById('k2ch').textContent=ch.size;
-  if(hasFilter){rMap(2,eF,d=>gSC(gv(d,'Expansion Strategy')));buildHL(2,eF);
+const k2t = document.getElementById('k2t');
+const k2ph = document.getElementById('k2ph');
+const k2ch = document.getElementById('k2ch');
+
+if (k2t) k2t.textContent = eF.length.toLocaleString();
+if (k2ph) k2ph.textContent = ph.size;
+if (k2ch) k2ch.textContent = ch.size;
+               if(hasFilter){rMap(2,eF,d=>gSC(gv(d,'Expansion Strategy')));buildHL(2,eF);
     if(maps[2]._dA)maps[2].removeLayer(maps[2]._dA);const dA=L.layerGroup();eF.filter(d=>isDf(d)).forEach(d=>{const la=parseFloat(gv(d,'Centroid Lat')),lo=parseFloat(gv(d,'Centroid Long'));if(isNaN(la)||isNaN(lo))return;dA.addLayer(L.marker([la,lo],{icon:L.divIcon({className:'',html:`<svg width="12" height="15" viewBox="0 0 14 18"><path d="M7 0C3.1 0 0 3.1 0 7c0 5.2 7 11 7 11s7-5.8 7-11C14 3.1 10.9 0 7 0z" fill="#e53935" stroke="#b71c1c" stroke-width="1"/><circle cx="7" cy="7" r="2.5" fill="white"/></svg>`,iconSize:[12,15],iconAnchor:[6,15],popupAnchor:[0,-15]})}).bindPopup(mkPop(d),{maxWidth:300}))});dA.addTo(maps[2]);maps[2]._dA=dA;
     const strats=new Set;eF.forEach(d=>{const s=gv(d,'Expansion Strategy');if(s)strats.add(s)});let leg='<h4>Strategy</h4>';[...strats].sort().forEach(s=>{const sc=gSC(s);leg+=`<div class="li"><div class="lc" style="background:${sc.f};border:1px solid ${sc.b}"></div>${s}</div>`});
     leg+='<div style="border-top:1px solid var(--bdr);margin:2px 0;padding-top:2px"><div class="li"><div style="width:7px;height:9px"><svg width="7" height="9" viewBox="0 0 14 18"><path d="M7 0C3.1 0 0 3.1 0 7c0 5.2 7 11 7 11s7-5.8 7-11C14 3.1 10.9 0 7 0z" fill="#e53935"/></svg></div>Defunct</div></div>';
