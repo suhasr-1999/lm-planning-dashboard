@@ -118,14 +118,19 @@ input[type="file"]{display:none}
     <svg width="50" height="44" viewBox="0 0 120 100"><path d="M28,82 C28,82 18,50 30,30 C35,22 42,12 50,8 L58,38 Z" fill="#C8C820"/><path d="M50,8 C58,5 68,12 78,28 C88,44 82,58 78,62 L58,38 Z" fill="#D6D43A"/><path d="M28,82 L58,38 L78,62 C72,72 58,80 44,84 Z" fill="#A8A41A"/></svg>
     <div><div style="font-size:22px;font-weight:800;color:var(--teal)">SHADOWFAX</div><div style="font-size:10px;color:var(--tl);font-style:italic;margin-top:-3px">Think ahead!</div></div>
   </div>
-  <p class="lo-sub">LM Planning Dashboard</p><p class="lo-sub2">Upload boundary & connect data</p>
+  <p class="lo-sub">LM Planning Dashboard</p>
+  <p class="lo-sub2">Loading data automatically...</p>
   <div class="ua">
-    <label class="ub" id="geoBtn"><div class="ui">🗺️</div><div><div class="ut">Step 1: Upload GeoJSON Boundary</div><div class="us">All_India_pincode_Boundary_19312.geojson</div></div><input type="file" id="geoF" accept=".geojson,.json"></label>
-    <div class="gi"><label>Step 2: Connect Google Sheets</label><div class="gr"><input type="text" id="gsUrl" placeholder="Leave blank for default..."><button onclick="loadSheets()">Connect</button></div><div class="gs" id="gsSt">Click Connect</div></div>
-    <div class="od">—— or upload CSV ——</div>
-    <label class="ub" id="csvBtn"><div class="ui">📄</div><div><div class="ut">Base File CSV</div><div class="us">Pan India data</div></div><input type="file" id="csvF" accept=".csv"></label>
-    <button class="startb" id="startBtn" onclick="startPortal()">Launch Dashboard →</button>
-    <div class="pw" id="pw"><div class="pl" id="pl">...</div><div class="pbw"><div class="pfl" id="pf"></div></div></div>
+    <div class="pw show" id="pw"><div class="pl" id="pl">Initializing...</div><div class="pbw"><div class="pfl" id="pf"></div></div></div>
+    <div class="gs" id="gsSt" style="text-align:center;margin-top:8px"></div>
+    <div style="margin-top:12px;text-align:center">
+      <div class="od">—— or load manually ——</div>
+      <div style="display:flex;gap:6px;justify-content:center;margin-top:6px">
+        <label class="hbtn" style="font-size:9px;padding:6px 12px">🗺️ Upload GeoJSON<input type="file" id="geoF" accept=".geojson,.json"></label>
+        <label class="hbtn" style="font-size:9px;padding:6px 12px">📄 Upload CSV<input type="file" id="csvF" accept=".csv"></label>
+      </div>
+      <button class="startb" id="startBtn" onclick="startPortal()" style="margin-top:10px">Launch Dashboard →</button>
+    </div>
   </div>
 </div>
 
@@ -238,6 +243,9 @@ const SC={'Not In Plan':{f:'#e0e0e0',b:'#9e9e9e'},'Yet to Plan || Phase 2':{f:'#
 function gSC(s){return SC[s]||{f:'#e0e0e0',b:'#9e9e9e'}}
 const SV={f:'#43a047',b:'#2e7d32'},NV={f:'#e53935',b:'#b71c1c'},RC={f:'#FF6D00',b:'#e65100'};
 const SID='1-d3YUOaNlMpjZ6rYgGgmX3n0rlpt8mF0_5gVcdampvI';
+const GSHEET_URL='https://docs.google.com/spreadsheets/d/'+SID+'/gviz/tq?tqx=out:csv&gid=0';
+// GeoJSON URL — update this after uploading to GitHub
+const GEOJSON_URL='data/boundaries.geojson';
 const IB=[[6,67],[38,98]];
 
 let gjD=null,gsD=[];let aM=[],fM=[],eF=[];
@@ -287,13 +295,55 @@ function parseP(v){if(!v)return 0;const s=String(v).trim().replace('%','');const
 function setProg(p,l){document.getElementById('pf').style.width=p+'%';if(l)document.getElementById('pl').textContent=l}
 function tgSB(id){const sb=document.getElementById(id);sb.classList.toggle('collapsed');sb.querySelector('.sb-tgl').textContent=sb.classList.contains('collapsed')?'▶':'◀'}
 
+// AUTO-LOAD on page open
+function autoLoad(){
+  const st=document.getElementById('gsSt');
+  setProg(5,'Loading Google Sheet...');st.textContent='Loading sheet...';st.className='gs';
+  let sheetDone=false,geoDone=false;
+
+  // Load Google Sheet
+  Papa.parse(GSHEET_URL,{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,
+    complete:r=>{if(r.data?.length){gsD=r.data;gsD.forEach(row=>{if(row.Pincode)row.Pincode=String(row.Pincode).trim().split('.')[0]});
+      st.textContent='✅ Sheet: '+gsD.length+' rows';st.className='gs ok';setProg(30,'Sheet loaded...')}else{st.textContent='⚠️ Sheet empty — upload CSV';st.className='gs err'}
+      sheetDone=true;if(geoDone)finishAutoLoad()},
+    error:()=>{st.textContent='⚠️ Sheet failed — upload CSV manually';st.className='gs err';sheetDone=true;if(geoDone)finishAutoLoad()}});
+
+  // Load GeoJSON
+  setProg(10,'Loading boundaries...');
+  fetch(GEOJSON_URL).then(r=>{if(!r.ok)throw new Error('Not found');return r.json()}).then(data=>{
+    gjD=data;setProg(50,'Boundaries: '+(gjD.features||[]).length);geoDone=true;if(sheetDone)finishAutoLoad()
+  }).catch(e=>{
+    // GeoJSON not found on server — show manual upload
+    setProg(20,'GeoJSON not on server — upload manually');
+    document.getElementById('gsSt').textContent+=' | Upload GeoJSON manually ↓';
+    geoDone=true;if(sheetDone)finishAutoLoad()});
+
+  // Timeout fallback
+  setTimeout(()=>{if(!sheetDone||!geoDone){st.textContent='⚠️ Slow loading — try manual upload';st.className='gs err'}},15000);
+}
+
+function finishAutoLoad(){
+  if(gjD&&gsD.length>0){
+    setProg(60,'Merging data...');
+    setTimeout(()=>{mergeAll();buildHubList();setProg(80,'Rendering...');
+      setTimeout(()=>{renderAll();setProg(100,'Done!');document.getElementById('app').style.display='flex';
+        setTimeout(()=>{document.getElementById('lo').classList.add('hide');[1,2].forEach(n=>maps[n].invalidateSize())},200)},150)},100);
+  }else{
+    // Show manual upload button if auto-load partially failed
+    document.getElementById('startBtn').classList.add('show');
+    setProg(100,'Ready for manual upload');
+  }
+}
+
+// Start auto-load when page opens
+window.addEventListener('DOMContentLoaded',()=>{setTimeout(autoLoad,300)});
+
 function loadSheets(){
   const st=document.getElementById('gsSt');st.textContent='Connecting...';st.className='gs';
-  let sid=SID;const inp=document.getElementById('gsUrl').value.trim();if(inp){const m=inp.match(/\/d\/([a-zA-Z0-9_-]+)/);if(m)sid=m[1]}
   const to=setTimeout(()=>{st.textContent='⚠️ Slow. Upload CSV.';st.className='gs err'},10000);
-  Papa.parse('https://docs.google.com/spreadsheets/d/'+sid+'/gviz/tq?tqx=out:csv&gid=0',{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>{clearTimeout(to);if(r.data?.length){gsD=r.data;gsD.forEach(row=>{if(row.Pincode)row.Pincode=String(row.Pincode).trim().split('.')[0]});st.textContent='✅ '+gsD.length+' rows';st.className='gs ok';checkReady()}else{st.textContent='❌ Empty';st.className='gs err'}},error:()=>{clearTimeout(to);st.textContent='❌ Failed';st.className='gs err'}})}
+  Papa.parse(GSHEET_URL,{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>{clearTimeout(to);if(r.data?.length){gsD=r.data;gsD.forEach(row=>{if(row.Pincode)row.Pincode=String(row.Pincode).trim().split('.')[0]});st.textContent='✅ '+gsD.length+' rows';st.className='gs ok';checkReady()}else{st.textContent='❌ Empty';st.className='gs err'}},error:()=>{clearTimeout(to);st.textContent='❌ Failed';st.className='gs err'}})}
 function refreshAll(){const sp=document.getElementById('rSp');sp.style.display='inline-block';
-  Papa.parse('https://docs.google.com/spreadsheets/d/'+SID+'/gviz/tq?tqx=out:csv&gid=0',{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>{sp.style.display='none';if(r.data?.length){gsD=r.data;gsD.forEach(row=>{if(row.Pincode)row.Pincode=String(row.Pincode).trim().split('.')[0]});mergeAll();buildHubList();renderAll();alert('✅ Refreshed!')}},error:()=>{sp.style.display='none'}})}
+  Papa.parse(GSHEET_URL,{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>{sp.style.display='none';if(r.data?.length){gsD=r.data;gsD.forEach(row=>{if(row.Pincode)row.Pincode=String(row.Pincode).trim().split('.')[0]});mergeAll();buildHubList();renderAll();alert('✅ Refreshed!')}},error:()=>{sp.style.display='none'}})}
 function checkReady(){if(gjD&&gsD.length>0)document.getElementById('startBtn').classList.add('show')}
 
 function mergeAll(){
