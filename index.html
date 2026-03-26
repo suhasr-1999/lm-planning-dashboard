@@ -255,9 +255,8 @@ function finishLoad(){if(gjD&&gsD.length){setProg(60,'Merging...');setTimeout(()
         document.getElementById('k1t').textContent=fM.length.toLocaleString();document.getElementById('k1s').textContent=svc.toLocaleString();document.getElementById('k1n').textContent=nsvc.toLocaleString();document.getElementById('k1rc').textContent=rct.toLocaleString();document.getElementById('k1ipsp').textContent=ipsSvc.toLocaleString();document.getElementById('k1ipsn').textContent=ipsNsvc.toLocaleString();
         rMap(1,fM,d=>{if(isSvc(d))return SV;if(isRe(d))return RC;if(isNS(d))return NV;return null});
         buildHL(1,fM);
-        const ph=new Set,ch=new Set;eF.forEach(d=>{const p=gv(d,'Proposed Hub Name');if(p&&p!=='-')ph.add(p);const c=gv(d,'Conversion Hub name');if(c&&c!=='-')ch.add(c)});
-        const k2t=document.getElementById('k2t'),k2ph=document.getElementById('k2ph'),k2ch=document.getElementById('k2ch');
-        if(k2t)k2t.textContent=eF.length.toLocaleString();if(k2ph)k2ph.textContent=ph.size;if(k2ch)k2ch.textContent=ch.size;
+        // Render Tab 2 expansion pincodes on startup so they show immediately when tab is opened
+        af2();
         setProg(100,'Done!');
         document.getElementById('gsSt').textContent='Loaded successfully';document.getElementById('gsSt').className='gs ok';
         document.getElementById('app').style.display='flex';
