@@ -255,12 +255,10 @@ function finishLoad(){if(gjD&&gsD.length){setProg(60,'Merging...');setTimeout(()
         document.getElementById('k1t').textContent=fM.length.toLocaleString();document.getElementById('k1s').textContent=svc.toLocaleString();document.getElementById('k1n').textContent=nsvc.toLocaleString();document.getElementById('k1rc').textContent=rct.toLocaleString();document.getElementById('k1ipsp').textContent=ipsSvc.toLocaleString();document.getElementById('k1ipsn').textContent=ipsNsvc.toLocaleString();
         rMap(1,fM,d=>{if(isSvc(d))return SV;if(isRe(d))return RC;if(isNS(d))return NV;return null});
         buildHL(1,fM);
-        // Render Tab 2 expansion pincodes on startup so they show immediately when tab is opened
-        af2();
         setProg(100,'Done!');
         document.getElementById('gsSt').textContent='Loaded successfully';document.getElementById('gsSt').className='gs ok';
         document.getElementById('app').style.display='flex';
-        setTimeout(()=>{document.getElementById('lo').classList.add('hide');[1,2].forEach(n=>maps[n].invalidateSize())},200);
+        setTimeout(()=>{document.getElementById('lo').classList.add('hide');[1,2].forEach(n=>maps[n].invalidateSize());af2();},200);
       }catch(err){console.error('Setup error:',err);document.getElementById('gsSt').textContent='Error: '+err.message;document.getElementById('gsSt').className='gs err';document.getElementById('startBtn').classList.add('show')}
     },100);
   }catch(err){console.error('Merge error:',err);document.getElementById('gsSt').textContent='Merge error: '+err.message;document.getElementById('gsSt').className='gs err';document.getElementById('startBtn').classList.add('show')}
@@ -495,7 +493,7 @@ let t3Rendered=false;
 function swTab(id,btn){document.querySelectorAll('.tab-c').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');
   const n=id==='t1'?1:id==='t2'?2:3;
   if(id==='t3'){initMap3();setTimeout(()=>{maps[3].invalidateSize();if(!t3Rendered&&aM.length){t3Rendered=true;setTimeout(()=>{try{pf3();af3()}catch(e){console.warn('Tab3 error:',e)}},200)}},100)}
-  else{setTimeout(()=>maps[n].invalidateSize(),100)}}
+  else{setTimeout(()=>{maps[n].invalidateSize();if(id==='t2'&&aM.length)af2();},100)}}
 
 function renderAll(){pf1();pf2();af1();af2();if(t3Rendered){hubMergerCache={};try{pf3();af3()}catch(e){}}else{t3Rendered=false}}
 
