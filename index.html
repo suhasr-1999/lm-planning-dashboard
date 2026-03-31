@@ -220,7 +220,8 @@ body.crosshair-mode .leaflet-container{cursor:crosshair!important}
           <div class="sb-f"><label>Merger Remarks</label><div id="ss_f3merger"></div></div>
           <div class="sb-f"><label>Pin Type</label><div id="ss_f3pt"></div></div><div class="sb-f"><label>Region</label><div id="ss_f3r"></div></div><div class="sb-f"><label>State</label><div id="ss_f3st"></div></div><div class="sb-f"><label>POD</label><div id="ss_f3p"></div></div><div class="sb-f"><label>City</label><div id="ss_f3c"></div></div><div class="sb-f"><label>Svc Remarks</label><div id="ss_f3sr"></div></div>
           <div class="sb-rst" onclick="rf3()">Reset All</div></div>
-          <div class="sb-s"><div class="sb-st">Search Hub</div><div class="sb-f"><div class="hub-dd-wrap"><input class="hub-dd-input" id="hdi3" placeholder="Type hub..." oninput="hubDD(3)" onfocus="hubDD(3)"><div class="hub-dd-list" id="hdl3"></div></div></div></div>
+          <div class="sb-s"><div class="sb-st">Search Hub</div><div class="sb-f"><div class="hub-dd-wrap"><input class="hub-dd-input" id="hdi3" placeholder="Type hub..." oninput="hubDD(3)" onfocus="hubDD(3)"><div class="hub-dd-list" id="hdl3"></div></div></div>
+          <div class="sb-rst hs-clear" id="hsc3" onclick="clrHub(3)">Clear Hub</div></div>
           <div class="sb-s"><div class="sb-st">Actions</div>
             <button class="sb-btn" id="hubTableBtn" onclick="toggleHubTable()">Show Hub List</button>
           </div>
@@ -457,7 +458,7 @@ function buildHubAnomaly(){
     if(anomFilter==='Outside Boundary'&&!hasLatLng)return;
     const col=isIn?'#0B9B8A':'#e53935';
     const bLyr=L.geoJSON(merged,{style:{fillColor:col,fillOpacity:.1,weight:3,color:col,opacity:.7,dashArray:isIn?'':'6,4'}});
-    bLyr.on('click',()=>bLyr.bindPopup(mkHubAnomalyPop(name,data.pins.length,svcC,nsC,adl,isIn,nearHub,hvDist,osmDist,mType,remarks,cityType,data.cat),{maxWidth:400}).openPopup());
+    bLyr.on('click',()=>{if(mMode)return;bLyr.bindPopup(mkHubAnomalyPop(name,data.pins.length,svcC,nsC,adl,isIn,nearHub,hvDist,osmDist,mType,remarks,cityType,data.cat),{maxWidth:400}).openPopup()});
     hbL3.addLayer(bLyr);
     if(hasLatLng){
       const ic=isSelf?'#43a047':'#ff9800',st=isSelf?'#1b5e20':'#e65100';
@@ -491,7 +492,7 @@ function zoomHub3(nm){if(!map3Inited)return;hmL3.eachLayer(l=>{if(l.getPopup){co
 
 function rMap(n,data,colorFn){if(gL[n])maps[n].removeLayer(gL[n]);const ft=[];
   data.forEach(d=>{if(!d._g||!d._geo)return;const c=colorFn(d);if(!c)return;ft.push({type:'Feature',geometry:d._geo,properties:d})});
-  gL[n]=L.geoJSON(null,{style:f=>{const c=colorFn(f.properties);return{fillColor:c.f,weight:.5,opacity:1,color:c.b,fillOpacity:.45,renderer:cvs[n]}},onEachFeature:(f,l)=>{l.on({mouseover:e=>e.target.setStyle({weight:2,fillOpacity:.8}),mouseout:e=>{if(gL[n])gL[n].resetStyle(e.target)},click:()=>l.bindPopup(mkPop(f.properties),{maxWidth:300}).openPopup()})},renderer:cvs[n]}).addTo(maps[n]);
+  gL[n]=L.geoJSON(null,{style:f=>{const c=colorFn(f.properties);return{fillColor:c.f,weight:.5,opacity:1,color:c.b,fillOpacity:.45,renderer:cvs[n]}},onEachFeature:(f,l)=>{l.on({mouseover:e=>e.target.setStyle({weight:2,fillOpacity:.8}),mouseout:e=>{if(gL[n])gL[n].resetStyle(e.target)},click:()=>{if(mMode)return;l.bindPopup(mkPop(f.properties),{maxWidth:300}).openPopup()}})},renderer:cvs[n]}).addTo(maps[n]);
   let i=0;const ch=1500;(function go(){const end=Math.min(i+ch,ft.length);for(;i<end;i++)gL[n].addData(ft[i]);if(i<ft.length)setTimeout(go,0);else if(ft.length>0&&ft.length<5000)try{maps[n].fitBounds(gL[n].getBounds(),{padding:[20,20],maxZoom:11})}catch(e){}})()}
 
 function buildHL(n,data){hL[n].clearLayers();const seen=new Set;data.forEach(d=>{const la=parseFloat(gv(d,'Hub Lat')),lo=parseFloat(gv(d,'Hub Long'));if(isNaN(la)||isNaN(lo))return;const nm=gv(d,'Current Serviceable Hub')||gv(d,'Final Hub')||'';if(!nm||seen.has(nm))return;seen.add(nm);const sf=(gv(d,'hub_category')||'').toUpperCase().includes('SELF');const hp=aM.filter(dd=>gv(dd,'Current Serviceable Hub')===nm||gv(dd,'Final Hub')===nm);
@@ -515,11 +516,11 @@ function doHubSrch(n,nm){const vl=nm.toLowerCase(),ds=aM;
   if(!hp.length){alert('Hub not found');return}
   if(hsL[n])maps[n].removeLayer(hsL[n]);
   const sl=L.layerGroup();try{let mg=null;hp.forEach(d=>{try{const p=turf.feature(d._geo);if(!mg)mg=p;else mg=turf.union(mg,p)}catch(e){}});
-    if(mg){const b=L.geoJSON(mg,{style:{fillColor:'#0B6B5A',fillOpacity:.08,weight:5,color:'#0B6B5A',opacity:.9}});b.on('click',()=>b.bindPopup(mkHubPop(nm,hp),{maxWidth:380}).openPopup());sl.addLayer(b)}}catch(e){}
-  hp.forEach(d=>{const l=L.geoJSON({type:'Feature',geometry:d._geo},{style:{fillColor:'#0B6B5A',fillOpacity:.12,weight:1,color:'#0B6B5A',opacity:.4}});l.on('click',()=>l.bindPopup(mkPop(d),{maxWidth:300}).openPopup());sl.addLayer(l)});
+    if(mg){const b=L.geoJSON(mg,{style:{fillColor:'#0B6B5A',fillOpacity:.08,weight:5,color:'#0B6B5A',opacity:.9}});b.on('click',()=>{if(mMode)return;b.bindPopup(mkHubPop(nm,hp),{maxWidth:380}).openPopup()});sl.addLayer(b)}}catch(e){}
+  hp.forEach(d=>{const l=L.geoJSON({type:'Feature',geometry:d._geo},{style:{fillColor:'#0B6B5A',fillOpacity:.12,weight:1,color:'#0B6B5A',opacity:.4}});l.on('click',()=>{if(mMode)return;l.bindPopup(mkPop(d),{maxWidth:300}).openPopup()});sl.addLayer(l)});
   let hLat=null,hLng=null,hCat=false;hp.forEach(d=>{if(!hLat){const la=parseFloat(gv(d,'Hub Lat')),lo=parseFloat(gv(d,'Hub Long'));if(!isNaN(la)&&!isNaN(lo)){hLat=la;hLng=lo;hCat=(gv(d,'hub_category')||'').toUpperCase().includes('SELF')}}});
   if(hLat&&hLng)sl.addLayer(L.marker([hLat,hLng],{icon:L.divIcon({className:'hub-home-icon',html:`<svg viewBox="0 0 24 24" width="16" height="16"><path d="M3 21V10l9-7 9 7v11H14v-6h-4v6z" fill="${hCat?'#43a047':'#ff9800'}" stroke="${hCat?'#1b5e20':'#e65100'}" stroke-width="1.5" stroke-linejoin="round"/></svg>`,iconSize:[16,16],iconAnchor:[8,16],popupAnchor:[0,-16]})}).bindPopup(mkHubPop(nm,hp),{maxWidth:380}));
-  sl.addTo(maps[n]);hsL[n]=sl;if(n<=2)document.getElementById('hsc'+n).style.display='block';
+  sl.addTo(maps[n]);hsL[n]=sl;const hscBtn=document.getElementById('hsc'+n);if(hscBtn)hscBtn.style.display='block';
   try{maps[n].fitBounds(L.geoJSON({type:'FeatureCollection',features:hp.map(d=>({type:'Feature',geometry:d._geo}))}).getBounds(),{padding:[30,30]})}catch(e){if(hLat)maps[n].setView([hLat,hLng],12)}}
 
 function clrHub(n){if(hsL[n]){maps[n].removeLayer(hsL[n]);hsL[n]=null}document.getElementById('hdi'+n).value='';
@@ -680,9 +681,12 @@ function mComputeAll(){
 
 function handleMeasureClick(e){
   if(mMode!=='measure')return;
+  const m=getActiveMap();
   mWaypoints.push({lat:e.latlng.lat,lng:e.latlng.lng});
   mAddMarker(e.latlng.lat,e.latlng.lng,mWaypoints.length-1);
   if(mWaypoints.length>=2)mComputeAll();
+  // Close any popup that may have opened from underlying layers (hub markers etc)
+  if(m)setTimeout(()=>m.closePopup(),10);
   mShowToast(mWaypoints.length+' points — click more or ESC');
 }
 
@@ -703,8 +707,9 @@ function startMeasureMode(){
   stopMeasure();
   mMode='measure';
   mActiveMapN=getActiveMapN();
-  // Bind click to current map
   bindMeasureToMap(mActiveMapN);
+  // Close any open popup on the active map
+  const m=getActiveMap();if(m)m.closePopup();
   document.body.classList.add('crosshair-mode');
   document.getElementById('btnMeasure').classList.add('active');
   document.getElementById('btnMStop').style.display='inline-flex';
