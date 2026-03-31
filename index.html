@@ -94,22 +94,20 @@ label.hbtn{cursor:pointer}
 input[type="file"]{display:none}
 .hub-home-icon{display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
 ::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:#f0f2f4}::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
-/* ── Tab 4: Measure Distance ── */
-body.crosshair-mode #map4{cursor:crosshair!important}
+/* ── Measure Distance Overlay Tool ── */
 body.crosshair-mode .leaflet-container{cursor:crosshair!important}
-.t4-toolbar{position:absolute;top:6px;left:50%;transform:translateX(-50%);z-index:999;display:flex;gap:4px;align-items:center}
-.t4-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:6px;border:1px solid var(--bdr);background:rgba(255,255,255,.96);backdrop-filter:blur(10px);color:var(--txl);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;user-select:none;white-space:nowrap;box-shadow:var(--sh)}
-.t4-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--tbg)}
-.t4-btn.active{background:var(--teal);color:var(--w);border-color:var(--teal)}
-.t4-btn.stop-btn{background:#fff3e0;color:#e65100;border-color:#ffe0b2}
-.t4-btn svg{width:14px;height:14px;flex-shrink:0}
+.hbtn.measure-btn{background:var(--w);color:var(--txl);border:1px solid var(--bdr);font-weight:600;gap:4px;transition:all .15s}
+.hbtn.measure-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--tbg)}
+.hbtn.measure-btn.active{background:var(--teal);color:var(--w);border-color:var(--teal)}
+.hbtn.measure-stop{background:#fff3e0;color:#e65100;border-color:#ffe0b2;font-weight:600}
+.hbtn.measure-stop:hover{background:#ffe0b2}
 .dist-panel{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border:1px solid var(--bdr);border-radius:10px;padding:10px 16px;z-index:999;display:none;min-width:340px;max-width:480px;box-shadow:var(--shl)}
 .dist-panel.show{display:flex;flex-direction:column;gap:4px}
 .dp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
 .dp-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--txm)}
 .dp-close{background:none;border:none;color:var(--txm);cursor:pointer;font-size:14px;padding:0 2px;line-height:1}.dp-close:hover{color:#e53935}
 .dist-type-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.dist-type-row label{font-size:9px;font-weight:700;color:var(--txm);text-transform:uppercase;white-space:nowrap}
+.dist-type-row>label{font-size:9px;font-weight:700;color:var(--txm);text-transform:uppercase;white-space:nowrap}
 .dist-sel{padding:3px 8px;border:1px solid var(--bdr);border-radius:5px;font-size:11px;font-family:inherit;font-weight:600;color:var(--tx);background:var(--w);cursor:pointer;outline:none}.dist-sel:focus{border-color:var(--teal)}
 .d-seg-list{max-height:160px;overflow-y:auto;margin:2px 0}
 .d-seg-row{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:11px;border-bottom:1px solid #f0f2f4}.d-seg-row:last-child{border-bottom:none}
@@ -120,10 +118,9 @@ body.crosshair-mode .leaflet-container{cursor:crosshair!important}
 .d-total-row .t-label{font-size:9px;color:var(--txm);font-weight:700;text-transform:uppercase;width:50px;flex-shrink:0}
 .d-total-row .t-dist{font-size:15px;font-weight:800;flex:1}
 .d-total-row .t-time{font-size:12px;font-weight:700;color:#1565c0;text-align:right}
-.d-osrm-note{font-size:8px;color:var(--txm);font-style:italic;margin-top:3px}
-.d-esc-hint{font-size:8px;color:var(--txm);text-align:center;margin-top:2px}
-.d-toast{position:absolute;top:50px;left:50%;transform:translateX(-50%);background:var(--teal);border-radius:6px;padding:6px 16px;font-size:11px;font-weight:600;color:var(--w);z-index:1001;display:none;white-space:nowrap;box-shadow:var(--sh)}.d-toast.show{display:block}
-.tab-c{transition:opacity .15s ease}.tab-c.active{opacity:1}
+.d-note{font-size:8px;color:var(--txm);font-style:italic;margin-top:3px}
+.d-esc{font-size:8px;color:var(--txm);text-align:center;margin-top:2px}
+.d-toast{position:absolute;top:6px;left:50%;transform:translateX(-50%);background:var(--teal);border-radius:6px;padding:6px 16px;font-size:11px;font-weight:600;color:var(--w);z-index:1001;display:none;white-space:nowrap;box-shadow:var(--sh)}.d-toast.show{display:block}
 </style>
 </head>
 <body>
@@ -151,12 +148,34 @@ body.crosshair-mode .leaflet-container{cursor:crosshair!important}
       <button class="tbtn active" onclick="swTab('t1',this)">Pan India</button>
       <button class="tbtn" onclick="swTab('t2',this)">Expansion</button>
       <button class="tbtn" onclick="swTab('t3',this)">Hub Anomaly</button>
-      <button class="tbtn" onclick="swTab('t4',this)">Measure Distance</button>
     </div>
-    <div class="hacts"><button class="hbtn" onclick="refreshAll()">Refresh <span class="sp" id="rSp"></span></button><label class="hbtn">GeoJSON<input type="file" id="gfT" accept=".geojson,.json"></label></div>
+    <div class="hacts"><button class="hbtn" onclick="refreshAll()">Refresh <span class="sp" id="rSp"></span></button><label class="hbtn">GeoJSON<input type="file" id="gfT" accept=".geojson,.json"></label><button class="hbtn measure-btn" id="btnMeasure" onclick="toggleMeasure()"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 22L22 2"/><path d="M6 18l2-2M10 14l2-2M14 10l2-2M18 6l2-2"/><circle cx="2" cy="22" r="1.5" fill="currentColor"/><circle cx="22" cy="2" r="1.5" fill="currentColor"/></svg>Measure Distance</button><button class="hbtn measure-stop" id="btnMStop" style="display:none" onclick="stopMeasure()">Stop</button></div>
   </div>
 
   <div class="main">
+    <!-- MEASURE DISTANCE OVERLAY (works on all tabs) -->
+    <div class="dist-panel" id="distPanel">
+      <div class="dp-header">
+        <div class="dp-title">Measure Distance</div>
+        <button class="dp-close" onclick="stopMeasure()" title="Close (Esc)">✕</button>
+      </div>
+      <div class="dist-type-row">
+        <label>Distance</label>
+        <select class="dist-sel" id="distSel" onchange="onDistTypeChange()">
+          <option value="aerial">Aerial Distance</option>
+          <option value="route" selected>Route Distance</option>
+        </select>
+      </div>
+      <div class="d-seg-list" id="dSegList"></div>
+      <div class="d-total-row">
+        <div class="t-label">Total</div>
+        <div class="t-dist" id="dTotDist">—</div>
+        <div class="t-time" id="dTotTime">—</div>
+      </div>
+      <div class="d-note" id="dNote"></div>
+      <div class="d-esc">Press <b>ESC</b> to clear</div>
+    </div>
+    <div class="d-toast" id="dToast"></div>
     <!-- TAB 1: PAN INDIA -->
     <div class="tab-c active" id="tab-t1">
       <div class="map-w"><div id="map1"></div></div>
@@ -212,43 +231,6 @@ body.crosshair-mode .leaflet-container{cursor:crosshair!important}
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h4 style="font-size:11px;font-weight:700;color:var(--teal)">Hub List</h4><button onclick="toggleHubTable()" style="background:none;border:none;color:var(--txm);cursor:pointer;font-size:14px">✕</button></div>
         <div style="max-height:200px;overflow-y:auto" id="hubTableContent"></div>
       </div>
-    </div>
-
-    <!-- TAB 4: MEASURE DISTANCE -->
-    <div class="tab-c" id="tab-t4">
-      <div class="map-w"><div id="map4"></div></div>
-      <div class="t4-toolbar">
-        <button class="t4-btn" id="btnMeasure" onclick="startMeasure()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 22L22 2"/><path d="M6 18l2-2M10 14l2-2M14 10l2-2M18 6l2-2"/><circle cx="2" cy="22" r="1.5" fill="currentColor"/><circle cx="22" cy="2" r="1.5" fill="currentColor"/></svg>
-          Measure Distance
-        </button>
-        <button class="t4-btn stop-btn" id="btnMStop" style="display:none" onclick="stopMeasure()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-          Stop
-        </button>
-      </div>
-      <div class="dist-panel" id="distPanel">
-        <div class="dp-header">
-          <div class="dp-title">Measure Distance</div>
-          <button class="dp-close" onclick="stopMeasure()" title="Close (Esc)">✕</button>
-        </div>
-        <div class="dist-type-row">
-          <label>Distance</label>
-          <select class="dist-sel" id="distSel" onchange="onDistTypeChange()">
-            <option value="aerial">Aerial Distance</option>
-            <option value="route" selected>Route Distance</option>
-          </select>
-        </div>
-        <div class="d-seg-list" id="dSegList"></div>
-        <div class="d-total-row">
-          <div class="t-label">Total</div>
-          <div class="t-dist" id="dTotDist">—</div>
-          <div class="t-time" id="dTotTime">—</div>
-        </div>
-        <div class="d-osrm-note" id="dOsrmNote"></div>
-        <div class="d-esc-hint">Press <b>ESC</b> to clear</div>
-      </div>
-      <div class="d-toast" id="dToast"></div>
     </div>
   </div>
 </div>
@@ -542,8 +524,7 @@ function doHubSrch(n,nm){const vl=nm.toLowerCase(),ds=aM;
 
 function clrHub(n){if(hsL[n]){maps[n].removeLayer(hsL[n]);hsL[n]=null}document.getElementById('hdi'+n).value='';
   const btn=document.getElementById('hsc'+n);if(btn)btn.style.display='none';
-  if(n<=2){try{maps[n].setView([22.5,82],5)}catch(e){}}
-}
+  if(maps[n])try{maps[n].setView([22.5,82],5)}catch(e){}}
 
 function sPin(n){const v=document.getElementById('ps'+n).value.trim();if(!v||!gL[n])return;let found=0;gL[n].eachLayer(l=>{if(found)return;if(String(l.feature?.properties?.Pincode)===v){found=1;maps[n].fitBounds(l.getBounds(),{maxZoom:13});l.setStyle({weight:3,color:'#D4CF1F',fillOpacity:.9});setTimeout(()=>l.fire('click'),300);setTimeout(()=>gL[n].resetStyle(l),5000)}});if(!found)alert('Pincode not found')}
 
@@ -564,15 +545,11 @@ function genIns(){const box=document.getElementById('insC'),panel=document.getEl
   box.innerHTML=ins.slice(0,5).map((t,i)=>`<div class="ins-i"><div class="ins-n">${i+1}</div><div class="ins-t">${t}</div></div>`).join('');panel.classList.add('show')}
 
 let t3Rendered=false;
-let map4Inited=false;
-function initMap4(){if(map4Inited)return;maps[4]=L.map('map4',{zoomControl:true,maxBounds:IB,maxBoundsViscosity:1,minZoom:4}).setView([22.5,82],5);L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'© OSM © CARTO',subdomains:'abcd',maxZoom:19}).addTo(maps[4]);map4Inited=true}
-
-function swTab(id,btn){document.querySelectorAll('.tab-c').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');
-  // Clean up measure mode when leaving tab4
-  if(id!=='t4')stopMeasure();
-  const n=id==='t1'?1:id==='t2'?2:id==='t3'?3:4;
+function swTab(id,btn){
+  stopMeasure(); // clear measurement when switching tabs
+  document.querySelectorAll('.tab-c').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');
+  const n=id==='t1'?1:id==='t2'?2:3;
   if(id==='t3'){initMap3();setTimeout(()=>{maps[3].invalidateSize();if(!t3Rendered&&aM.length){t3Rendered=true;setTimeout(()=>{try{pf3();af3()}catch(e){console.warn('Tab3 error:',e)}},200)}},100)}
-  else if(id==='t4'){initMap4();setTimeout(()=>maps[4].invalidateSize(),100)}
   else{setTimeout(()=>{maps[n].invalidateSize();if(id==='t2'&&aM.length)af2();},100)}}
 
 function renderAll(){pf1();pf2();af1();af2();if(t3Rendered){hubMergerCache={};try{pf3();af3()}catch(e){}}else{t3Rendered=false}}
@@ -581,55 +558,77 @@ document.getElementById('geoF').addEventListener('change',function(e){const f=e.
 document.getElementById('csvF').addEventListener('change',function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const p=Papa.parse(ev.target.result,{header:true,skipEmptyLines:true,dynamicTyping:false});if(p.data?.length){gsD=p.data;gsD.forEach(row=>{if(row.Pincode)row.Pincode=String(row.Pincode).trim().split('.')[0]});if(gjD)finishLoad()}};r.readAsText(f)});
 document.getElementById('gfT').addEventListener('change',function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{gjD=JSON.parse(ev.target.result);hubMergerCache={};mergeAll();buildHubList();renderAll()}catch(err){alert(err.message)}};r.readAsText(f)});
 
-/* ════════════════════════════════════════════════
-   TAB 4: MEASURE DISTANCE TOOL
-   ════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════
+   MEASURE DISTANCE — overlay tool on active map
+   Works on Pan India (map1), Expansion (map2), Hub Anomaly (map3)
+   Draws markers + lines directly on top of existing polygons
+   ════════════════════════════════════════════════════════════ */
 const SPEED_TIERS=[{max:5,spd:22},{max:15,spd:28},{max:50,spd:35},{max:Infinity,spd:45}];
-function indiaTime(distKm){let rem=distKm,tot=0;for(let i=0;i<SPEED_TIERS.length&&rem>0;i++){const prev=i===0?0:SPEED_TIERS[i-1].max;const bw=SPEED_TIERS[i].max-prev;const ib=Math.min(rem,bw);tot+=(ib/SPEED_TIERS[i].spd)*60;rem-=ib}return tot}
+function indiaTime(km){let rem=km,tot=0;for(let i=0;i<SPEED_TIERS.length&&rem>0;i++){const prev=i===0?0:SPEED_TIERS[i-1].max;const bw=SPEED_TIERS[i].max-prev;const ib=Math.min(rem,bw);tot+=(ib/SPEED_TIERS[i].spd)*60;rem-=ib}return tot}
 
-let mMode=null,mWaypoints=[],mMarkers=[],mAerialLines=[],mRouteLines=[],mSegments=[],mOsrmGeo=null,mDistType='route';
+let mMode=null, mWaypoints=[], mMarkers=[], mAerialLines=[], mRouteLines=[];
+let mSegments=[], mOsrmGeo=null, mDistType='route', mActiveMapN=null;
 const M_LABELS='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const M_COLORS=['#e65100','#0B9B8A','#1565c0','#c62828','#6a1b9a','#00838f','#ef6c00','#2e7d32'];
+
+// Detect which map is currently visible
+function getActiveMapN(){
+  if(document.getElementById('tab-t1').classList.contains('active'))return 1;
+  if(document.getElementById('tab-t2').classList.contains('active'))return 2;
+  if(document.getElementById('tab-t3').classList.contains('active'))return 3;
+  return 1;
+}
+function getActiveMap(){const n=getActiveMapN();return maps[n]||null}
 
 function fetchOSRM4(pts){
   const c=pts.map(p=>p.lng+','+p.lat).join(';');
   return fetch('https://router.project-osrm.org/route/v1/driving/'+c+'?overview=full&geometries=geojson&steps=false')
     .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
-    .then(d=>{if(d.code!=='Ok'||!d.routes.length)throw new Error('No route');const rt=d.routes[0];return{geometry:rt.geometry,legs:rt.legs.map(l=>({distance_km:l.distance/1000,duration_min:l.duration/60}))}})
+    .then(d=>{if(d.code!=='Ok'||!d.routes.length)throw new Error('No route');const rt=d.routes[0];
+      return{geometry:rt.geometry,legs:rt.legs.map(l=>({distance_km:l.distance/1000,duration_min:l.duration/60}))}})
     .catch(e=>{console.warn('OSRM:',e.message);return null})
 }
 
 function mClearAll(){
-  mMarkers.forEach(m=>maps[4].removeLayer(m));mAerialLines.forEach(l=>maps[4].removeLayer(l));mRouteLines.forEach(l=>maps[4].removeLayer(l));
+  const m=getActiveMap();if(!m)return;
+  mMarkers.forEach(mk=>{try{m.removeLayer(mk)}catch(e){}});
+  mAerialLines.forEach(l=>{try{m.removeLayer(l)}catch(e){}});
+  mRouteLines.forEach(l=>{try{m.removeLayer(l)}catch(e){}});
   mMarkers=[];mAerialLines=[];mRouteLines=[];mWaypoints=[];mSegments=[];mOsrmGeo=null;
   document.getElementById('distPanel').classList.remove('show');
 }
 
 function mAddMarker(lat,lng,idx){
+  const m=getActiveMap();if(!m)return;
   const label=M_LABELS[idx]||String(idx+1),color=M_COLORS[idx%M_COLORS.length];
   const html='<div style="width:24px;height:24px;border-radius:50%;background:'+color+';border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.35);font-family:Inter,sans-serif">'+label+'</div>';
-  const m=L.marker([lat,lng],{icon:L.divIcon({className:'',html:html,iconSize:[24,24],iconAnchor:[12,12]})}).addTo(maps[4]);
-  m.bindPopup('<b>'+label+'</b><br>'+lat.toFixed(5)+', '+lng.toFixed(5));
-  mMarkers.push(m);
+  const mk=L.marker([lat,lng],{icon:L.divIcon({className:'',html:html,iconSize:[24,24],iconAnchor:[12,12]}),zIndexOffset:2000}).addTo(m);
+  mk.bindPopup('<b>'+label+'</b><br>'+lat.toFixed(5)+', '+lng.toFixed(5));
+  mMarkers.push(mk);
 }
 
 function mDrawAerial(){
-  mAerialLines.forEach(l=>maps[4].removeLayer(l));mAerialLines=[];
+  const m=getActiveMap();if(!m)return;
+  mAerialLines.forEach(l=>{try{m.removeLayer(l)}catch(e){}});mAerialLines=[];
   for(let i=0;i<mWaypoints.length-1;i++){
-    const line=L.polyline([[mWaypoints[i].lat,mWaypoints[i].lng],[mWaypoints[i+1].lat,mWaypoints[i+1].lng]],{color:'#e65100',weight:2.5,dashArray:'6,5',opacity:.8}).addTo(maps[4]);
+    const line=L.polyline([[mWaypoints[i].lat,mWaypoints[i].lng],[mWaypoints[i+1].lat,mWaypoints[i+1].lng]],{color:'#e65100',weight:3,dashArray:'8,6',opacity:.9}).addTo(m);
     mAerialLines.push(line);
   }
 }
 
 function mDrawRoute(){
-  mRouteLines.forEach(l=>maps[4].removeLayer(l));mRouteLines=[];
+  const m=getActiveMap();if(!m)return;
+  mRouteLines.forEach(l=>{try{m.removeLayer(l)}catch(e){}});mRouteLines=[];
   if(!mOsrmGeo)return;
-  const layer=L.geoJSON(mOsrmGeo,{style:{color:'#0B9B8A',weight:5,opacity:.85}}).addTo(maps[4]);
+  const layer=L.geoJSON(mOsrmGeo,{style:{color:'#0B9B8A',weight:5,opacity:.9}}).addTo(m);
   mRouteLines.push(layer);
 }
 
 function mUpdateLines(){
-  mAerialLines.forEach(l=>maps[4].removeLayer(l));mRouteLines.forEach(l=>maps[4].removeLayer(l));
+  const m=getActiveMap();if(!m)return;
+  mAerialLines.forEach(l=>{try{m.removeLayer(l)}catch(e){}});
+  mRouteLines.forEach(l=>{try{m.removeLayer(l)}catch(e){}});
+  mAerialLines=[];mRouteLines=[];
   if(mDistType==='aerial')mDrawAerial();
   else{if(mOsrmGeo)mDrawRoute();else mDrawAerial()}
 }
@@ -638,12 +637,12 @@ function mFmtDist(km){return km<1?(km*1000).toFixed(0)+' m':km.toFixed(2)+' km'}
 function mFmtTime(min){if(min<60)return Math.round(min)+' min';return Math.floor(min/60)+'h '+Math.round(min%60)+'m'}
 function mShowToast(msg){const t=document.getElementById('dToast');t.textContent=msg;t.classList.add('show')}
 function mHideToast(){document.getElementById('dToast').classList.remove('show')}
-function mFitWP(){if(mWaypoints.length<2)return;maps[4].fitBounds(mWaypoints.map(p=>[p.lat,p.lng]),{padding:[50,50]})}
+function mFitWP(){const m=getActiveMap();if(!m||mWaypoints.length<2)return;m.fitBounds(mWaypoints.map(p=>[p.lat,p.lng]),{padding:[50,50]})}
 
 function mRenderPanel(note){
   const segList=document.getElementById('dSegList');
   let html='',totalDist=0,totalTime=0;
-  const isRoute=mDistType==='route';const color=isRoute?'var(--teal)':'#e65100';const icon=isRoute?'🚗':'✈';
+  const isRoute=mDistType==='route',color=isRoute?'var(--teal)':'#e65100',icon=isRoute?'🚗':'✈';
   mSegments.forEach(s=>{
     const dist=isRoute?(s.route!==null?s.route:s.aerial*1.3):s.aerial;
     const time=indiaTime(dist);totalDist+=dist;totalTime+=time;
@@ -652,14 +651,14 @@ function mRenderPanel(note){
   segList.innerHTML=html;
   document.getElementById('dTotDist').innerHTML='<span style="color:'+color+'">'+icon+' '+mFmtDist(totalDist)+'</span>';
   document.getElementById('dTotTime').textContent='🕐 '+mFmtTime(totalTime);
-  document.getElementById('dOsrmNote').textContent=note||'';
+  document.getElementById('dNote').textContent=note||'';
   document.getElementById('distPanel').classList.add('show');
 }
 
 function onDistTypeChange(){
   mDistType=document.getElementById('distSel').value;
   if(mSegments.length){mUpdateLines();
-    const note=mDistType==='route'?(mOsrmGeo?'Route via OSRM | Time: Tier 2 city speed profile':'⚠ OSRM unavailable — route = 1.3× aerial'):'Aerial (haversine) | Time: Tier 2 city speed profile';
+    const note=mDistType==='route'?(mOsrmGeo?'Route via OSRM | Time: Tier 2 city speed':'⚠ OSRM unavailable — 1.3× aerial'):'Aerial (haversine) | Time: Tier 2 city speed';
     mRenderPanel(note)}
 }
 
@@ -673,19 +672,10 @@ function mComputeAll(){
   mUpdateLines();mRenderPanel('Fetching route...');mFitWP();
   fetchOSRM4(mWaypoints).then(osrm=>{
     if(osrm){mOsrmGeo=osrm.geometry;for(let k=0;k<mSegments.length;k++){if(osrm.legs[k])mSegments[k].route=osrm.legs[k].distance_km}mUpdateLines();
-      mRenderPanel(mDistType==='route'?'Route via OSRM | Time: Tier 2 city speed profile':'Aerial (haversine) | Time: Tier 2 city speed profile')}
-    else{for(let m=0;m<mSegments.length;m++)mSegments[m].route=mSegments[m].aerial*1.3;mUpdateLines();
-      mRenderPanel(mDistType==='route'?'⚠ OSRM unavailable — route = 1.3× aerial':'Aerial (haversine) | Time: Tier 2 city speed profile')}
+      mRenderPanel(mDistType==='route'?'Route via OSRM | Time: Tier 2 city speed':'Aerial (haversine) | Time: Tier 2 city speed')}
+    else{for(let j=0;j<mSegments.length;j++)mSegments[j].route=mSegments[j].aerial*1.3;mUpdateLines();
+      mRenderPanel(mDistType==='route'?'⚠ OSRM unavailable — 1.3× aerial':'Aerial (haversine) | Time: Tier 2 city speed')}
   });
-}
-
-function startMeasure(){
-  if(mMode==='measure'){stopMeasure();return}
-  stopMeasure();mMode='measure';
-  document.body.classList.add('crosshair-mode');
-  document.getElementById('btnMeasure').classList.add('active');
-  document.getElementById('btnMStop').style.display='inline-flex';
-  mShowToast('Click points on map — ESC to clear');
 }
 
 function handleMeasureClick(e){
@@ -696,23 +686,48 @@ function handleMeasureClick(e){
   mShowToast(mWaypoints.length+' points — click more or ESC');
 }
 
+// Bind measure click to all maps
+let mClickBound={};
+function bindMeasureToMap(n){
+  if(mClickBound[n]||!maps[n])return;
+  maps[n].on('click',function(e){if(mMode==='measure'&&getActiveMapN()===n)handleMeasureClick(e)});
+  mClickBound[n]=true;
+}
+
+function toggleMeasure(){
+  if(mMode==='measure'){stopMeasure();return}
+  startMeasureMode();
+}
+
+function startMeasureMode(){
+  stopMeasure();
+  mMode='measure';
+  mActiveMapN=getActiveMapN();
+  // Bind click to current map
+  bindMeasureToMap(mActiveMapN);
+  document.body.classList.add('crosshair-mode');
+  document.getElementById('btnMeasure').classList.add('active');
+  document.getElementById('btnMStop').style.display='inline-flex';
+  mShowToast('Click points on the map — ESC to clear');
+}
+
 function stopMeasure(){
-  mMode=null;document.body.classList.remove('crosshair-mode');
+  if(mMode){mClearAll()}
+  mMode=null;mActiveMapN=null;
+  document.body.classList.remove('crosshair-mode');
   const btn=document.getElementById('btnMeasure');if(btn)btn.classList.remove('active');
   const stp=document.getElementById('btnMStop');if(stp)stp.style.display='none';
-  if(map4Inited)mClearAll();
   mHideToast();
 }
 
-// ESC key handler
+// ESC key
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mMode)stopMeasure()});
 
-// Map4 click — deferred binding after map init
-function bindMap4Click(){if(maps[4])maps[4].on('click',handleMeasureClick)}
-
-// Override initMap4 to bind click
-const _origInitMap4=initMap4;
-initMap4=function(){_origInitMap4();bindMap4Click()};
+// Bind to maps 1 & 2 immediately (they're created at startup)
+setTimeout(function(){bindMeasureToMap(1);bindMeasureToMap(2)},500);
+// Map 3 is lazy — bind after initMap3
+const _origInitMap3=initMap3;
+initMap3=function(){_origInitMap3();bindMeasureToMap(3)};
 
 </script>
 </body>
